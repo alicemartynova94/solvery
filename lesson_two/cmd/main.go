@@ -1,6 +1,41 @@
 package main
 
+import (
+	"fmt"
+	ex "solvery/lesson_two/internal/string_ex"
+)
+
 func main() {
+	var str string
+	var daemon bool
+
+	pflag.StringVar(&str, "input", "", "string to unpack")
+	pflag.BoolVar(&daemon, "daemon", false, "run in daemon mode")
+	pflag.Parse()
+
+	if daemon {
+		for {
+			fmt.Print("Введите строку: ")
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			input := scanner.Text()
+			unpackedString, err := ex.UnpackString(input)
+			if err != nil {
+				fmt.Printf("error: %v", err)
+				return
+			}
+
+			fmt.Println(unpackedString)
+			fmt.Println()
+		}
+	} else {
+		unpackedString, err := ex.UnpackString(str)
+		if err != nil {
+			fmt.Printf("error: %v", err)
+			return
+		}
+		fmt.Println(unpackedString)
+	}
 
 }
 
