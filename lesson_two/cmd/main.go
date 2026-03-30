@@ -1,42 +1,69 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"github.com/spf13/pflag"
+	"os"
 	ex "solvery/lesson_two/internal/string_ex"
 )
 
 func main() {
 	var str string
 	var daemon bool
+	var pack bool
+	var unpack bool
 
 	pflag.StringVar(&str, "input", "", "string to unpack")
 	pflag.BoolVar(&daemon, "daemon", false, "run in daemon mode")
+	pflag.BoolVar(&pack, "pack", false, "pack mode")
+	pflag.BoolVar(&unpack, "unpack", false, "unpack mode")
 	pflag.Parse()
 
-	if daemon {
-		for {
-			fmt.Print("Введите строку: ")
-			scanner := bufio.NewScanner(os.Stdin)
-			scanner.Scan()
-			input := scanner.Text()
-			unpackedString, err := ex.UnpackString(input)
-			if err != nil {
-				fmt.Printf("error: %v", err)
-				return
-			}
-
-			fmt.Println(unpackedString)
-			fmt.Println()
+	if unpack {
+		if daemon {
+			daemonMode()
+		} else {
+			unpackMode(str)
 		}
+	} else if pack {
+		packMode(str)
 	} else {
-		unpackedString, err := ex.UnpackString(str)
+		fmt.Println("Please specify a mode: --pack, --unpack or --daemon")
+	}
+
+}
+
+func daemonMode() {
+	for {
+		fmt.Print("Введите строку: ")
+		scanner := bufio.NewScanner(os.Stdin)
+		scanner.Scan()
+		input := scanner.Text()
+		unpackedString, err := ex.UnpackString(input)
 		if err != nil {
 			fmt.Printf("error: %v", err)
 			return
 		}
-		fmt.Println(unpackedString)
-	}
 
+		fmt.Println(unpackedString)
+		fmt.Println()
+	}
+}
+
+func unpackMode(str string) {
+	unpackedString, err := ex.UnpackString(str)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		return
+	}
+	fmt.Println(unpackedString)
+}
+
+func packMode(str string) {
+	unpackedString := ex.PackString(str)
+
+	fmt.Println(unpackedString)
 }
 
 // LinkedList

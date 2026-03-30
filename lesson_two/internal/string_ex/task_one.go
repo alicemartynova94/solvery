@@ -7,6 +7,8 @@ import (
 )
 
 var ErrInvalidString = errors.New("string cannot start with a digit")
+var ErrTwoDigitsInRow = errors.New("invalid string format: two digits in a row")
+var ErrCannotStartWithZero = errors.New("invalid string format: cannot start with 0")
 
 func UnpackString(s string) (string, error) {
 	if strings.TrimSpace(s) == "" {
@@ -27,10 +29,10 @@ func UnpackString(s string) (string, error) {
 		} else if unicode.IsDigit(v) {
 
 			if unicode.IsDigit(runes[i-1]) {
-				return "", errors.New("invalid string format: two digits in a row")
+				return "", ErrTwoDigitsInRow
 			} else if v == '0' {
 				if len(result) == 0 {
-					return "", errors.New("invalid string format: 0 at start")
+					return "", ErrCannotStartWithZero
 				}
 				result = result[:len(result)-1]
 			} else {
@@ -44,28 +46,37 @@ func UnpackString(s string) (string, error) {
 	return string(result), nil
 }
 
-func PackString(s string) (string, error) {
+func PackString(s string) string {
 	if strings.TrimSpace(s) == "" {
-		return "", nil
+		return ""
 	}
 
 	runes := []rune(s)
 	result := make([]rune, 0)
+	first := runes[0]
+	count := 1
 
-	runesCount := make(map[rune]int)
-	runesCount[runes[0]] = 1
+	for i := 1; i < len(runes); i++ {
+		v := runes[i]
 
-	for i, v := range runes {
-		if _, ok := runesCount[v]; !ok {
-			runesCount[v] = 1
-			val, _ := map[runes[i-1]]
-			for j := 0; j < val; j++ {
-				result = append(result, runes[i-1])
+		if first == v {
+			count++
+		} else {
+			if count == 1 {
+				result = append(result, first)
+
+			} else {
+				result = append(result, first)
+				result = append(result, rune('0'+count))
+				count = 1
 			}
-		}else{
-			runesCount[v]++
+			first = v
 		}
 	}
+	result = append(result, first)
+	if count > 1 {
+		result = append(result, rune('0'+count))
+	}
 
-	return string(result), nil
+	return string(result)
 }
