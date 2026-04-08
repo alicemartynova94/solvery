@@ -78,3 +78,22 @@ func (p Polygon) Perimeter() (float64, error) {
 
 	return result, nil
 }
+
+func (p Polygon) Area() float64 {
+	points := p.Points
+	var result float64
+	var sum float64
+	for i := 1; i < len(points); i++ {
+		p1 := points[i-1]
+		p2 := points[i]
+		calculations := p1.X*p2.Y - p1.Y*p2.X
+		sum += calculations
+	}
+	p1 := points[len(points)-1]
+	p2 := points[0]
+	calculations := p1.X*p2.Y - p1.Y*p2.X
+	sum += calculations
+	result = math.Abs(sum) / 2
+
+	return result
+}

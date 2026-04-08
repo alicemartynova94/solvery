@@ -11,15 +11,21 @@ func main() {
 	var distance bool
 	var perimeter bool
 	var radius float64
+	var area bool
 
 	pflag.StringArrayVar(&points, "point", []string{}, "list of 2 points")
 	pflag.BoolVar(&distance, "distance", false, "distance between 1 and 2 point")
 	pflag.BoolVar(&perimeter, "perimeter", false, "polygon perimeter")
 	pflag.Float64Var(&radius, "radius", -1, "in radius")
+	pflag.BoolVar(&area, "area", false, "polygon area")
 	pflag.Parse()
 
-	if perimeter && len(points) >= 3 {
-		perimeterCheck(points)
+	if len(points) >= 3 {
+		if perimeter {
+			perimeterCheck(points)
+		} else if area {
+			areaCheck(points)
+		}
 	} else if len(points) == 2 {
 		if radius > 0 {
 			radiusCheck(points, radius)
@@ -88,6 +94,22 @@ func perimeterCheck(points []string) {
 		fmt.Printf("perimeter err %v", err)
 		return
 	}
+
+	fmt.Println(result)
+}
+
+func areaCheck(points []string) {
+	polygon := internal.Polygon{}.Points
+	for i, point := range points {
+		p, err := internal.ParsePoint(point)
+		if err != nil {
+			fmt.Printf("point %d parsing err %v", i, err)
+			return
+		}
+		polygon = append(polygon, p)
+	}
+
+	result := internal.Polygon{Points: polygon}.Area()
 
 	fmt.Println(result)
 }
