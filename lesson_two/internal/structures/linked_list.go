@@ -1,23 +1,19 @@
 package lesson_two
 
 type LinkedList[T comparable] struct {
-	head *ListEl[T]
-	tail *ListEl[T]
+	head *Node[T]
+	tail *Node[T]
 	size int
 }
 
-type ListEl[T comparable] struct {
+type Node[T comparable] struct {
 	value T
-	next  *ListEl[T]
-	prev  *ListEl[T]
+	next  *Node[T]
+	prev  *Node[T]
 }
 
 func (l *LinkedList[T]) IsEmpty() bool {
 	return l.head == nil
-}
-
-func (l *LinkedList[T]) Size() int {
-	return l.size
 }
 
 func (l *LinkedList[T]) GetValues() []T {
@@ -29,7 +25,7 @@ func (l *LinkedList[T]) GetValues() []T {
 }
 
 func (l *LinkedList[T]) Append(v T) {
-	e := &ListEl[T]{value: v}
+	e := &Node[T]{value: v}
 	if l.IsEmpty() {
 		l.tail, l.head = e, e
 	} else {
@@ -41,7 +37,7 @@ func (l *LinkedList[T]) Append(v T) {
 }
 
 func (l *LinkedList[T]) Prepend(v T) {
-	e := &ListEl[T]{value: v}
+	e := &Node[T]{value: v}
 	if l.IsEmpty() {
 		l.tail, l.head = e, e
 	} else {
@@ -97,20 +93,19 @@ func (l *LinkedList[T]) RemoveFront() (T, bool) {
 	return result, true
 }
 
-func (l *LinkedList[T]) FindVal(v T) (T, bool) {
-	var zeroVal T
+func (l *LinkedList[T]) FindVal(v T) bool {
 	if l.IsEmpty() {
-		return zeroVal, false
+		return false
 	}
 
-	var result T
+	var result bool
 	for e := l.head; e != nil; e = e.next {
 		if e.value == v {
-			result = e.value
+			result = true
 		}
 	}
 
-	return result, true
+	return result
 }
 
 func (l *LinkedList[T]) RemoveAll(v T) {
@@ -136,13 +131,6 @@ func (l *LinkedList[T]) RemoveAll(v T) {
 }
 
 func (l *LinkedList[T]) Clear() {
-	for e := l.head; e != nil; {
-		next := e.next
-		e.prev = nil
-		e.next = nil
-		e = next
-	}
-
 	l.head, l.tail = nil, nil
 	l.size = 0
 }

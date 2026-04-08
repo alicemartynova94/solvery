@@ -23,7 +23,6 @@ func (s *Stack[T]) Pop() (T, bool) {
 	}
 
 	element := s.elements[len(s.elements)-1]
-	s.elements[len(s.elements)-1] = zeroVal
 	s.elements = s.elements[:len(s.elements)-1]
 
 	return element, true
@@ -41,9 +40,5 @@ func (s *Stack[T]) Peek() (T, bool) {
 }
 
 func (s *Stack[T]) Clear() {
-	for i := range s.elements {
-		var zeroVal T
-		s.elements[i] = zeroVal
-	}
 	s.elements = s.elements[:0]
 }
