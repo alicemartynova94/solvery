@@ -145,6 +145,11 @@ func TestPolygon_Perimeter(t *testing.T) {
 			{X: 3, Y: 0},
 			{X: 3, Y: 4},
 		}}, 12.0, false},
+		{"expect success: triangle", Polygon{Points: []Point{
+			{X: -2, Y: -1},
+			{X: 3, Y: -1},
+			{X: 3, Y: 2},
+		}}, 13.8309518948453, false},
 	}
 
 	for _, test := range tests {
@@ -152,6 +157,32 @@ func TestPolygon_Perimeter(t *testing.T) {
 			result, err := test.p.Perimeter()
 			assert.Equal(t, test.perimeter, result)
 			assert.Equal(t, test.wantErr, err != nil)
+		})
+	}
+}
+
+func TestPolygon_Area(t *testing.T) {
+	tests := []struct {
+		name      string
+		p         Polygon
+		perimeter float64
+	}{
+		{"expect success: triangle", Polygon{Points: []Point{
+			{X: 0, Y: 0},
+			{X: 3, Y: 0},
+			{X: 3, Y: 4},
+		}}, 6.0},
+		{"expect success with negative numbers: triangle", Polygon{Points: []Point{
+			{X: -2, Y: -1},
+			{X: 3, Y: -1},
+			{X: 3, Y: 2},
+		}}, 7.5},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := test.p.Area()
+			assert.Equal(t, test.perimeter, result)
 		})
 	}
 }
