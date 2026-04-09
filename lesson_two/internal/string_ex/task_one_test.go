@@ -14,10 +14,14 @@ func TestUnpackString(t *testing.T) {
 		{"case 1", "a4bc2d5e", "aaaabccddddde"},
 		{"case 2", "abcd", "abcd"},
 		{"case 3", "3abc", ""},
-		{"case 3", "45", ""},
-		{"case 3", "aaa10b", ""},
-		{"case 3", "aaa0b", "aab"},
-		{"case 4", "", ""},
+		{"case 4", "45", ""},
+		{"case 5", "aaa10b", ""},
+		{"case 6", "aaa0b", "aab"},
+		{"case 7", "", ""},
+		{"case 8", "qwe\\4\\5", "qwe45"},
+		{"case 9", "qwe\\45", "qwe44444"},
+		{"case 10", "qwe\\\\5", "qwe\\\\\\\\\\"},
+		{"case 11", "qw\\ne", ""},
 	}
 
 	for _, tt := range tests {
@@ -36,6 +40,7 @@ func TestPackString(t *testing.T) {
 	}{
 		{"case 1", "aaaabccddddde", "a4bc2d5e"},
 		{"case 2", "abcd", "abcd"},
+		{"case 3", "", ""},
 	}
 
 	for _, tt := range tests {

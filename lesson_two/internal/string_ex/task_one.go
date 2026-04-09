@@ -8,7 +8,6 @@ import (
 
 var ErrInvalidString = errors.New("string cannot start with a digit")
 var ErrTwoDigitsInRow = errors.New("invalid string format: two digits in a row")
-var ErrCannotStartWithZero = errors.New("invalid string format: cannot start with 0")
 
 func UnpackString(s string) (string, error) {
 	if strings.TrimSpace(s) == "" {
@@ -21,23 +20,36 @@ func UnpackString(s string) (string, error) {
 		return "", ErrInvalidString
 	}
 
-	for i, v := range runes {
+	for i := 0; i < len(runes); i++ {
+		v := runes[i]
+
+		if v == '\\' && i+1 < len(runes) {
+			next := runes[i+1]
+			if unicode.IsLetter(next) {
+				return "", ErrInvalidString
+			}
+			if unicode.IsDigit(next) || next == '\\' {
+				result = append(result, next)
+				i++
+				continue
+			}
+		}
 
 		if unicode.IsLetter(v) {
 			result = append(result, v)
+			continue
+		}
 
-		} else if unicode.IsDigit(v) {
-
-			if unicode.IsDigit(runes[i-1]) {
+		if unicode.IsDigit(v) {
+			prev := runes[i-1]
+			resultI := len(result) - 1
+			if unicode.IsDigit(prev) && !unicode.IsDigit(result[resultI]) {
 				return "", ErrTwoDigitsInRow
 			} else if v == '0' {
-				if len(result) == 0 {
-					return "", ErrCannotStartWithZero
-				}
-				result = result[:len(result)-1]
+				result = result[:resultI]
 			} else {
 				for j := 0; j < int(v-'0')-1; j++ {
-					result = append(result, runes[i-1])
+					result = append(result, result[resultI])
 				}
 			}
 		}
