@@ -1,38 +1,38 @@
 package lesson_three
 
-type cache[K comparable, V any] struct {
-	nodes    map[K]*node[K, V]
-	head     *node[K, V]
-	tail     *node[K, V]
+type Cache[K comparable, V any] struct {
+	nodes    map[K]*Node[K, V]
+	head     *Node[K, V]
+	tail     *Node[K, V]
 	capacity int
 }
 
-type node[K comparable, V any] struct {
+type Node[K comparable, V any] struct {
 	key   K
 	value V
-	next  *node[K, V]
-	prev  *node[K, V]
+	next  *Node[K, V]
+	prev  *Node[K, V]
 }
 
-func NewCache[K comparable, V any](capacity int) *cache[K, V] {
+func NewCache[K comparable, V any](capacity int) *Cache[K, V] {
 	if capacity < 1 {
 		panic("capacity must be greater than 0")
 	}
-	return &cache[K, V]{
-		nodes:    make(map[K]*node[K, V]),
+	return &Cache[K, V]{
+		nodes:    make(map[K]*Node[K, V]),
 		capacity: capacity,
 	}
 }
 
-func (c *cache[K, V]) IsEmpty() bool {
+func (c *Cache[K, V]) IsEmpty() bool {
 	return c.head == nil
 }
 
-func (c *cache[K, V]) Size() int {
+func (c *Cache[K, V]) Size() int {
 	return len(c.nodes)
 }
 
-func (c *cache[K, V]) Get(key K) (value V, ok bool) {
+func (c *Cache[K, V]) Get(key K) (value V, ok bool) {
 	var zeroValue V
 	if _, ok = c.nodes[key]; !ok {
 		return zeroValue, false
@@ -44,7 +44,7 @@ func (c *cache[K, V]) Get(key K) (value V, ok bool) {
 	return v.value, true
 }
 
-func (c *cache[K, V]) Put(key K, value V) {
+func (c *Cache[K, V]) Put(key K, value V) {
 	if v, ok := c.nodes[key]; ok {
 		if len(c.nodes) > 1 {
 			c.pushFront(v)
@@ -53,7 +53,7 @@ func (c *cache[K, V]) Put(key K, value V) {
 		return
 	}
 
-	node := &node[K, V]{
+	node := &Node[K, V]{
 		key:   key,
 		value: value,
 	}
@@ -79,7 +79,7 @@ func (c *cache[K, V]) Put(key K, value V) {
 	}
 }
 
-func (c *cache[K, V]) pushFront(v *node[K, V]) {
+func (c *Cache[K, V]) pushFront(v *Node[K, V]) {
 	prev := v.prev
 	next := v.next
 	if v == c.tail {
