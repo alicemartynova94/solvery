@@ -13,29 +13,35 @@ type SemaphoreTwo struct {
 }
 
 func NewSemaphoreTwo(n int64) *SemaphoreTwo {
-	mu := sync.Mutex{}
-
-	return &SemaphoreTwo{
+	s := &SemaphoreTwo{
 		available: n,
-		cond:      sync.NewCond(&mu),
 		capacity:  n,
 	}
+
+	s.cond = sync.NewCond(&s.mutex)
+	return s
 }
 
 func (s *SemaphoreTwo) Acquire(ctx context.Context, n int64) error {
 	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
 	for s.available < n {
+		done := make(chan struct{})
+
+		go func() {
+			s.cond.Wait()
+			close(done)
+		}()
+
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
-		default:
-			s.cond.Wait()
+		case <-done:
 		}
 	}
+
 	s.available -= n
-
-	s.mutex.Unlock()
-
 	return nil
 }
 

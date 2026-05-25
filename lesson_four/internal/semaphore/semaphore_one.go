@@ -35,10 +35,6 @@ func (s *SemaphoreOne) Acquire(ctx context.Context, n int64) error {
 	return nil
 }
 
-func (s *SemaphoreOne) TryAcquire(n int64) bool {
-	return true
-}
-
 func (s *SemaphoreOne) Release(n int64) {
 	for i := 0; i < int(n); i++ {
 		select {
