@@ -64,7 +64,7 @@ func PackString(s string) string {
 	}
 
 	runes := []rune(s)
-	result := make([]rune, 0)
+	var str strings.Builder
 	first := runes[0]
 	count := 1
 
@@ -75,20 +75,22 @@ func PackString(s string) string {
 			count++
 		} else {
 			if count == 1 {
-				result = append(result, first)
+				str.WriteRune(first)
 
 			} else {
-				result = append(result, first)
-				result = append(result, rune('0'+count))
+				str.WriteRune(first)
+				str.WriteRune(rune('0' + count))
 				count = 1
 			}
 			first = v
 		}
 	}
-	result = append(result, first)
+	str.WriteRune(first)
 	if count > 1 {
-		result = append(result, rune('0'+count))
+		str.WriteRune(rune('0' + count))
 	}
 
-	return string(result)
+	result := str.String()
+
+	return result
 }
