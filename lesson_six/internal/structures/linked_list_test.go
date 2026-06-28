@@ -1,4 +1,4 @@
-package lesson_two
+package structures
 
 import (
 	"github.com/stretchr/testify/assert"

@@ -1,15 +1,11 @@
-package lesson_two
+package structures
 
 type Queue[T comparable] struct {
-	ll LinkedList[T]
-}
-
-func (q *Queue[T]) IsEmpty() bool {
-	return q.ll.head == nil
+	ll *LinkedList[T]
 }
 
 func (q *Queue[T]) Size() int {
-	return q.ll.size
+	return q.ll.Size()
 }
 
 func (q *Queue[T]) GetValues() []T {
