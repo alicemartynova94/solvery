@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"github.com/google/uuid"
+	"sync"
 	"time"
 )
 
@@ -24,31 +25,71 @@ type Scheduler interface {
 }
 
 type Schedule struct {
-	m map[uuid.UUID]*Task
+	mu     *sync.RWMutex
+	wg     *sync.WaitGroup
+	m      map[uuid.UUID]*Task
+	cancel context.CancelFunc
 }
 
-func (s *Schedule) NewScheduler(ctx context.Context) {
+func NewScheduler() *Schedule {
+	return &Schedule{
+		mu: &sync.RWMutex{},
+		wg: &sync.WaitGroup{},
+		m:  make(map[uuid.UUID]*Task),
+	}
+}
 
-	go func(c context.Context) {
+func (s *Schedule) Run(ctx context.Context) {
+	context, cancel := context.WithCancel(ctx)
+	s.cancel = cancel
+
+	go func() {
+
+		ticker := time.NewTicker(100 * time.Millisecond)
+		defer ticker.Stop()
 		for {
 
-			for _, v := range s.m {
-				if time.Now().After(v.ExecuteAt) {
-					go v.Command(ctx)
+			select {
+			case <-context.Done():
+				return
+			case <-ticker.C:
 
-					if v.Recurring {
-						v.ExecuteAt = time.Now().Add(v.Interval)
+				var tasks []*Task
+
+				s.mu.Lock()
+
+				for _, v := range s.m {
+					if time.Now().After(v.ExecuteAt) {
+						tasks = append(tasks, v)
+
+						if v.Recurring {
+							v.ExecuteAt = v.ExecuteAt.Add(v.Interval)
+						} else {
+							delete(s.m, v.ID)
+						}
+
 					}
+				}
+				s.mu.Unlock()
 
+				for _, v := range tasks {
+					s.wg.Add(1)
+
+					go func(t *Task) {
+						defer s.wg.Done()
+						_ = t.Command(context)
+					}(v)
 				}
 			}
-
 		}
-	}(ctx)
+	}()
 
 }
 
 func (s *Schedule) ScheduleAt(t Task, tm time.Time) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	t.ExecuteAt = tm
 	t.Interval = 0
 	t.Recurring = false
@@ -57,6 +98,9 @@ func (s *Schedule) ScheduleAt(t Task, tm time.Time) {
 }
 
 func (s *Schedule) ScheduleAfter(t Task, d time.Duration) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	t.ExecuteAt = time.Now().Add(d)
 	t.Interval = 0
 	t.Recurring = false
@@ -65,6 +109,9 @@ func (s *Schedule) ScheduleAfter(t Task, d time.Duration) {
 }
 
 func (s *Schedule) ScheduleEvery(t Task, d time.Duration) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	t.ExecuteAt = time.Now().Add(d)
 	t.Interval = d
 	t.Recurring = true
@@ -73,18 +120,31 @@ func (s *Schedule) ScheduleEvery(t Task, d time.Duration) {
 }
 
 func (s *Schedule) Cancel(id uuid.UUID) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
 	if _, ok := s.m[id]; ok {
 		delete(s.m, id)
 	}
 }
 
 func (s *Schedule) GetPendingTasks() []Task {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
 	tasks := make([]Task, 0, len(s.m))
 	for _, v := range s.m {
-		if time.Now().After(v.ExecuteAt) { //???
+		if time.Now().Before(v.ExecuteAt) {
 			tasks = append(tasks, *v)
 		}
 	}
 
 	return tasks
+}
+
+func (s *Schedule) Stop() {
+	if s.cancel != nil {
+		s.cancel()
+	}
+	s.wg.Wait()
 }
