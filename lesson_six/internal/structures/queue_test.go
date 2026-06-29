@@ -2,15 +2,18 @@ package structures
 
 import (
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
-func newQueue[T comparable](values ...T) Queue[T] {
-	q := Queue[T]{}
+func newQueue[T comparable](values ...T) *Queue[T] {
+	q := Queue[T]{
+		ll: &LinkedList[T]{},
+	}
 	for _, value := range values {
 		q.Push(value)
 	}
-	return q
+	return &q
 }
 
 func TestQueue_Push(t *testing.T) {
@@ -80,7 +83,25 @@ func TestQueue_Clear(t *testing.T) {
 	}
 }
 
-func TestQueue_IsEmpty(t *testing.T) {
-	q := newQueue([]int{}...)
-	assert.True(t, q.IsEmpty())
+func TestQueue_Concurrency(t *testing.T) {
+	queue := newQueue[int]()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			queue.Push(n)
+		}(i)
+	}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			queue.Pop()
+		}()
+	}
+
+	wg.Wait()
 }

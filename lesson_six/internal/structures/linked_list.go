@@ -3,7 +3,7 @@ package structures
 import "sync"
 
 type LinkedList[T comparable] struct {
-	mu   *sync.RWMutex
+	mu   sync.RWMutex
 	head *NodeL[T]
 	tail *NodeL[T]
 	size int

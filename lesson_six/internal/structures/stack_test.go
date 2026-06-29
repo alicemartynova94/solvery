@@ -2,11 +2,12 @@ package structures
 
 import (
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
 func newStack[T comparable](values ...T) *Stack[T] {
-	stack := &Stack[T]{}
+	stack := NewStack[T]()
 	for _, v := range values {
 		stack.Push(v)
 	}
@@ -97,5 +98,35 @@ func TestStack_Clear(t *testing.T) {
 			assert.Equal(t, test.size, s.Size())
 		})
 	}
+}
 
+func TestStack_Concurrency(t *testing.T) {
+	stack := newStack[int]()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			stack.Push(n)
+		}(i)
+	}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			stack.Pop()
+		}()
+	}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			stack.Peek()
+		}()
+	}
+
+	wg.Wait()
 }

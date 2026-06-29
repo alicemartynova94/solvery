@@ -2,15 +2,16 @@ package structures
 
 import (
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
-func newList[T comparable](values ...T) LinkedList[T] {
+func newList[T comparable](values ...T) *LinkedList[T] {
 	ll := LinkedList[T]{}
 	for _, value := range values {
 		ll.Append(value)
 	}
-	return ll
+	return &ll
 }
 
 func TestLinkedList_Append(t *testing.T) {
@@ -35,7 +36,7 @@ func TestLinkedList_Append(t *testing.T) {
 }
 
 func TestLinkedList_PrependToEmptyList(t *testing.T) {
-	list := LinkedList[string]{}
+	list := newList[string]()
 	list.Prepend("first")
 
 	assert.Equal(t, "first", list.head.value)
@@ -166,4 +167,64 @@ func TestLinkedList_Clear(t *testing.T) {
 
 		})
 	}
+}
+
+func TestLinkedList_AppendRemoveConcurrency(t *testing.T) {
+	list := newList[int]()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 30; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			list.Append(n)
+		}(i)
+	}
+
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			list.RemoveFront()
+		}()
+	}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			list.RemoveTail()
+		}()
+	}
+
+	wg.Wait()
+}
+
+func TestLinkedList_PrependRemoveAllClearConcurrency(t *testing.T) {
+	list := newList[int]()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 30; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			list.Prepend(n)
+		}(i)
+	}
+
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			list.RemoveAll(n)
+		}(i)
+	}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		list.Clear()
+	}()
+
+	wg.Wait()
 }
