@@ -1,8 +1,10 @@
 package internal
 
 import (
+	"context"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 	"time"
 )
@@ -80,6 +82,57 @@ func TestScheduler_CancelAndGetPending(t *testing.T) {
 }
 
 func TestScheduler_RunStop(t *testing.T) {
+	ctx := context.Background()
+	scheduler := NewSchedule()
+	done := make(chan struct{})
+	scheduler.Run(ctx)
+
+	task := Task{
+		ID: uuid.New(),
+		Command: func(ctx context.Context) error {
+			close(done)
+			return nil
+		},
+	}
+
+	scheduler.ScheduleAfter(task, 5*time.Millisecond)
+
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("task was not performed")
+	}
+
+	scheduler.Stop()
+}
+
+func TestScheduler_Concurrent(t *testing.T) {
 	scheduler := NewSchedule()
 
+	ctx := context.Background()
+	scheduler.Run(ctx)
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < 500; i++ {
+		wg.Add(1)
+
+		go func() {
+			defer wg.Done()
+			id := uuid.New()
+
+			scheduler.ScheduleAfter(Task{
+				ID: id,
+				Command: func(ctx context.Context) error {
+					return nil
+				},
+			}, 10*time.Millisecond)
+
+			scheduler.GetPendingTasks()
+			scheduler.Cancel(id)
+		}()
+	}
+
+	wg.Wait()
+	scheduler.Stop()
 }
