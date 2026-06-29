@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"sync"
 	"testing"
@@ -59,21 +58,27 @@ func TestCacheTtl_GetConcurrent(t *testing.T) {
 	cacheTtl := NewCache()
 	var wg sync.WaitGroup
 
-	for i := 0; i < 10; i++ {
+	key := "one key"
+
+	for i := 0; i < 100; i++ {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			key := fmt.Sprintf("key-%d", i)
-			cacheTtl.Set(key, i, 5*time.Minute)
+			for j := 0; j < 80; j++ {
+				cacheTtl.Set(key, i, 5*time.Minute)
+			}
 		}(i)
 	}
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		wg.Add(1)
-		go func(i int) {
+		go func() {
 			defer wg.Done()
-			key := fmt.Sprintf("key-%d", i)
-			cacheTtl.Get(key)
-		}(i)
+			for j := 0; j < 80; j++ {
+				cacheTtl.Get(key)
+			}
+		}()
 	}
+
+	wg.Wait()
 }

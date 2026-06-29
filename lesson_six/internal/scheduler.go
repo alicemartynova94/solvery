@@ -9,19 +9,19 @@ import (
 
 type Task struct {
 	ID        uuid.UUID
-	ExecuteAt time.Time     // для однократных
-	Interval  time.Duration // для периодических (0 - однократная)
+	ExecuteAt time.Time
+	Interval  time.Duration
 	Command   func(ctx context.Context) error
 	Recurring bool
 }
 
 type Scheduler interface {
 	ScheduleAt(Task, time.Time)
-	ScheduleAfter(Task, time.Duration) // выполнить через N времени
-	ScheduleEvery(Task, time.Duration) // периодическое выполнение
+	ScheduleAfter(Task, time.Duration)
+	ScheduleEvery(Task, time.Duration)
 	Cancel(uuid.UUID)
-	GetPendingTasks() []Task // получить список ожидающих задач
-	Stop()                   // остановить планировщик (дождаться выполнения текущих)
+	GetPendingTasks() []Task
+	Stop()
 }
 
 type Schedule struct {
@@ -31,59 +31,12 @@ type Schedule struct {
 	cancel context.CancelFunc
 }
 
-func NewScheduler() *Schedule {
+func NewSchedule() *Schedule {
 	return &Schedule{
 		mu: &sync.RWMutex{},
 		wg: &sync.WaitGroup{},
 		m:  make(map[uuid.UUID]*Task),
 	}
-}
-
-func (s *Schedule) Run(ctx context.Context) {
-	context, cancel := context.WithCancel(ctx)
-	s.cancel = cancel
-
-	go func() {
-
-		ticker := time.NewTicker(100 * time.Millisecond)
-		defer ticker.Stop()
-		for {
-
-			select {
-			case <-context.Done():
-				return
-			case <-ticker.C:
-
-				var tasks []*Task
-
-				s.mu.Lock()
-
-				for _, v := range s.m {
-					if time.Now().After(v.ExecuteAt) {
-						tasks = append(tasks, v)
-
-						if v.Recurring {
-							v.ExecuteAt = v.ExecuteAt.Add(v.Interval)
-						} else {
-							delete(s.m, v.ID)
-						}
-
-					}
-				}
-				s.mu.Unlock()
-
-				for _, v := range tasks {
-					s.wg.Add(1)
-
-					go func(t *Task) {
-						defer s.wg.Done()
-						_ = t.Command(context)
-					}(v)
-				}
-			}
-		}
-	}()
-
 }
 
 func (s *Schedule) ScheduleAt(t Task, tm time.Time) {
@@ -147,4 +100,51 @@ func (s *Schedule) Stop() {
 		s.cancel()
 	}
 	s.wg.Wait()
+}
+
+func (s *Schedule) Run(ctx context.Context) {
+	localContext, cancel := context.WithCancel(ctx)
+	s.cancel = cancel
+
+	go func() {
+
+		timer := time.NewTicker(100 * time.Millisecond)
+		defer timer.Stop()
+		for {
+
+			select {
+			case <-localContext.Done():
+				return
+			case <-timer.C:
+
+				var tasks []*Task
+
+				s.mu.Lock()
+
+				for _, v := range s.m {
+					if time.Now().After(v.ExecuteAt) {
+						tasks = append(tasks, v)
+
+						if v.Recurring {
+							v.ExecuteAt = v.ExecuteAt.Add(v.Interval)
+						} else {
+							delete(s.m, v.ID)
+						}
+
+					}
+				}
+				s.mu.Unlock()
+
+				for _, v := range tasks {
+					s.wg.Add(1)
+
+					go func(t *Task) {
+						defer s.wg.Done()
+						_ = t.Command(localContext)
+					}(v)
+				}
+			}
+		}
+	}()
+
 }

@@ -83,7 +83,7 @@ func TestQueue_Clear(t *testing.T) {
 	}
 }
 
-func TestQueue_Concurrency(t *testing.T) {
+func TestQueue_PushPopConcurrency(t *testing.T) {
 	queue := newQueue[int]()
 	var wg sync.WaitGroup
 
@@ -100,6 +100,29 @@ func TestQueue_Concurrency(t *testing.T) {
 		go func() {
 			defer wg.Done()
 			queue.Pop()
+		}()
+	}
+
+	wg.Wait()
+}
+
+func TestQueue_ClearConcurrency(t *testing.T) {
+	queue := newQueue[int]()
+	var wg sync.WaitGroup
+
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			queue.Push(n)
+		}(i)
+	}
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			queue.Clear()
 		}()
 	}
 

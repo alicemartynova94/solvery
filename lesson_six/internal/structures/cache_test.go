@@ -2,6 +2,7 @@ package structures
 
 import (
 	"github.com/stretchr/testify/assert"
+	"sync"
 	"testing"
 )
 
@@ -113,4 +114,27 @@ func TestCache_Size(t *testing.T) {
 	cache.Put(6, "purple")
 
 	assert.Equal(t, 6, cache.Size())
+}
+
+func TestCache_AppendRemoveConcurrency(t *testing.T) {
+	list := NewCache[int, int](int(10))
+	var wg sync.WaitGroup
+
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			list.Put(n, n)
+		}(i)
+	}
+
+	for i := 0; i < 50; i++ {
+		wg.Add(1)
+		go func(n int) {
+			defer wg.Done()
+			list.Get(n)
+		}(i)
+	}
+
+	wg.Wait()
 }
