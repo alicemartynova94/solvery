@@ -1,7 +1,8 @@
-package internal
+package internal_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"solvery/01_lesson/internal"
 	"math"
 	"testing"
 )
@@ -9,42 +10,42 @@ import (
 func TestPoint_CalculateDistance(t *testing.T) {
 	tests := []struct {
 		name        string
-		p1, p2      Point
+		p1, p2      internal.Point
 		expectedVal float64
 		expectErr   bool
 	}{
-		{"same location", Point{
+		{"same location", internal.Point{
 			X: 0,
 			Y: 0,
-		}, Point{
+		}, internal.Point{
 			X: 0,
 			Y: 0,
 		}, 0, false},
-		{"positive", Point{
+		{"positive", internal.Point{
 			X: 2,
 			Y: 0,
-		}, Point{
+		}, internal.Point{
 			X: 0,
 			Y: 0,
 		}, 2, false},
-		{"negative", Point{
+		{"negative", internal.Point{
 			X: -2,
 			Y: -4,
-		}, Point{
+		}, internal.Point{
 			X: -6,
 			Y: -9,
 		}, 6.40312423743284, false},
-		{"NaN", Point{
+		{"NaN", internal.Point{
 			X: math.NaN(),
 			Y: -4,
-		}, Point{
+		}, internal.Point{
 			X: -6,
 			Y: -9,
 		}, 0.0, true},
-		{"negative", Point{
+		{"negative", internal.Point{
 			X: math.MaxFloat64,
 			Y: -4,
-		}, Point{
+		}, internal.Point{
 			X: -6,
 			Y: -9,
 		}, 0.0, true},
@@ -62,28 +63,28 @@ func TestPoint_CalculateDistance(t *testing.T) {
 func TestPoint_InRadius(t *testing.T) {
 	tests := []struct {
 		name     string
-		p1, p2   Point
+		p1, p2   internal.Point
 		radius   float64
 		expected bool
 	}{
-		{"expected true: in radius", Point{
+		{"expected true: in radius", internal.Point{
 			X: 0,
 			Y: 0,
-		}, Point{
+		}, internal.Point{
 			X: 0,
 			Y: 0,
 		}, 0, true},
-		{"expected true: radius=distance", Point{
+		{"expected true: radius=distance", internal.Point{
 			X: 0,
 			Y: 0,
-		}, Point{
+		}, internal.Point{
 			X: 3,
 			Y: 4,
 		}, 5, true},
-		{"expected false: no in radius", Point{
+		{"expected false: no in radius", internal.Point{
 			X: 0,
 			Y: 0,
-		}, Point{
+		}, internal.Point{
 			X: 1,
 			Y: 1,
 		}, 0, false},
@@ -99,10 +100,10 @@ func TestPoint_InRadius(t *testing.T) {
 
 func TestPoint_InRadius_Err(t *testing.T) {
 	radius := 5.0
-	p1 := Point{
+	p1 := internal.Point{
 		X: math.NaN(),
 		Y: 0}
-	p2 := Point{
+	p2 := internal.Point{
 		X: 0,
 		Y: 0,
 	}
@@ -127,7 +128,7 @@ func TestPoint_ParsePoints(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := ParsePoint(test.point)
+			_, err := internal.ParsePoint(test.point)
 			assert.Equal(t, test.wantErr, err != nil)
 		})
 	}
@@ -136,16 +137,16 @@ func TestPoint_ParsePoints(t *testing.T) {
 func TestPolygon_Perimeter(t *testing.T) {
 	tests := []struct {
 		name      string
-		p         Polygon
+		p         internal.Polygon
 		perimeter float64
 		wantErr   bool
 	}{
-		{"expect success: triangle", Polygon{Points: []Point{
+		{"expect success: triangle", internal.Polygon{Points: []internal.Point{
 			{X: 0, Y: 0},
 			{X: 3, Y: 0},
 			{X: 3, Y: 4},
 		}}, 12.0, false},
-		{"expect success: triangle", Polygon{Points: []Point{
+		{"expect success: triangle", internal.Polygon{Points: []internal.Point{
 			{X: -2, Y: -1},
 			{X: 3, Y: -1},
 			{X: 3, Y: 2},
@@ -164,15 +165,15 @@ func TestPolygon_Perimeter(t *testing.T) {
 func TestPolygon_Area(t *testing.T) {
 	tests := []struct {
 		name      string
-		p         Polygon
+		p         internal.Polygon
 		perimeter float64
 	}{
-		{"expect success: triangle", Polygon{Points: []Point{
+		{"expect success: triangle", internal.Polygon{Points: []internal.Point{
 			{X: 0, Y: 0},
 			{X: 3, Y: 0},
 			{X: 3, Y: 4},
 		}}, 6.0},
-		{"expect success with negative numbers: triangle", Polygon{Points: []Point{
+		{"expect success with negative numbers: triangle", internal.Polygon{Points: []internal.Point{
 			{X: -2, Y: -1},
 			{X: 3, Y: -1},
 			{X: 3, Y: 2},
