@@ -1,13 +1,14 @@
-package semaphore
+package semaphore_test
 
 import (
 	"context"
+	"solvery/04_lesson/internal/semaphore"
 	"testing"
 	"time"
 )
 
 func TestSemaphoreTwo_Acquire_Success(t *testing.T) {
-	s := NewSemaphoreTwo(3)
+	s := semaphore.NewSemaphoreTwo(3)
 
 	err := s.Acquire(context.Background(), 2)
 	if err != nil {
@@ -16,7 +17,7 @@ func TestSemaphoreTwo_Acquire_Success(t *testing.T) {
 }
 
 func TestSemaphoreTwo_Acquire_Fail(t *testing.T) {
-	s := NewSemaphoreTwo(1)
+	s := semaphore.NewSemaphoreTwo(1)
 
 	ctx := context.Background()
 
@@ -60,7 +61,7 @@ func TestSemaphoreTwo_Acquire_Fail(t *testing.T) {
 //}
 
 func TestSemaphoreTwo_Release_Success(t *testing.T) {
-	s := NewSemaphoreTwo(2)
+	s := semaphore.NewSemaphoreTwo(2)
 
 	_ = s.Acquire(context.Background(), 2)
 
@@ -73,7 +74,7 @@ func TestSemaphoreTwo_Release_Success(t *testing.T) {
 }
 
 func TestSemaphoreTwo_TryAcquire(t *testing.T) {
-	s := NewSemaphoreTwo(2)
+	s := semaphore.NewSemaphoreTwo(2)
 
 	tests := []struct {
 		name     string

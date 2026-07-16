@@ -1,7 +1,8 @@
-package internal
+package internal_test
 
 import (
 	"reflect"
+	intrn "solvery/05_lesson/internal"
 	"testing"
 	"time"
 )
@@ -10,7 +11,7 @@ func TestPipeline_ExecutePipeline_Successful(t *testing.T) {
 	in := make(chan interface{})
 	done := make(chan interface{})
 
-	stage1 := func(in In) Out {
+	stage1 := func(in intrn.In) intrn.Out {
 		out := make(chan interface{})
 
 		go func() {
@@ -23,7 +24,7 @@ func TestPipeline_ExecutePipeline_Successful(t *testing.T) {
 		return out
 	}
 
-	stage2 := func(in In) Out {
+	stage2 := func(in intrn.In) intrn.Out {
 		out := make(chan interface{})
 
 		go func() {
@@ -36,7 +37,7 @@ func TestPipeline_ExecutePipeline_Successful(t *testing.T) {
 		return out
 	}
 
-	out := ExecutePipeline(in, done, stage1, stage2)
+	out := intrn.ExecutePipeline(in, done, stage1, stage2)
 
 	go func() {
 		defer close(in)
@@ -65,7 +66,7 @@ func TestPipeline_ExecutePipelineWithDone(t *testing.T) {
 	done := make(chan interface{})
 	signal := make(chan struct{})
 
-	stage1 := func(in In) Out {
+	stage1 := func(in intrn.In) intrn.Out {
 		out := make(chan interface{})
 
 		go func() {
@@ -79,7 +80,7 @@ func TestPipeline_ExecutePipelineWithDone(t *testing.T) {
 		return out
 	}
 
-	out := ExecutePipeline(in, done, stage1)
+	out := intrn.ExecutePipeline(in, done, stage1)
 
 	go func() {
 		defer close(in)
@@ -106,7 +107,7 @@ func TestPipeline_OutputClosed(t *testing.T) {
 	in := make(chan interface{})
 	done := make(chan interface{})
 
-	out := ExecutePipeline(in, done)
+	out := intrn.ExecutePipeline(in, done)
 
 	close(in)
 

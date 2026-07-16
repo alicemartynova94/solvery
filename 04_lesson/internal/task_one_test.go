@@ -1,7 +1,8 @@
-package internal
+package internal_test
 
 import (
 	"math"
+	intnl "solvery/04_lesson/internal"
 	"testing"
 	"time"
 )
@@ -13,7 +14,7 @@ func TestCalculatePi(t *testing.T) {
 	resultChannel := make(chan float64, numberOfRoutines)
 
 	for i := 0; i < numberOfRoutines; i++ {
-		go CalculatePi(i, numberOfRoutines, stopChannel, resultChannel)
+		go intnl.CalculatePi(i, numberOfRoutines, stopChannel, resultChannel)
 	}
 
 	time.Sleep(5 * time.Second)

@@ -1,8 +1,9 @@
-package internal
+package internal_test
 
 import (
 	"errors"
 	"github.com/stretchr/testify/assert"
+	intrn "solvery/05_lesson/internal"
 	"testing"
 	"time"
 )
@@ -10,24 +11,24 @@ import (
 func TestWorkpool_Run_Success(t *testing.T) {
 	tests := []struct {
 		name       string
-		tasks      []Task
+		tasks      []intrn.Task
 		workersNum int
 		errNum     int
 	}{
 		{name: "no tasks for three workers",
-			tasks:      []Task{},
+			tasks:      []intrn.Task{},
 			workersNum: 3,
 			errNum:     1,
 		},
 		{name: "one task for three workers",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 			},
 			workersNum: 3,
 			errNum:     1,
 		},
 		{name: "three tasks for three workers",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 				func() error { return nil },
 				func() error { return nil },
@@ -36,7 +37,7 @@ func TestWorkpool_Run_Success(t *testing.T) {
 			errNum:     1,
 		},
 		{name: "five tasks for three workers",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 				func() error { return nil },
 				func() error { return nil },
@@ -47,7 +48,7 @@ func TestWorkpool_Run_Success(t *testing.T) {
 			errNum:     1,
 		},
 		{name: "five tasks for three workers with errors",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 				func() error { return errors.New("err") },
 				func() error { return nil },
@@ -61,7 +62,7 @@ func TestWorkpool_Run_Success(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := Run(tt.tasks, tt.workersNum, tt.errNum)
+			err := intrn.Run(tt.tasks, tt.workersNum, tt.errNum)
 			assert.NoError(t, err)
 		})
 	}
@@ -70,12 +71,12 @@ func TestWorkpool_Run_Success(t *testing.T) {
 func TestWorkpool_Run_ReturnErr(t *testing.T) {
 	tests := []struct {
 		name       string
-		tasks      []Task
+		tasks      []intrn.Task
 		workersNum int
 		errNum     int
 	}{
 		{name: " all tasks with errors",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return errors.New("err") },
 				func() error { return errors.New("err") },
 				func() error { return errors.New("err") },
@@ -86,7 +87,7 @@ func TestWorkpool_Run_ReturnErr(t *testing.T) {
 			errNum:     3,
 		},
 		{name: " some tasks with errors exceeding limit",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return errors.New("err") },
 				func() error { return nil },
 				func() error { return errors.New("err") },
@@ -102,14 +103,14 @@ func TestWorkpool_Run_ReturnErr(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := Run(tt.tasks, tt.workersNum, tt.errNum)
-			assert.ErrorIs(t, err, ErrErrorsLimitExceeded)
+			err := intrn.Run(tt.tasks, tt.workersNum, tt.errNum)
+			assert.ErrorIs(t, err, intrn.ErrErrorsLimitExceeded)
 		})
 	}
 }
 
 func TestWorkpool_Run_NoDeadLock(t *testing.T) {
-	tasks := make([]Task, 10000)
+	tasks := make([]intrn.Task, 10000)
 
 	for i := range tasks {
 		tasks[i] = func() error { return nil }
@@ -118,7 +119,7 @@ func TestWorkpool_Run_NoDeadLock(t *testing.T) {
 	done := make(chan struct{})
 
 	go func() {
-		Run(tasks, 10, 3)
+		intrn.Run(tasks, 10, 3)
 		close(done)
 	}()
 
@@ -132,12 +133,12 @@ func TestWorkpool_Run_NoDeadLock(t *testing.T) {
 func TestWorkpool_Run_ErrNumEqualZero(t *testing.T) {
 	tests := []struct {
 		name       string
-		tasks      []Task
+		tasks      []intrn.Task
 		workersNum int
 		errNum     int
 	}{
 		{name: "zero err number",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 				func() error { return nil },
 				func() error { return nil },
@@ -146,7 +147,7 @@ func TestWorkpool_Run_ErrNumEqualZero(t *testing.T) {
 			errNum:     0,
 		},
 		{name: "negative err number",
-			tasks: []Task{
+			tasks: []intrn.Task{
 				func() error { return nil },
 				func() error { return nil },
 				func() error { return nil },
@@ -159,7 +160,7 @@ func TestWorkpool_Run_ErrNumEqualZero(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := Run(tt.tasks, tt.workersNum, tt.errNum)
+			err := intrn.Run(tt.tasks, tt.workersNum, tt.errNum)
 			assert.NoError(t, err)
 		})
 	}

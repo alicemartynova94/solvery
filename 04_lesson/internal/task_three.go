@@ -2,7 +2,7 @@ package internal
 
 import "sync"
 
-func or(channels ...<-chan interface{}) <-chan interface{} {
+func Or(channels ...<-chan interface{}) <-chan interface{} {
 	var o sync.Once
 	done := make(chan interface{})
 	for _, ch := range channels {
