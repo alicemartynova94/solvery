@@ -1,12 +1,13 @@
-package lesson_two
+package lesson_two_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	str "solvery/02_lesson/internal/structures"
 	"testing"
 )
 
-func newQueue[T comparable](values ...T) Queue[T] {
-	q := Queue[T]{}
+func newQueue[T comparable](values ...T) str.Queue[T] {
+	q := str.Queue[T]{}
 	for _, value := range values {
 		q.Push(value)
 	}

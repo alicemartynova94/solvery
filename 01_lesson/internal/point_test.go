@@ -2,8 +2,8 @@ package internal_test
 
 import (
 	"github.com/stretchr/testify/assert"
-	"solvery/01_lesson/internal"
 	"math"
+	"solvery/01_lesson/internal"
 	"testing"
 )
 

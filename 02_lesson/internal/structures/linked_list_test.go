@@ -1,12 +1,13 @@
-package lesson_two
+package lesson_two_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	str "solvery/02_lesson/internal/structures"
 	"testing"
 )
 
-func newList[T comparable](values ...T) LinkedList[T] {
-	ll := LinkedList[T]{}
+func newList[T comparable](values ...T) str.LinkedList[T] {
+	ll := str.LinkedList[T]{}
 	for _, value := range values {
 		ll.Append(value)
 	}
@@ -35,7 +36,7 @@ func TestLinkedList_Append(t *testing.T) {
 }
 
 func TestLinkedList_PrependToEmptyList(t *testing.T) {
-	list := LinkedList[string]{}
+	list := str.LinkedList[string]{}
 	list.Prepend("first")
 
 	assert.Equal(t, "first", list.head.value)
@@ -44,7 +45,7 @@ func TestLinkedList_PrependToEmptyList(t *testing.T) {
 }
 
 func TestLinkedList_PrependToList(t *testing.T) {
-	list := LinkedList[string]{}
+	list := str.LinkedList[string]{}
 	list.Prepend("first")
 	list.Prepend("second")
 	list.Prepend("third")

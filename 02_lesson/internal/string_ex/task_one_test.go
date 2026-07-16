@@ -1,7 +1,8 @@
-package lesson_two
+package lesson_two_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	str "solvery/02_lesson/internal/string_ex"
 	"testing"
 )
 
@@ -26,7 +27,7 @@ func TestUnpackString(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, _ := UnpackString(tt.input)
+			got, _ := str.UnpackString(tt.input)
 			assert.Equal(t, tt.want, got)
 		})
 	}
@@ -45,7 +46,7 @@ func TestPackString(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := PackString(tt.input)
+			got := str.PackString(tt.input)
 			assert.Equal(t, tt.want, got)
 		})
 	}

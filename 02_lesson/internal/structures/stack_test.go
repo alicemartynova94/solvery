@@ -1,12 +1,13 @@
-package lesson_two
+package lesson_two_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	str "solvery/02_lesson/internal/structures"
 	"testing"
 )
 
-func newStack[T comparable](values ...T) *Stack[T] {
-	stack := &Stack[T]{}
+func newStack[T comparable](values ...T) *str.Stack[T] {
+	stack := &str.Stack[T]{}
 	for _, v := range values {
 		stack.Push(v)
 	}
