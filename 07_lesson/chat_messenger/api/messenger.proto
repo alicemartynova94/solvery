@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "github.com/pkg/messenger;messenger";
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+service MessengerService {
+  rpc CreateSession(CreateSessionRequest) returns (Session){
+    option (google.api.http) = {
+      post: "/sessions"
+    };
+  }
+
+  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse){
+    option (google.api.http) = {
+      post: "/chats"
+      body: "*"
+    };
+  }
+
+  rpc JoinChat(JoinChatRequest) returns (JoinChatResponse){
+    option (google.api.http) = {
+      post: "/chats/{chat_id}/join"
+    };
+  }
+
+  rpc CreateMessage(CreateMessageRequest) returns (Message) {
+    option (google.api.http) = {
+      post: "/chats/{chat_id}/messages"
+      body: "message_text"
+    };
+  }
+
+  rpc ListMessages(ListMessagesRequest) returns (ListMessagesResponse) {
+    option (google.api.http) = {
+      get: "/chats/{chat_id}/messages"
+    };
+  }
+
+}
+
+message CreateSessionRequest{}
+
+message Session{
+  string session_id = 1;
+}
+
+message CreateChatRequest{
+  string chat_name = 1;
+  google.protobuf.Timestamp expires_at = 2;
+  int32 max_messages = 3;
+  bool read_only = 4;
+}
+
+message CreateChatResponse{
+  string id = 1;
+  string chat_name = 2;
+  google.protobuf.Timestamp expires_at = 3;
+  int32 max_messages = 4;
+  bool read_only = 5;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+  bool is_deleted = 9;
+}
+
+message JoinChatRequest {
+  string chat_id = 1;
+}
+
+message JoinChatResponse {}
+
+message CreateMessageRequest{
+  string chat_id = 1;
+  string message_text = 2;
+}
+
+message ListMessagesRequest{
+  string chat_id = 1;
+}
+
+message ListMessagesResponse{
+  repeated Message messages = 1;
+}
+
+message Message {
+  string id = 1;
+  string author_id = 2;
+  string text = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+  bool is_deleted = 6;
+}
