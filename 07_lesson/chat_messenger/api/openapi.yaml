@@ -1,0 +1,241 @@
+openapi: 3.0.3
+info:
+  title: Messenger API
+  description: |
+    Simple chat messenger
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Session
+  - name: Chat
+  - name: Messages
+
+paths:
+  /sessions:
+    post:
+      tags: [Session]
+      summary: Create session for user
+      responses:
+        '201':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+  /chats:
+    post:
+      tags: [Chat]
+      summary: Create chat
+      parameters:
+        - $ref: '#/components/parameters/SessionID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatRequest'
+      responses:
+        '201':
+          description: Chat created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateChatResponse'
+        '401':
+          description: Invalid session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /chats/{chatId}/join:
+    post:
+      tags: [Chat]
+      summary: Join chat
+      parameters:
+        - $ref: '#/components/parameters/ChatID'
+        - $ref: '#/components/parameters/SessionID'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Chat id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /chats/{chatId}/messages:
+    post:
+      tags: [Messages]
+      summary: Create message
+      parameters:
+        - $ref: '#/components/parameters/SessionID'
+        - $ref: '#/components/parameters/ChatID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMessageRequest'
+      responses:
+        '201':
+          description: Message created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Invalid chat or session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags: [Messages]
+      summary: Get list of messages for chat
+      parameters:
+        - $ref: '#/components/parameters/SessionID'
+        - $ref: '#/components/parameters/ChatID'
+      responses:
+        '200':
+          description: Messages returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '404':
+          description: Invalid chat or session id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  parameters:
+    SessionID:
+      name: X-Session-ID
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "550e8400-e29b-41d4-a716-446655440000"
+      description: User session UUID
+    ChatID:
+      name: chatId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: "550e8400-e29b-41d4-a716-446655440000"
+      description: Chat UUID
+  schemas:
+    Session:
+      type: object
+      required:
+        - sessionId
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+    CreateChatRequest:
+      type: object
+      required:
+        - chatName
+        - expiresAt
+        - maxMessages
+        - readOnly
+      properties:
+        chatName:
+          type: string
+          description: Chat name
+          minLength: 1
+          maxLength: 100
+          example: Chat-name-example
+        expiresAt:
+          type: string
+          format: date-time
+          description: Chat expiration time
+          example: "2026-07-14T15:30:00Z"
+        maxMessages:
+          type: integer
+          description: Max numbers of messages in chat
+          example: 100
+        readOnly:
+          type: boolean
+          description: Only owner can send messages
+          example: false
+    CreateChatResponse:
+      type: object
+      required:
+        - chatId
+      properties:
+        chatId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+    CreateMessageRequest:
+      type: object
+      required:
+        - messageText
+      properties:
+        messageText:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: Message text
+          example: text
+    Message:
+      type: object
+      required:
+        - id
+        - authorId
+        - text
+        - createdAt
+        - isDeleted
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        authorId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        text:
+          type: string
+          example: text example
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-07-14T15:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-07-14T15:30:00Z"
+        isDeleted:
+          type: boolean
+          example: true
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
