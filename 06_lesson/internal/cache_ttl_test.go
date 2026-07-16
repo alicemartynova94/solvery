@@ -1,14 +1,15 @@
-package internal
+package internal_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"solvery/06_lesson/internal"
 	"sync"
 	"testing"
 	"time"
 )
 
 func TestCacheTtl_Set(t *testing.T) {
-	cacheTtl := NewCache()
+	cacheTtl := internal.NewCache()
 	cacheTtl.Set("one", "element", 5*time.Minute)
 	v, ok := cacheTtl.Get("one")
 
@@ -17,7 +18,7 @@ func TestCacheTtl_Set(t *testing.T) {
 }
 
 func TestCacheTtl_GetExpired(t *testing.T) {
-	cacheTtl := NewCache()
+	cacheTtl := internal.NewCache()
 	cacheTtl.Set("one", "element", 5*time.Millisecond)
 	time.Sleep(10 * time.Millisecond)
 
@@ -28,7 +29,7 @@ func TestCacheTtl_GetExpired(t *testing.T) {
 }
 
 func TestCacheTtl_GetWrongKey(t *testing.T) {
-	cacheTtl := NewCache()
+	cacheTtl := internal.NewCache()
 	cacheTtl.Set("one", "element", 5*time.Millisecond)
 
 	v, ok := cacheTtl.Get("two")
@@ -38,7 +39,7 @@ func TestCacheTtl_GetWrongKey(t *testing.T) {
 }
 
 func TestCacheTtl_Clear(t *testing.T) {
-	cacheTtl := NewCache()
+	cacheTtl := internal.NewCache()
 	cacheTtl.Set("expired", "element", 5*time.Millisecond)
 	cacheTtl.Set("not expired", "element", 5*time.Minute)
 	time.Sleep(15 * time.Millisecond)
@@ -55,7 +56,7 @@ func TestCacheTtl_Clear(t *testing.T) {
 }
 
 func TestCacheTtl_GetConcurrent(t *testing.T) {
-	cacheTtl := NewCache()
+	cacheTtl := internal.NewCache()
 	var wg sync.WaitGroup
 
 	key := "one key"

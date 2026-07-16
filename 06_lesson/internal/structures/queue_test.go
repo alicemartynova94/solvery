@@ -1,14 +1,15 @@
-package structures
+package structures_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"solvery/06_lesson/internal/structures"
 	"sync"
 	"testing"
 )
 
-func newQueue[T comparable](values ...T) *Queue[T] {
-	q := Queue[T]{
-		ll: &LinkedList[T]{},
+func newQueue[T comparable](values ...T) *structures.Queue[T] {
+	q := structures.Queue[T]{
+		ll: &structures.LinkedList[T]{},
 	}
 	for _, value := range values {
 		q.Push(value)

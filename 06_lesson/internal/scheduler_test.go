@@ -1,21 +1,22 @@
-package internal
+package internal_test
 
 import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"solvery/06_lesson/internal"
 	"sync"
 	"testing"
 	"time"
 )
 
 func TestScheduler_ScheduleAt(t *testing.T) {
-	task := Task{
+	task := internal.Task{
 		ID: uuid.New(),
 	}
 
 	tm := time.Date(2026, 6, 30, 12, 0, 0, 0, time.UTC)
-	schedule := NewSchedule()
+	schedule := internal.NewSchedule()
 	schedule.ScheduleAt(task, tm)
 
 	el := schedule.m[task.ID]
@@ -26,13 +27,13 @@ func TestScheduler_ScheduleAt(t *testing.T) {
 }
 
 func TestScheduler_ScheduleAfter(t *testing.T) {
-	task := Task{
+	task := internal.Task{
 		ID: uuid.New(),
 	}
 
 	tm := time.Now()
 	duration := 30 * time.Minute
-	schedule := NewSchedule()
+	schedule := internal.NewSchedule()
 	schedule.ScheduleAfter(task, duration)
 
 	el := schedule.m[task.ID]
@@ -43,13 +44,13 @@ func TestScheduler_ScheduleAfter(t *testing.T) {
 }
 
 func TestScheduler_ScheduleEvery(t *testing.T) {
-	task := Task{
+	task := internal.Task{
 		ID: uuid.New(),
 	}
 
 	tm := time.Now()
 	duration := 30 * time.Minute
-	schedule := NewSchedule()
+	schedule := internal.NewSchedule()
 	schedule.ScheduleEvery(task, duration)
 
 	el := schedule.m[task.ID]
@@ -61,14 +62,14 @@ func TestScheduler_ScheduleEvery(t *testing.T) {
 
 func TestScheduler_CancelAndGetPending(t *testing.T) {
 	tm := time.Now().Add(30 * time.Minute)
-	task1 := Task{
+	task1 := internal.Task{
 		ID: uuid.New(),
 	}
-	task2 := Task{
+	task2 := internal.Task{
 		ID: uuid.New(),
 	}
 
-	schedule := NewSchedule()
+	schedule := internal.NewSchedule()
 	schedule.ScheduleAt(task1, tm)
 	schedule.ScheduleAt(task2, tm)
 
@@ -83,11 +84,11 @@ func TestScheduler_CancelAndGetPending(t *testing.T) {
 
 func TestScheduler_RunStop(t *testing.T) {
 	ctx := context.Background()
-	scheduler := NewSchedule()
+	scheduler := internal.NewSchedule()
 	done := make(chan struct{})
 	scheduler.Run(ctx)
 
-	task := Task{
+	task := internal.Task{
 		ID: uuid.New(),
 		Command: func(ctx context.Context) error {
 			close(done)
@@ -107,7 +108,7 @@ func TestScheduler_RunStop(t *testing.T) {
 }
 
 func TestScheduler_Concurrent(t *testing.T) {
-	scheduler := NewSchedule()
+	scheduler := internal.NewSchedule()
 
 	ctx := context.Background()
 	scheduler.Run(ctx)
@@ -121,7 +122,7 @@ func TestScheduler_Concurrent(t *testing.T) {
 			defer wg.Done()
 			id := uuid.New()
 
-			scheduler.ScheduleAfter(Task{
+			scheduler.ScheduleAfter(internal.Task{
 				ID: id,
 				Command: func(ctx context.Context) error {
 					return nil

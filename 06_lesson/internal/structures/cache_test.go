@@ -1,7 +1,8 @@
-package structures
+package structures_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"solvery/06_lesson/internal/structures"
 	"sync"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestCache_Get(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cache := NewCache[int, string](10)
+			cache := structures.NewCache[int, string](10)
 			cache.Put(1, "red")
 			cache.Put(2, "green")
 			cache.Put(3, "blue")
@@ -33,7 +34,7 @@ func TestCache_Get(t *testing.T) {
 }
 
 func TestCache_Put_IsEmpty(t *testing.T) {
-	cache := NewCache[int, string](10)
+	cache := structures.NewCache[int, string](10)
 
 	cache.Put(1, "red")
 
@@ -42,7 +43,7 @@ func TestCache_Put_IsEmpty(t *testing.T) {
 }
 
 func TestCache_Put_ExistingKey(t *testing.T) {
-	cache := NewCache[int, string](10)
+	cache := structures.NewCache[int, string](10)
 	cache.Put(1, "red")
 	cache.Put(2, "red")
 	cache.Put(3, "red")
@@ -52,7 +53,7 @@ func TestCache_Put_ExistingKey(t *testing.T) {
 }
 
 func TestCache_Put_InCapacity(t *testing.T) {
-	cache := NewCache[int, string](10)
+	cache := structures.NewCache[int, string](10)
 	cache.Put(1, "yellow")
 	cache.Put(2, "red")
 	cache.Put(3, "green")
@@ -75,7 +76,7 @@ func TestCache_Put_ExceedCapacity(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cache := NewCache[int, string](tt.capacity)
+			cache := structures.NewCache[int, string](tt.capacity)
 			cache.Put(1, "red")
 			cache.Put(2, "yellow")
 			cache.Put(3, "white")
@@ -90,7 +91,7 @@ func TestCache_Put_ExceedCapacity(t *testing.T) {
 }
 
 func TestCache_Put_CheckOrder(t *testing.T) {
-	cache := NewCache[int, string](10)
+	cache := structures.NewCache[int, string](10)
 	cache.Put(3, "white")
 	cache.Put(4, "black")
 	cache.Put(5, "green")
@@ -105,7 +106,7 @@ func TestCache_Put_CheckOrder(t *testing.T) {
 }
 
 func TestCache_Size(t *testing.T) {
-	cache := NewCache[int, string](10)
+	cache := structures.NewCache[int, string](10)
 	cache.Put(1, "red")
 	cache.Put(2, "yellow")
 	cache.Put(3, "white")
@@ -117,7 +118,7 @@ func TestCache_Size(t *testing.T) {
 }
 
 func TestCache_AppendRemoveConcurrency(t *testing.T) {
-	list := NewCache[int, int](int(10))
+	list := structures.NewCache[int, int](int(10))
 	var wg sync.WaitGroup
 
 	for i := 0; i < 100; i++ {

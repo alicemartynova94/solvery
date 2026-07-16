@@ -1,13 +1,14 @@
-package structures
+package structures_test
 
 import (
 	"github.com/stretchr/testify/assert"
+	"solvery/06_lesson/internal/structures"
 	"sync"
 	"testing"
 )
 
-func newStack[T comparable](values ...T) *Stack[T] {
-	stack := NewStack[T]()
+func newStack[T comparable](values ...T) *structures.Stack[T] {
+	stack := structures.NewStack[T]()
 	for _, v := range values {
 		stack.Push(v)
 	}
