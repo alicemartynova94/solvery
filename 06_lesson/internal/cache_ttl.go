@@ -6,7 +6,7 @@ import (
 )
 
 type CacheTtl struct {
-	mu sync.RWMutex
+	mu *sync.RWMutex
 	m  map[string]Element
 }
 
