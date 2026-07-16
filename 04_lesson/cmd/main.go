@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"solvery/lesson_four/internal"
+	"solvery/04_lesson/internal"
 )
 
 func main() {

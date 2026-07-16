@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/pflag"
-	"solvery/lesson_one/internal"
+	"solvery/01_lesson/internal"
 )
 
 func main() {

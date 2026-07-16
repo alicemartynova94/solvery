@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/spf13/pflag"
 	"os"
-	ex "solvery/lesson_two/internal/string_ex"
+	ex "solvery/02_lesson/internal/string_ex"
 )
 
 func main() {
