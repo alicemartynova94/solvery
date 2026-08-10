@@ -229,6 +229,17 @@ X-Session-ID: 550e8400-e29b-41d4-a716-446655440000
 ```  
 HTTP Status: 204 No Content  
 
+### gRPC API  
+GRPC http://localhost:8090/messenger.v1
+
+Available methods:
+- CreateChat
+- GetChat 
+- UpdateChat
+- DeleteChat
+- AddChatMember
+- DeleteChatMember
+  
 ### Error Cases  
   
 **Missing Session**  
@@ -385,6 +396,15 @@ Content-Type: application/json
 }
 ```  
 HTTP Status: 200 OK  
+
+### gRPC API  
+GRPC http://localhost:8090/messenger.v1  
+  
+Available methods:  
+- CreateMessage
+- GetMessages
+- DeleteMessage
+- EditMessage 
   
 ### Error Cases  
   
