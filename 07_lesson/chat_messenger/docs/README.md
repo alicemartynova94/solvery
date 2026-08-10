@@ -322,13 +322,13 @@ HTTP Status: 409 Conflict
   
 ### Delete Chat Member  
 Remove a session from the chat. The chat owner can remove any member, a member can only remove itself.  
-Here X-Session-ID is either the owner or a member of the chat. 
+Here X-Session-ID is either the owner or a member of the chat.  
   
 **Request:**  
 DELETE http://localhost:8080/api/v1/chats/{id}/members 
 X-Session-ID: 550e8400-e29b-41d4-a716-446655440000 
-
-**Example Request:**
+  
+**Example Request:**  
 ```
 {}
 ```  
@@ -359,9 +359,238 @@ HTTP Status: 404 Not Found
 Example Response:  
 ```
 {
-"error": "chat not found"
+    "error": "chat not found"
+}
+```  
+HTTP Status: 404 Not Found  
+  
+## Messages API  
+Messages belong o a chat. Every message has an author, which is determined in header.  
+  
+### Create Message  
+Create a new message in a chat.  
+  
+**Request:**  
+POST http://localhost:8080/api/v1/chats/{chat_id}/messages  
+X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+Content-Type: application/json  
+  
+**Example Request:**  
+```
+{
+    "text": "Example text."
+}
+```  
+  
+**Example Response:**
+```
+{ 
+    "id": "770e8400-e29b-41d4-a716-446655440000", 
+    "chat_id": "660e8400-e29b-41d4-a716-446655440000", 
+    "sender_id": "550e8400-e29b-41d4-a716-446655440000", 
+    "text": "Example text.", 
+    "created_at": "2026-08-10T10:00:00Z"
+}
+```  
+HTTP Status: 200 OK  
+
+### Error Cases  
+**Empty Message**  
+
+Example Response:  
+``` 
+{ 
+    "error": "message text is required" 
+}
+```  
+HTTP Status: 400 Bad Request  
+  
+**Message Length**  
+
+Example Response:  
+``` 
+{ 
+    "error": "message too long"
+}
+```  
+HTTP Status: 400 Bad Request  
+
+**Read-only Chat**  
+
+Example Response:  
+```
+    "error": "chat is read-only"
+```  
+HTTP Status: 409 Conflict  
+  
+**Expired Chat**  
+
+Example Response:  
+```
+    "error": "chat expired"
+```  
+HTTP Status: 409 Conflict  
+  
+### Get Messages  
+Return messages from a chat. Only chat members can retrieve messages. 
+
+Constraints:  
+default limit: 50;
+maximum limit: 100;
+offset >= 0.
+
+Ordering created_at ASC.
+  
+GET http://localhost:8080/api/v1/chats/{chat_id}/messages?limit=50&offset=0  
+X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+
+**Example Response:**  
+```  
+{ 
+    "messages": [ 
+        { 
+            "id": "770e8400-e29b-41d4-a716-446655440000", 
+            "chat_id": "660e8400-e29b-41d4-a716-446655440000", 
+            "sender_id": "550e8400-e29b-41d4-a716-446655440000", 
+            "text": "Example text.", 
+            "created_at": "2026-08-10T10:00:00Z", 
+            "updated_at": "2026-08-10T10:00:00Z" 
+        } 
+    ]
+}
+```  
+HTTP Status: 200 OK  
+  
+### Error Cases  
+  
+**Non-existent Chat**  
+
+Example Response:  
+```
+{
+    "error": "chat not found"
+}
+```  
+HTTP Status: 404 Not Found  
+  
+**Requester is not a member**  
+Example Response:
+```
+{
+   "error": "forbidden"
+}
+```  
+HTTP Status: 401 Unauthorized  
+  
+### Delete Message  
+Delete an existing message. Only the author and chat owner can delete a message.  
+  
+DELETE http://localhost:8080/api/v1/chats/{id}/messages/{id}  
+X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+  
+**Example Response:**  
+HTTP Status: 204 No Content  
+
+### Error Cases  
+  
+**Non-existent Chat**  
+  
+Example Response:  
+```
+{
+    "error": "chat not found"
+}
+```  
+HTTP Status: 404 Not Found  
+  
+**Requester is not a member**  
+Example Response:  
+```
+{
+   "error": "forbidden"
+}
+```  
+HTTP Status: 401 Unauthorized  
+  
+**Non-existent Message**  
+Example Response:  
+```
+{
+   "error": "chat not found"
+}
+```  
+HTTP Status: 404 Not Found  
+  
+### Edit Messages  
+Updates the text of an existing message. Only the author can delete a message.  
+  
+PATCH http://localhost:8080/api/v1/chats/{id}/messages  
+X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+Content-Type: application/json  
+
+**Example Response:**  
+```  
+{ 
+    "text": "Example update message."
+}
+```   
+HTTP Status: 200 OK  
+  
+**Example Response:**  
+```
+{
+    "id": "770e8400-e29b-41d4-a716-446655440000",
+    "chat_id": "660e8400-e29b-41d4-a716-446655440000",
+    "sender_id": "550e8400-e29b-41d4-a716-446655440000",
+    "text": "Updated message text.",
+    "created_at": "2026-08-10T10:00:00Z",
+    "updated_at": "2026-08-10T10:05:00Z"
+}
+```  
+HTTP Status: 200 OK  
+  
+### Error Cases  
+  
+**Non-existent Chat**  
+  
+Example Response:  
+```
+{
+    "error": "chat not found"
+}
+```  
+HTTP Status: 404 Not Found  
+  
+**Requester is not a member**  
+Example Response:  
+```
+{
+   "error": "forbidden"
+}
+```  
+HTTP Status: 401 Unauthorized  
+  
+**Non-existent Message**  
+Example Response:  
+```
+{
+   "error": "chat not found"
 }
 ```  
 HTTP Status: 404 Not Found  
 
-## Messages API  
+**Read-only Chat**  
+  
+Example Response:  
+```
+    "error": "chat is read-only"
+```  
+HTTP Status: 409 Conflict  
+  
+**Expired Chat**  
+  
+Example Response:  
+```
+    "error": "chat expired"
+```  
+HTTP Status: 409 Conflict
