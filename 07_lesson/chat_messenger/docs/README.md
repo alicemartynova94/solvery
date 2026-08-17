@@ -1,5 +1,15 @@
 # QA Notes
 
+## Task Breakdown  
+- [ ] Set up project skeleton  
+- [ ] Implement Session API 
+- [ ] Add Session API tests 
+- [ ] Implement Chat API
+- [ ] Implement Chat members API 
+- [ ] Add Chat API tests
+- [ ] Implement Messages API
+- [ ] Add Messages API tests
+
 ## Prerequisites  
 Start application:  
 `make run`  
