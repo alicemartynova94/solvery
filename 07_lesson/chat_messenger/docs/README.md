@@ -1,14 +1,23 @@
 # QA Notes
 
 ## Task Breakdown  
-- [ ] Set up project skeleton  
-- [ ] Implement Session API 
-- [ ] Add Session API tests 
-- [ ] Implement Chat API
-- [ ] Implement Chat members API 
-- [ ] Add Chat API tests
-- [ ] Implement Messages API
-- [ ] Add Messages API tests
+1. [ ] Спроектировать API 
+2. [ ] Подготовить базовую структуру проекта 
+3. Реализовать Session API
+- [ ] Реализовать API для создания сессий
+- [ ] Реализовать API для удаления сессий 
+4. Реализовать Chat API
+- [ ] Реализовать API для создания чатов
+- [ ] Реализовать API для проверки наличия чата 
+- [ ] Реализовать API для изменения данных чата
+- [ ] Реализовать API для удаления чата
+- [ ] Реализовать API для добавления участника в чат 
+- [ ] Реализовать API для удаления участника из чата
+5. Реализовать Messages API
+- [ ] Реализовать API для создания сообщения 
+- [ ] Реализовать API для получения сообщений чата 
+- [ ] Реализовать API для удаления сообщения
+- [ ] Реализовать API для изменения текста сообщения
 
 ## Prerequisites  
 Start application:  
