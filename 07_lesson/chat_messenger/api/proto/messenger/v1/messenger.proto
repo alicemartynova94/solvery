@@ -49,10 +49,10 @@ message Session{
 }
 
 message CreateChatRequest{
-  string chat_name = 1;
-  google.protobuf.Timestamp expires_at = 2;
-  int32 max_messages = 3;
-  bool read_only = 4;
+    string chat_name = 1;
+    google.protobuf.Timestamp expires_at = 2;
+    int32 max_messages = 3;
+    bool read_only = 4;
 }
 
 message CreateChatResponse{
