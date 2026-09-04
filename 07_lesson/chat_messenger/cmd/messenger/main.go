@@ -7,8 +7,7 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"solvery/07_lesson/chat_messenger/internal/api"
-	"solvery/07_lesson/chat_messenger/internal/api/generated"
+	"solvery/07_lesson/chat_messenger/gen/openapi"
 	"strconv"
 )
 
@@ -67,9 +66,8 @@ func NewHTTPServer(cfg *Config) *http.Server {
 	mux := http.NewServeMux()
 
 	apiServer := api.NewServer()
-	generated.HandlerFromMux(apiServer, mux)
+	openapi.HandlerFromMux(apiServer, mux)
 
-	// Swagger UI
 	swaggerFS := http.FileServer(http.Dir("07_lesson/chat_messenger/api"))
 	mux.Handle("GET /swagger/", http.StripPrefix("/swagger/", swaggerFS))
 
