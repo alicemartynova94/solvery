@@ -52,7 +52,8 @@ HTTP Status: 200 OK
 Terminates existing session.  
   
 **Request:**  
-DELETE http://localhost:8080/api/v1/sessions/{id}  
+DELETE http://localhost:8080/api/v1/sessions
+X-Session-ID: <session-id>
 ```
 {}
 ```  
@@ -121,17 +122,19 @@ Creates a new chat for the session (chat owner). The owner must also be consider
   
 **Max Messages Rules**  
 - Changing to a lower value (than the current) is forbidden 
-- Negative value is forbidden 
+- Negative value is forbidden
+- Zero value indicated that there is no max messages value for a chat
   
 **Request:**  
 POST http://localhost:8080/api/v1/chats  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+X-Session-ID: <session-id> 
 Content-Type: application/json  
 ```
 {
-    "max_messages": 100,
+    "chat_name": "example name",
     "expires_at": "2026-08-10T12:00:00Z",
     "read_only": false,
+    "max_messages": 100,
     "members":[ 
     "550e8400-e29b-41d4-a716-446655440001", 
     "550e8400-e29b-41d4-a716-446655440002"
@@ -143,6 +146,15 @@ Content-Type: application/json
 ```
 {
     "id": "660e8400-e29b-41d4-a716-446655440000"
+    "chat_name": "example name",
+    "expires_at": "2026-08-10T12:00:00Z",
+    "read_only": false,
+    "max_messages": 100,
+    "members":[ 
+    "550e8400-e29b-41d4-a716-446655440001", 
+    "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "created_at": "2026-08-10T10:00:00Z"
 }
 ```  
 HTTP Status: 200 OK  
@@ -151,8 +163,8 @@ HTTP Status: 200 OK
 Gets basic chat info, including chat settings and members' session IDs.  
   
 **Request:**  
-GET http://localhost:8080/api/v1/chats/{id}  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000   
+GET http://localhost:8080/api/v1/chats/{chat_id}  
+X-Session-ID: <session-id>  
 ```
 {}
 ```  
@@ -160,11 +172,12 @@ X-Session-ID: 550e8400-e29b-41d4-a716-446655440000
 **Response:**  
 ```
 {
-    "max_messages": 100,
+    "id": "660e8400-e29b-41d4-a716-446655440000"
+    "chat_name": "example name",
     "expires_at": "2026-08-10T12:00:00Z",
     "read_only": false,
+    "max_messages": 100,
     "members":[ 
-    "550e8400-e29b-41d4-a716-446655440000", 
     "550e8400-e29b-41d4-a716-446655440001", 
     "550e8400-e29b-41d4-a716-446655440002"
     ],
@@ -179,14 +192,16 @@ Updates chat settings. Available for the chat owner.
 Only following fields can be updated: max_messages, expires_at, read_only.  
   
 **Request:**  
-PATCH http://localhost:8080/api/v1/chats/{id}  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+PATCH http://localhost:8080/api/v1/chats/{chat_id}  
+X-Session-ID: <session-id> 
 Content-Type: application/json  
 ```
 {
-    "max_messages": 100,
+    "chat_name": "example name",
     "expires_at": "2026-08-10T12:00:00Z",
-    "read_only": false
+    "read_only": false,
+    "max_messages": 100,
+    "updated_at": "2026-08-10T10:00:00Z"
 }
 ```  
   
@@ -200,8 +215,8 @@ HTTP Status: 200 OK
 Deletes an existing chat. Available for the chat owner.  
   
 **Request:**  
-DELETE http://localhost:8080/api/v1/chats/{id}  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+DELETE http://localhost:8080/api/v1/chats/{chat_id}  
+X-Session-ID: <session-id>  
 ```
 {}
 ```  
@@ -216,37 +231,58 @@ HTTP Status: 204 No Content
 Adds an existing session to the chat.   
   
 **Request:**  
-POST http://localhost:8080/api/v1/chats/{id}/members  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+POST http://localhost:8080/api/v1/chats/{chat_id}/members  
+X-Session-ID: <session-id> 
 Content-Type: application/json  
 ```
 {
-    "session_id": "550e8400-e29b-41d4-a716-446655440001"
+    "members":[ 
+    "550e8400-e29b-41d4-a716-446655440005", 
+    "550e8400-e29b-41d4-a716-446655440006"
+    ]
 }
 ```  
   
 **Response:**  
 ```
-{}
+{
+    "members":[ 
+    "550e8400-e29b-41d4-a716-446655440001", 
+    "550e8400-e29b-41d4-a716-446655440002",
+    "550e8400-e29b-41d4-a716-446655440003", 
+    "550e8400-e29b-41d4-a716-446655440004",
+    "550e8400-e29b-41d4-a716-446655440005", 
+    "550e8400-e29b-41d4-a716-446655440006",
+    ]
+}
 ```  
-HTTP Status: 200 OK
+HTTP Status: 200 OK  
   
 ### Delete Chat Member  
-Removes a member's session from the chat.  
-Here X-Session-ID is either the owner or a member of the chat.  
+Removes a member's session from the chat.   
   
 **Request:**  
-DELETE http://localhost:8080/api/v1/chats/{id}/members  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+DELETE http://localhost:8080/api/v1/chats/{chat_id}/members  
+X-Session-ID: <session-id>  
 ```
-{}
+{
+    "members": "550e8400-e29b-41d4-a716-446655440001"
+}
 ```  
   
 **Response:**  
 ```
-{}
+{
+    "members":[ 
+    "550e8400-e29b-41d4-a716-446655440002",
+    "550e8400-e29b-41d4-a716-446655440003", 
+    "550e8400-e29b-41d4-a716-446655440004",
+    "550e8400-e29b-41d4-a716-446655440005", 
+    "550e8400-e29b-41d4-a716-446655440006",
+    ]
+}
 ```  
-HTTP Status: 204 No Content  
+HTTP Status: 200 OK
 
 ### gRPC API  
 GRPC http://localhost:8090/messenger.v1
@@ -323,7 +359,7 @@ Creates a new message in a chat.
   
 **Request:**  
 POST http://localhost:8080/api/v1/chats/{chat_id}/messages  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+X-Session-ID: <session-id>   
 Content-Type: application/json  
 ```
 {
@@ -353,7 +389,7 @@ Constraints for pagination:
 
 **Request:**  
 GET http://localhost:8080/api/v1/chats/{chat_id}/messages  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+X-Session-ID: <session-id>   
 ```  
 {}
 ```  
@@ -379,8 +415,8 @@ HTTP Status: 200 OK
 Deletes an existing message. Only the author and chat owner can delete a message.  
   
 **Request:**  
-DELETE http://localhost:8080/api/v1/chats/{id}/messages/{id}  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+DELETE http://localhost:8080/api/v1/chats/{chat_id}/messages/{message_id}  
+X-Session-ID: <session-id>   
 ```  
 {}
 ```  
@@ -395,8 +431,8 @@ HTTP Status: 204 No Content
 Updates the text of an existing message. Only the author can edit the message.  
 
 **Request:**  
-PATCH http://localhost:8080/api/v1/chats/{id}/messages/{id}  
-X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
+PATCH http://localhost:8080/api/v1/chats/{chat_id}/messages/{messages_id}  
+X-Session-ID: <session-id>    
 Content-Type: application/json  
 ```  
 { 
