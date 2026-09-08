@@ -24,7 +24,7 @@ Start application:
 `make run`  
   
 After successful startup:  
-Swagger UI: http://localhost:9000/swagger/index.html
+Swagger UI: http://localhost:8080/swagger/index.html
 Expected result:  
 Swagger UI page is available.  
   
@@ -322,7 +322,7 @@ Messages belong o a chat. Every message has an author, which is determined in th
 Creates a new message in a chat.  
   
 **Request:**  
-POST http://localhost:8080/api/v1/chats/{chat_id}/messages  
+POST http://localhost:8080/api/v1/chats/{id}/messages  
 X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
 Content-Type: application/json  
 ```
@@ -352,7 +352,7 @@ Constraints for pagination:
 - ordering by created_at 
 
 **Request:**  
-GET http://localhost:8080/api/v1/chats/{chat_id}/messages  
+GET http://localhost:8080/api/v1/chats/{id}/messages  
 X-Session-ID: 550e8400-e29b-41d4-a716-446655440000  
 ```  
 {}
