@@ -7,82 +7,148 @@ option go_package = "github.com/pkg/messenger;messenger";
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
-service MessengerService {
+service MessengerService{
   rpc CreateSession(CreateSessionRequest) returns (Session){
     option (google.api.http) = {
-      post: "/sessions"
+      post: "api/v1/sessions"
     };
   }
 
-  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse){
+  rpc DeleteSession(Session) returns (DeleteSessionResponse){
     option (google.api.http) = {
-      post: "/chats"
+      delete: "api/v1/sessions"
+    };
+  }
+
+  rpc CreateChat(CreateChatRequest) returns (Chat){
+    option (google.api.http) = {
+      post: "api/v1/chats"
       body: "*"
     };
   }
 
-  rpc JoinChat(JoinChatRequest) returns (JoinChatResponse){
+  rpc GetChat(GetChatRequest) returns (Chat){
+    option (google.api.http) = {
+      get: "api/v1/chats/{id}"
+      body: "*"
+    };
+  }
+
+  rpc UpdateChat(UpdateChatRequest)returns (Chat){
+    option (google.api.http) = {
+      get: "api/v1/chats/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteChat(DeleteChatRequest) returns (DeleteChatResponse){
+    option (google.api.http) = {
+      get: "api/v1/chats/{id}"
+      body: "*"
+    };
+  }
+
+  rpc AddChatMembers(AddChatMembersRequest) returns (AddChatMembersResponse){
     option (google.api.http) = {
       post: "/chats/{chat_id}/join"
     };
   }
 
+  rpc DeleteChatMember(DeleteChatMemberRequest) returns (DeleteChatMemberResponse){
+    option (google.api.http) = {
+      post: "api/v1/chats/{id}/members"
+    };
+  }
+
   rpc CreateMessage(CreateMessageRequest) returns (Message) {
     option (google.api.http) = {
-      post: "/chats/{chat_id}/messages"
-      body: "message_text"
+      post: "api/v1/chats/{id}/messages"
+      body: "*"
     };
   }
 
-  rpc ListMessages(ListMessagesRequest) returns (ListMessagesResponse) {
+  rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse) {
     option (google.api.http) = {
-      get: "/chats/{chat_id}/messages"
+      get: "api/v1/chats/{id}/messages"
     };
   }
 
+  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse){
+    option(google.api.http) = {
+      delete: "api/v1/chats/{id}/messages/{id}"
+    };
+  }
+
+  rpc EditMessage(EditMessageRequest) returns (Message){
+    option(google.api.http) = {
+      patch: "api/v1/chats/{id}/messages/{id}"
+    };
+  }
 }
 
 message CreateSessionRequest{}
 
 message Session{
-  string session_id = 1;
+  string id = 1;
 }
+
+message DeleteSessionResponse{}
 
 message CreateChatRequest{
-    string chat_name = 1;
-    google.protobuf.Timestamp expires_at = 2;
-    int32 max_messages = 3;
-    bool read_only = 4;
+  string chat_name = 1;
+  optional google.protobuf.Timestamp expires_at = 2;
+  bool read_only = 3;
+  int32 max_messages = 4;
+  repeated Session members = 5;
 }
 
-message CreateChatResponse{
+message Chat{
   string id = 1;
   string chat_name = 2;
   google.protobuf.Timestamp expires_at = 3;
-  int32 max_messages = 4;
-  bool read_only = 5;
+  bool read_only = 4;
+  int32 max_messages = 5;
+  repeated Session members = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
-  bool is_deleted = 9;
 }
 
-message JoinChatRequest {
-  string chat_id = 1;
+message GetChatRequest{
+  string id = 1;
 }
 
-message JoinChatResponse {}
+message UpdateChatRequest{
+  string chat_name = 2;
+  google.protobuf.Timestamp expires_at = 3;
+  bool read_only = 4;
+  int32 max_messages = 5;
+}
+
+message DeleteChatRequest{
+  string id = 1;
+}
+
+message DeleteChatResponse{}
+
+message AddChatMembersRequest{
+  string id = 1;
+  repeated Session members = 2;
+}
+
+message AddChatMembersResponse{
+  repeated Session members = 1;
+}
+
+message DeleteChatMemberRequest{
+  string id = 1;
+}
+
+message DeleteChatMemberResponse{
+}
 
 message CreateMessageRequest{
   string chat_id = 1;
   string message_text = 2;
-}
-
-message ListMessagesRequest{
-  string chat_id = 1;
-}
-
-message ListMessagesResponse{
-  repeated Message messages = 1;
 }
 
 message Message {
@@ -91,5 +157,24 @@ message Message {
   string text = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
-  bool is_deleted = 6;
+}
+
+message GetMessagesRequest{
+  string chat_id = 1;
+}
+
+message GetMessagesResponse{
+  repeated Message messages = 1;
+}
+
+message DeleteMessageRequest{
+  string chat_id = 1;
+  string message_id = 2;
+}
+
+message DeleteMessageResponse{}
+
+message EditMessageRequest{
+  string chat_id = 1;
+  string message_id = 2;
 }
