@@ -155,6 +155,7 @@ Content-Type: application/json
     "550e8400-e29b-41d4-a716-446655440002"
     ],
     "created_at": "2026-08-10T10:00:00Z"
+    "updated_at": "2026-08-10T10:00:00Z"
 }
 ```  
 HTTP Status: 200 OK  
@@ -207,7 +208,19 @@ Content-Type: application/json
   
 **Response:**  
 ```
-{}
+{
+    "id": "660e8400-e29b-41d4-a716-446655440000"
+    "chat_name": "example name",
+    "expires_at": "2026-08-10T12:00:00Z",
+    "read_only": false,
+    "max_messages": 100,
+    "members":[ 
+    "550e8400-e29b-41d4-a716-446655440001", 
+    "550e8400-e29b-41d4-a716-446655440002"
+    ],
+    "created_at": "2026-08-10T10:00:00Z",
+    "updated_at": "2026-08-10T10:00:00Z"
+}
 ```  
 HTTP Status: 200 OK  
   
