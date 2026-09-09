@@ -279,21 +279,13 @@ DELETE http://localhost:8080/api/v1/chats/{chat_id}/members
 X-Session-ID: <session-id>  
 ```
 {
-    "members": "550e8400-e29b-41d4-a716-446655440001"
+    "member_id": "550e8400-e29b-41d4-a716-446655440001"
 }
 ```  
   
 **Response:**  
 ```
-{
-    "members":[ 
-    "550e8400-e29b-41d4-a716-446655440002",
-    "550e8400-e29b-41d4-a716-446655440003", 
-    "550e8400-e29b-41d4-a716-446655440004",
-    "550e8400-e29b-41d4-a716-446655440005", 
-    "550e8400-e29b-41d4-a716-446655440006",
-    ]
-}
+{}
 ```  
 HTTP Status: 200 OK
 
@@ -384,10 +376,10 @@ Content-Type: application/json
 ```
 { 
     "id": "770e8400-e29b-41d4-a716-446655440000", 
-    "chat_id": "660e8400-e29b-41d4-a716-446655440000", 
-    "sender_id": "550e8400-e29b-41d4-a716-446655440000", 
+    "author_id": "550e8400-e29b-41d4-a716-446655440000", 
     "text": "Example text.", 
-    "created_at": "2026-08-10T10:00:00Z"
+    "created_at": "2026-08-10T10:00:00Z",
+    "updated_at": "2026-08-10T10:00:00Z"
 }
 ```  
 HTTP Status: 200 OK  
@@ -444,7 +436,7 @@ HTTP Status: 204 No Content
 Updates the text of an existing message. Only the author can edit the message.  
 
 **Request:**  
-PATCH http://localhost:8080/api/v1/chats/{chat_id}/messages/{messages_id}  
+PATCH http://localhost:8080/api/v1/chats/{chat_id}/messages/{message_id}  
 X-Session-ID: <session-id>    
 Content-Type: application/json  
 ```  
