@@ -5,85 +5,32 @@ package api;
 option go_package = "github.com/pkg/messenger;messenger";
 
 import "google/protobuf/timestamp.proto";
-import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 service MessengerService{
-  rpc CreateSession(CreateSessionRequest) returns (Session){
-    option (google.api.http) = {
-      post: "api/v1/sessions"
-    };
-  }
+  rpc CreateSession(CreateSessionRequest) returns (Session);
 
-  rpc DeleteSession(Session) returns (DeleteSessionResponse){
-    option (google.api.http) = {
-      delete: "api/v1/sessions"
-    };
-  }
+  rpc DeleteSession(google.protobuf.Empty) returns (DeleteSessionResponse);
 
-  rpc CreateChat(CreateChatRequest) returns (Chat){
-    option (google.api.http) = {
-      post: "api/v1/chats"
-      body: "*"
-    };
-  }
+  rpc CreateChat(CreateChatRequest) returns (Chat);
 
-  rpc GetChat(GetChatRequest) returns (Chat){
-    option (google.api.http) = {
-      get: "api/v1/chats/{id}"
-      body: "*"
-    };
-  }
+  rpc GetChat(GetChatRequest) returns (Chat);
 
-  rpc UpdateChat(UpdateChatRequest)returns (Chat){
-    option (google.api.http) = {
-      get: "api/v1/chats/{id}"
-      body: "*"
-    };
-  }
+  rpc UpdateChat(UpdateChatRequest) returns (Chat);
 
-  rpc DeleteChat(DeleteChatRequest) returns (DeleteChatResponse){
-    option (google.api.http) = {
-      get: "api/v1/chats/{id}"
-      body: "*"
-    };
-  }
+  rpc DeleteChat(DeleteChatRequest) returns (DeleteChatResponse);
 
-  rpc AddChatMembers(AddChatMembersRequest) returns (AddChatMembersResponse){
-    option (google.api.http) = {
-      post: "/chats/{chat_id}/join"
-    };
-  }
+  rpc AddChatMembers(AddChatMembersRequest) returns (AddChatMembersResponse);
 
-  rpc DeleteChatMember(DeleteChatMemberRequest) returns (DeleteChatMemberResponse){
-    option (google.api.http) = {
-      post: "api/v1/chats/{id}/members"
-    };
-  }
+  rpc DeleteChatMember(DeleteChatMemberRequest) returns (DeleteChatMemberResponse);
 
-  rpc CreateMessage(CreateMessageRequest) returns (Message) {
-    option (google.api.http) = {
-      post: "api/v1/chats/{id}/messages"
-      body: "*"
-    };
-  }
+  rpc CreateMessage(CreateMessageRequest) returns (Message);
 
-  rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse) {
-    option (google.api.http) = {
-      get: "api/v1/chats/{id}/messages"
-    };
-  }
+  rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
 
-  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse){
-    option(google.api.http) = {
-      delete: "api/v1/chats/{id}/messages/{id}"
-    };
-  }
+  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse);
 
-  rpc EditMessage(EditMessageRequest) returns (Message){
-    option(google.api.http) = {
-      patch: "api/v1/chats/{id}/messages/{id}"
-    };
-  }
+  rpc EditMessage(EditMessageRequest) returns (Message);
 }
 
 message CreateSessionRequest{}
@@ -99,7 +46,7 @@ message CreateChatRequest{
   optional google.protobuf.Timestamp expires_at = 2;
   bool read_only = 3;
   int32 max_messages = 4;
-  repeated Session members = 5;
+  repeated string members = 5;
 }
 
 message Chat{
@@ -108,39 +55,41 @@ message Chat{
   google.protobuf.Timestamp expires_at = 3;
   bool read_only = 4;
   int32 max_messages = 5;
-  repeated Session members = 6;
+  repeated string members = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
 
 message GetChatRequest{
-  string id = 1;
+  string chat_id = 1;
 }
 
 message UpdateChatRequest{
-  string chat_name = 2;
-  google.protobuf.Timestamp expires_at = 3;
-  bool read_only = 4;
-  int32 max_messages = 5;
+  optional string chat_name = 1;
+  optional google.protobuf.Timestamp expires_at = 2;
+  optional bool read_only = 3;
+  optional int32 max_messages = 4;
+  bool clear_expires_at = 5;
 }
 
 message DeleteChatRequest{
-  string id = 1;
+  string chat_id = 1;
 }
 
 message DeleteChatResponse{}
 
 message AddChatMembersRequest{
-  string id = 1;
-  repeated Session members = 2;
+  string chat_id = 1;
+  repeated string members = 2;
 }
 
 message AddChatMembersResponse{
-  repeated Session members = 1;
+  repeated string members = 1;
 }
 
 message DeleteChatMemberRequest{
-  string id = 1;
+  string chat_id = 1;
+  string member_id = 2;
 }
 
 message DeleteChatMemberResponse{
@@ -148,7 +97,7 @@ message DeleteChatMemberResponse{
 
 message CreateMessageRequest{
   string chat_id = 1;
-  string message_text = 2;
+  string text = 2;
 }
 
 message Message {
@@ -177,4 +126,5 @@ message DeleteMessageResponse{}
 message EditMessageRequest{
   string chat_id = 1;
   string message_id = 2;
+  string text = 3;
 }
