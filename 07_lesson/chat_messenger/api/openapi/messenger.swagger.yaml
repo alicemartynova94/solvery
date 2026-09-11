@@ -66,10 +66,7 @@ paths:
       description: |
         Creates a new chat for the session (chat owner).
         The owner must also be considered a chat member. 
-        
-        Max messages rules: 
-        - Changing to a lower value than the current value is forbidden. 
-        - Negative value is forbidden.
+
       requestBody:
         required: true
         content:
@@ -82,7 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateChatResponse'
+                $ref: '#/components/schemas/Chat'
         '401':
           description: Invalid session id
           content:
@@ -115,7 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetChatResponse'
+                $ref: '#/components/schemas/Chat'
         '401':
           description: Invalid session id
           content:
@@ -138,7 +135,7 @@ paths:
       tags: [ Chat ]
       summary: Update chat settings
       description: |
-        Updates chat settings. Available for the chat owner.
+        Updates chat basic settings.
         Only the following fields can be updated: max_messages, expires_at, read_only.
       parameters:
         - $ref: '#/components/parameters/ChatID'
@@ -154,7 +151,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetChatResponse'
+                $ref: '#/components/schemas/Chat'
         '401':
           description: Invalid session id
           content:
@@ -210,7 +207,7 @@ paths:
   /api/v1/chats/{chat_id}/members:
     post:
       tags: [Chat]
-      summary: Adds an existing session to the chat.
+      summary: Adds an existing session to the chat
       parameters:
         - $ref: '#/components/parameters/ChatID'
       requestBody:
@@ -220,8 +217,12 @@ paths:
             schema:
               $ref: '#/components/schemas/AddChatMemberRequest'
       responses:
-        '204':
+        '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddChatMemberResponse'
         '401':
           description: Invalid session ID
           content:
@@ -250,8 +251,7 @@ paths:
       tags: [Chat]
       summary: Delete chat member
       description: | 
-        Removes a member's session from the chat. 
-        X-Session-ID is either the owner or a member of the chat.
+        Removes a member's session from the chat.
       parameters:
         - $ref: '#/components/parameters/ChatID'
       requestBody:
@@ -269,14 +269,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
-          description: Invalid chat or session id
+        '403':
+          description: Permission denied
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '403':
-          description: Permission denied
+        '404':
+          description: Invalid chat or session id
           content:
             application/json:
               schema:
@@ -295,7 +295,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateMessageRequest'
+              $ref: '#/components/schemas/TextRequest'
       responses:
         '201':
           description: Message Created
@@ -337,11 +337,7 @@ paths:
       tags: [Message]
       summary: Get list of messages
       description: |
-        Returns messages from a chat. Only chat members can retrieve messages.
-        Constraints for pagination:  
-        - default limit - 50 
-        - offset >= 0 
-        - ordering by created_at
+        Returns all messages from a chat. Only chat members can retrieve messages.
       parameters:
         - $ref: '#/components/parameters/ChatID'
         - name: limit
@@ -432,7 +428,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EditMessageRequest'
+              $ref: '#/components/schemas/TextRequest'
       responses:
         '200':
           description: Message updated
@@ -509,16 +505,12 @@ components:
     CreateChatRequest:
       type: object
       required:
-        - max_messages
-        - expires_at
-        - read_only
-        - members
+        - chat_name
       properties:
-        max_messages:
-          type: integer
-          minimum: 0
-          description: Maximum number of messages in chat
-          example: 100
+        chat_name:
+          type: string
+          description: The name of created chat
+          example: example name
         expires_at:
           type: string
           format: date-time
@@ -528,6 +520,12 @@ components:
           type: boolean
           description: Only owner can send messages
           example: false
+          default: false
+        max_messages:
+          type: integer
+          description: Maximum number of messages in chat
+          example: 100
+          default: 0
         members:
           type: array
           description: Session IDs of chat members
@@ -537,35 +535,40 @@ components:
             example:
               - "550e8400-e29b-41d4-a716-446655440001"
               - "550e8400-e29b-41d4-a716-446655440002"
-    CreateChatResponse:
+            default: []
+    Chat:
       type: object
       required:
         - id
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440000"
-    GetChatResponse:
-      type: object
-      required:
-        - max_messages
+        - chat_name
         - expires_at
         - read_only
+        - max_messages
         - members
         - created_at
         - updated_at
       properties:
-        max_messages:
-          type: integer
-          example: 100
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        chat_name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          description: The name of created chat
+          example: example name
         expires_at:
           type: string
           format: date-time
+          nullable: true
           example: "2026-08-10T12:00:00Z"
         read_only:
           type: boolean
           example: false
+        max_messages:
+          type: integer
+          example: 100
         members:
           type: array
           items:
@@ -592,6 +595,7 @@ components:
         expires_at:
           type: string
           format: date-time
+          nullable: true
           example: "2026-08-10T12:00:00Z"
         read_only:
           type: boolean
@@ -599,22 +603,43 @@ components:
     AddChatMemberRequest:
       type: object
       required:
-        - session_id
+        - members
       properties:
-        session_id:
-          type: string
-          format: uuid
-          example: "550e8400-e29b-41d4-a716-446655440001"
+        members:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example:
+            - "550e8400-e29b-41d4-a716-446655440000"
+            - "550e8400-e29b-41d4-a716-446655440001"
+    AddChatMemberResponse:
+      type: object
+      required:
+        - members
+      properties:
+        members:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example:
+            - "550e8400-e29b-41d4-a716-446655440001"
+            - "550e8400-e29b-41d4-a716-446655440002"
+            - "550e8400-e29b-41d4-a716-446655440003"
+            - "550e8400-e29b-41d4-a716-446655440004"
+            - "550e8400-e29b-41d4-a716-446655440005"
+            - "550e8400-e29b-41d4-a716-446655440006"
     DeleteChatMemberRequest:
       type: object
       required:
-        - session_id
+        - member_id
       properties:
-        session_id:
+        member_id:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440001"
-    CreateMessageRequest:
+    TextRequest:
       type: object
       required:
         - text
@@ -625,23 +650,11 @@ components:
           maxLength: 500
           description: Message text
           example: "Example text."
-    EditMessageRequest:
-      type: object
-      required:
-        - text
-      properties:
-        text:
-          type: string
-          minLength: 1
-          maxLength: 500
-          description: Updated message text
-          example: "Example update message."
     Message:
       type: object
       required:
         - id
-        - chat_id
-        - sender_id
+        - author_id
         - text
         - created_at
         - updated_at
@@ -650,11 +663,7 @@ components:
           type: string
           format: uuid
           example: "770e8400-e29b-41d4-a716-446655440000"
-        chat_id:
-          type: string
-          format: uuid
-          example: "660e8400-e29b-41d4-a716-446655440000"
-        sender_id:
+        author_id:
           type: string
           format: uuid
           example: "550e8400-e29b-41d4-a716-446655440000"
@@ -676,3 +685,4 @@ components:
       properties:
         error:
           type: string
+          example: error message
