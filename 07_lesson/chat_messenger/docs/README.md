@@ -406,7 +406,7 @@ X-Session-ID: <session-id>
         { 
             "id": "770e8400-e29b-41d4-a716-446655440000", 
             "chat_id": "660e8400-e29b-41d4-a716-446655440000", 
-            "sender_id": "550e8400-e29b-41d4-a716-446655440000", 
+            "author_id": "550e8400-e29b-41d4-a716-446655440000", 
             "text": "Example text.", 
             "created_at": "2026-08-10T10:00:00Z", 
             "updated_at": "2026-08-10T10:00:00Z" 
@@ -450,7 +450,7 @@ Content-Type: application/json
 {
     "id": "770e8400-e29b-41d4-a716-446655440000",
     "chat_id": "660e8400-e29b-41d4-a716-446655440000",
-    "sender_id": "550e8400-e29b-41d4-a716-446655440000",
+    "author_id": "550e8400-e29b-41d4-a716-446655440000",
     "text": "Example update message.",
     "updated_at": "2026-08-10T10:05:00Z"
 }
