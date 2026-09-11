@@ -202,7 +202,7 @@ Content-Type: application/json
     "expires_at": "2026-08-10T12:00:00Z",
     "read_only": false,
     "max_messages": 100,
-    "updated_at": "2026-08-10T10:00:00Z"
+    "clear_expires_at" = false;
 }
 ```  
   
