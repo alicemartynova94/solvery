@@ -150,8 +150,8 @@ type ChatID = openapi_types.UUID
 // MessageID Example: 770e8400-e29b-41d4-a716-446655440000
 type MessageID = openapi_types.UUID
 
-// GetApiV1ChatsChatIdMessagesParams defines parameters for GetApiV1ChatsChatIdMessages.
-type GetApiV1ChatsChatIdMessagesParams struct {
+// GetMessagesParams defines parameters for GetMessages.
+type GetMessagesParams struct {
 	// Limit Maximum number of messages to return
 	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
 
@@ -159,23 +159,23 @@ type GetApiV1ChatsChatIdMessagesParams struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// PostApiV1ChatsJSONRequestBody defines body for PostApiV1Chats for application/json ContentType.
-type PostApiV1ChatsJSONRequestBody = CreateChatRequest
+// CreateChatJSONRequestBody defines body for CreateChat for application/json ContentType.
+type CreateChatJSONRequestBody = CreateChatRequest
 
-// PatchApiV1ChatsChatIdJSONRequestBody defines body for PatchApiV1ChatsChatId for application/json ContentType.
-type PatchApiV1ChatsChatIdJSONRequestBody = UpdateChatRequest
+// UpdateChatJSONRequestBody defines body for UpdateChat for application/json ContentType.
+type UpdateChatJSONRequestBody = UpdateChatRequest
 
-// DeleteApiV1ChatsChatIdMembersJSONRequestBody defines body for DeleteApiV1ChatsChatIdMembers for application/json ContentType.
-type DeleteApiV1ChatsChatIdMembersJSONRequestBody = DeleteChatMemberRequest
+// DeleteChatMemberJSONRequestBody defines body for DeleteChatMember for application/json ContentType.
+type DeleteChatMemberJSONRequestBody = DeleteChatMemberRequest
 
-// PostApiV1ChatsChatIdMembersJSONRequestBody defines body for PostApiV1ChatsChatIdMembers for application/json ContentType.
-type PostApiV1ChatsChatIdMembersJSONRequestBody = AddChatMemberRequest
+// AddChatMembersJSONRequestBody defines body for AddChatMembers for application/json ContentType.
+type AddChatMembersJSONRequestBody = AddChatMemberRequest
 
-// PostApiV1ChatsChatIdMessagesJSONRequestBody defines body for PostApiV1ChatsChatIdMessages for application/json ContentType.
-type PostApiV1ChatsChatIdMessagesJSONRequestBody = TextRequest
+// CreateMessageJSONRequestBody defines body for CreateMessage for application/json ContentType.
+type CreateMessageJSONRequestBody = TextRequest
 
-// PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody defines body for PatchApiV1ChatsChatIdMessagesMessageId for application/json ContentType.
-type PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody = TextRequest
+// EditMessageJSONRequestBody defines body for EditMessage for application/json ContentType.
+type EditMessageJSONRequestBody = TextRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -251,171 +251,171 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// PostApiV1ChatsWithBody Create chat
+	// CreateChatWithBody Create chat
 	//
 	// Creates a new chat for the session (chat owner).
 	// The owner must also be considered a chat member.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-	PostApiV1ChatsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+	CreateChatWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1Chats Create chat
+	// CreateChat Create chat
 	//
 	// Creates a new chat for the session (chat owner).
 	// The owner must also be considered a chat member.
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-	PostApiV1Chats(ctx context.Context, body PostApiV1ChatsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+	CreateChat(ctx context.Context, body CreateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteApiV1ChatsChatId Delete an existing chat
+	// DeleteChat Delete an existing chat
 	//
 	// Deletes an existing chat. Available for the chat owner.
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteApiV1ChatsChatId` operationId).
-	DeleteApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteChat` operationId).
+	DeleteChat(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetApiV1ChatsChatId Gets chat
+	// GetChat Gets chat
 	//
 	// Gets basic chat information, including chat settings and members' session IDs.
 	//
-	// Corresponds with GET /api/v1/chats/{chat_id} (the `GetApiV1ChatsChatId` operationId).
-	GetApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with GET /api/v1/chats/{chat_id} (the `GetChat` operationId).
+	GetChat(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PatchApiV1ChatsChatIdWithBody Update chat settings
+	// UpdateChatWithBody Update chat settings
 	//
 	// Updates chat basic settings.
 	// Only the following fields can be updated: max_messages, expires_at, read_only.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-	PatchApiV1ChatsChatIdWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+	UpdateChatWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PatchApiV1ChatsChatId Update chat settings
+	// UpdateChat Update chat settings
 	//
 	// Updates chat basic settings.
 	// Only the following fields can be updated: max_messages, expires_at, read_only.
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-	PatchApiV1ChatsChatId(ctx context.Context, chatId ChatID, body PatchApiV1ChatsChatIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+	UpdateChat(ctx context.Context, chatId ChatID, body UpdateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteApiV1ChatsChatIdMembersWithBody Delete chat member
+	// DeleteChatMemberWithBody Delete chat member
 	//
 	// Removes a member's session from the chat.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-	DeleteApiV1ChatsChatIdMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+	DeleteChatMemberWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteApiV1ChatsChatIdMembers Delete chat member
+	// DeleteChatMember Delete chat member
 	//
 	// Removes a member's session from the chat.
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-	DeleteApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatID, body DeleteApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+	DeleteChatMember(ctx context.Context, chatId ChatID, body DeleteChatMemberJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1ChatsChatIdMembersWithBody Adds an existing session to the chat
+	// AddChatMembersWithBody Adds an existing session to the chat
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-	PostApiV1ChatsChatIdMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+	AddChatMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1ChatsChatIdMembers Adds an existing session to the chat
+	// AddChatMembers Adds an existing session to the chat
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-	PostApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+	AddChatMembers(ctx context.Context, chatId ChatID, body AddChatMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetApiV1ChatsChatIdMessages Get list of messages
+	// GetMessages Get list of messages
 	//
 	// Returns all messages from a chat. Only chat members can retrieve messages.
 	//
-	// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetApiV1ChatsChatIdMessages` operationId).
-	GetApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID, params *GetApiV1ChatsChatIdMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetMessages` operationId).
+	GetMessages(ctx context.Context, chatId ChatID, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1ChatsChatIdMessagesWithBody Create a new message
+	// CreateMessageWithBody Create a new message
 	//
 	// Creates a new message in a chat.
 	// The message author is determined by the X-Session-ID header.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-	PostApiV1ChatsChatIdMessagesWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+	CreateMessageWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1ChatsChatIdMessages Create a new message
+	// CreateMessage Create a new message
 	//
 	// Creates a new message in a chat.
 	// The message author is determined by the X-Session-ID header.
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-	PostApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMessagesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+	CreateMessage(ctx context.Context, chatId ChatID, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteApiV1ChatsChatIdMessagesMessageId Delete a message
+	// DeleteMessage Delete a message
 	//
 	// Deletes an existing message.
 	// Only the author and chat owner can delete a message.
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteApiV1ChatsChatIdMessagesMessageId` operationId).
-	DeleteApiV1ChatsChatIdMessagesMessageId(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteMessage` operationId).
+	DeleteMessage(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PatchApiV1ChatsChatIdMessagesMessageIdWithBody Edit a message
+	// EditMessageWithBody Edit a message
 	//
 	// Updates the text of an existing message.
 	// Only the author can edit the message.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-	PatchApiV1ChatsChatIdMessagesMessageIdWithBody(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+	EditMessageWithBody(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PatchApiV1ChatsChatIdMessagesMessageId Edit a message
+	// EditMessage Edit a message
 	//
 	// Updates the text of an existing message.
 	// Only the author can edit the message.
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-	PatchApiV1ChatsChatIdMessagesMessageId(ctx context.Context, chatId ChatID, messageId MessageID, body PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+	EditMessage(ctx context.Context, chatId ChatID, messageId MessageID, body EditMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteApiV1Sessions Terminates existing session.
+	// DeleteSession Terminates existing session.
 	//
-	// Corresponds with DELETE /api/v1/sessions (the `DeleteApiV1Sessions` operationId).
-	DeleteApiV1Sessions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with DELETE /api/v1/sessions (the `DeleteSession` operationId).
+	DeleteSession(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostApiV1Sessions Create a new session for a client
+	// CreateSession Create a new session for a client
 	//
 	// Creates a new session for a client.
 	// The created session can subsequently be used as: X-Session-ID.
 	//
-	// Corresponds with POST /api/v1/sessions (the `PostApiV1Sessions` operationId).
-	PostApiV1Sessions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// Corresponds with POST /api/v1/sessions (the `CreateSession` operationId).
+	CreateSession(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// PostApiV1ChatsWithBody Create chat
+// CreateChatWithBody Create chat
 //
 // Creates a new chat for the session (chat owner).
 // The owner must also be considered a chat member.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-func (c *Client) PostApiV1ChatsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsRequestWithBody(c.Server, contentType, body)
+// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+func (c *Client) CreateChatWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateChatRequestWithBody(c.Server, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -426,16 +426,16 @@ func (c *Client) PostApiV1ChatsWithBody(ctx context.Context, contentType string,
 	return c.Client.Do(req)
 }
 
-// PostApiV1Chats Create chat
+// CreateChat Create chat
 //
 // Creates a new chat for the session (chat owner).
 // The owner must also be considered a chat member.
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-func (c *Client) PostApiV1Chats(ctx context.Context, body PostApiV1ChatsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsRequest(c.Server, body)
+// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+func (c *Client) CreateChat(ctx context.Context, body CreateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateChatRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -446,13 +446,13 @@ func (c *Client) PostApiV1Chats(ctx context.Context, body PostApiV1ChatsJSONRequ
 	return c.Client.Do(req)
 }
 
-// DeleteApiV1ChatsChatId Delete an existing chat
+// DeleteChat Delete an existing chat
 //
 // Deletes an existing chat. Available for the chat owner.
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteApiV1ChatsChatId` operationId).
-func (c *Client) DeleteApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiV1ChatsChatIdRequest(c.Server, chatId)
+// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteChat` operationId).
+func (c *Client) DeleteChat(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteChatRequest(c.Server, chatId)
 	if err != nil {
 		return nil, err
 	}
@@ -463,13 +463,13 @@ func (c *Client) DeleteApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqE
 	return c.Client.Do(req)
 }
 
-// GetApiV1ChatsChatId Gets chat
+// GetChat Gets chat
 //
 // Gets basic chat information, including chat settings and members' session IDs.
 //
-// Corresponds with GET /api/v1/chats/{chat_id} (the `GetApiV1ChatsChatId` operationId).
-func (c *Client) GetApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiV1ChatsChatIdRequest(c.Server, chatId)
+// Corresponds with GET /api/v1/chats/{chat_id} (the `GetChat` operationId).
+func (c *Client) GetChat(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetChatRequest(c.Server, chatId)
 	if err != nil {
 		return nil, err
 	}
@@ -480,16 +480,16 @@ func (c *Client) GetApiV1ChatsChatId(ctx context.Context, chatId ChatID, reqEdit
 	return c.Client.Do(req)
 }
 
-// PatchApiV1ChatsChatIdWithBody Update chat settings
+// UpdateChatWithBody Update chat settings
 //
 // Updates chat basic settings.
 // Only the following fields can be updated: max_messages, expires_at, read_only.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-func (c *Client) PatchApiV1ChatsChatIdWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPatchApiV1ChatsChatIdRequestWithBody(c.Server, chatId, contentType, body)
+// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+func (c *Client) UpdateChatWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateChatRequestWithBody(c.Server, chatId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -500,16 +500,16 @@ func (c *Client) PatchApiV1ChatsChatIdWithBody(ctx context.Context, chatId ChatI
 	return c.Client.Do(req)
 }
 
-// PatchApiV1ChatsChatId Update chat settings
+// UpdateChat Update chat settings
 //
 // Updates chat basic settings.
 // Only the following fields can be updated: max_messages, expires_at, read_only.
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-func (c *Client) PatchApiV1ChatsChatId(ctx context.Context, chatId ChatID, body PatchApiV1ChatsChatIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPatchApiV1ChatsChatIdRequest(c.Server, chatId, body)
+// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+func (c *Client) UpdateChat(ctx context.Context, chatId ChatID, body UpdateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateChatRequest(c.Server, chatId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -520,15 +520,15 @@ func (c *Client) PatchApiV1ChatsChatId(ctx context.Context, chatId ChatID, body 
 	return c.Client.Do(req)
 }
 
-// DeleteApiV1ChatsChatIdMembersWithBody Delete chat member
+// DeleteChatMemberWithBody Delete chat member
 //
 // Removes a member's session from the chat.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-func (c *Client) DeleteApiV1ChatsChatIdMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiV1ChatsChatIdMembersRequestWithBody(c.Server, chatId, contentType, body)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+func (c *Client) DeleteChatMemberWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteChatMemberRequestWithBody(c.Server, chatId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -539,15 +539,15 @@ func (c *Client) DeleteApiV1ChatsChatIdMembersWithBody(ctx context.Context, chat
 	return c.Client.Do(req)
 }
 
-// DeleteApiV1ChatsChatIdMembers Delete chat member
+// DeleteChatMember Delete chat member
 //
 // Removes a member's session from the chat.
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-func (c *Client) DeleteApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatID, body DeleteApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiV1ChatsChatIdMembersRequest(c.Server, chatId, body)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+func (c *Client) DeleteChatMember(ctx context.Context, chatId ChatID, body DeleteChatMemberJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteChatMemberRequest(c.Server, chatId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -558,13 +558,13 @@ func (c *Client) DeleteApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatI
 	return c.Client.Do(req)
 }
 
-// PostApiV1ChatsChatIdMembersWithBody Adds an existing session to the chat
+// AddChatMembersWithBody Adds an existing session to the chat
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-func (c *Client) PostApiV1ChatsChatIdMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsChatIdMembersRequestWithBody(c.Server, chatId, contentType, body)
+// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+func (c *Client) AddChatMembersWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddChatMembersRequestWithBody(c.Server, chatId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -575,13 +575,13 @@ func (c *Client) PostApiV1ChatsChatIdMembersWithBody(ctx context.Context, chatId
 	return c.Client.Do(req)
 }
 
-// PostApiV1ChatsChatIdMembers Adds an existing session to the chat
+// AddChatMembers Adds an existing session to the chat
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-func (c *Client) PostApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsChatIdMembersRequest(c.Server, chatId, body)
+// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+func (c *Client) AddChatMembers(ctx context.Context, chatId ChatID, body AddChatMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddChatMembersRequest(c.Server, chatId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -592,13 +592,13 @@ func (c *Client) PostApiV1ChatsChatIdMembers(ctx context.Context, chatId ChatID,
 	return c.Client.Do(req)
 }
 
-// GetApiV1ChatsChatIdMessages Get list of messages
+// GetMessages Get list of messages
 //
 // Returns all messages from a chat. Only chat members can retrieve messages.
 //
-// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetApiV1ChatsChatIdMessages` operationId).
-func (c *Client) GetApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID, params *GetApiV1ChatsChatIdMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetApiV1ChatsChatIdMessagesRequest(c.Server, chatId, params)
+// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetMessages` operationId).
+func (c *Client) GetMessages(ctx context.Context, chatId ChatID, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetMessagesRequest(c.Server, chatId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -609,16 +609,16 @@ func (c *Client) GetApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID,
 	return c.Client.Do(req)
 }
 
-// PostApiV1ChatsChatIdMessagesWithBody Create a new message
+// CreateMessageWithBody Create a new message
 //
 // Creates a new message in a chat.
 // The message author is determined by the X-Session-ID header.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-func (c *Client) PostApiV1ChatsChatIdMessagesWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsChatIdMessagesRequestWithBody(c.Server, chatId, contentType, body)
+// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+func (c *Client) CreateMessageWithBody(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateMessageRequestWithBody(c.Server, chatId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -629,16 +629,16 @@ func (c *Client) PostApiV1ChatsChatIdMessagesWithBody(ctx context.Context, chatI
 	return c.Client.Do(req)
 }
 
-// PostApiV1ChatsChatIdMessages Create a new message
+// CreateMessage Create a new message
 //
 // Creates a new message in a chat.
 // The message author is determined by the X-Session-ID header.
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-func (c *Client) PostApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMessagesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1ChatsChatIdMessagesRequest(c.Server, chatId, body)
+// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+func (c *Client) CreateMessage(ctx context.Context, chatId ChatID, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateMessageRequest(c.Server, chatId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -649,14 +649,14 @@ func (c *Client) PostApiV1ChatsChatIdMessages(ctx context.Context, chatId ChatID
 	return c.Client.Do(req)
 }
 
-// DeleteApiV1ChatsChatIdMessagesMessageId Delete a message
+// DeleteMessage Delete a message
 //
 // Deletes an existing message.
 // Only the author and chat owner can delete a message.
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *Client) DeleteApiV1ChatsChatIdMessagesMessageId(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiV1ChatsChatIdMessagesMessageIdRequest(c.Server, chatId, messageId)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteMessage` operationId).
+func (c *Client) DeleteMessage(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteMessageRequest(c.Server, chatId, messageId)
 	if err != nil {
 		return nil, err
 	}
@@ -667,16 +667,16 @@ func (c *Client) DeleteApiV1ChatsChatIdMessagesMessageId(ctx context.Context, ch
 	return c.Client.Do(req)
 }
 
-// PatchApiV1ChatsChatIdMessagesMessageIdWithBody Edit a message
+// EditMessageWithBody Edit a message
 //
 // Updates the text of an existing message.
 // Only the author can edit the message.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *Client) PatchApiV1ChatsChatIdMessagesMessageIdWithBody(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPatchApiV1ChatsChatIdMessagesMessageIdRequestWithBody(c.Server, chatId, messageId, contentType, body)
+// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+func (c *Client) EditMessageWithBody(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditMessageRequestWithBody(c.Server, chatId, messageId, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -687,16 +687,16 @@ func (c *Client) PatchApiV1ChatsChatIdMessagesMessageIdWithBody(ctx context.Cont
 	return c.Client.Do(req)
 }
 
-// PatchApiV1ChatsChatIdMessagesMessageId Edit a message
+// EditMessage Edit a message
 //
 // Updates the text of an existing message.
 // Only the author can edit the message.
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *Client) PatchApiV1ChatsChatIdMessagesMessageId(ctx context.Context, chatId ChatID, messageId MessageID, body PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPatchApiV1ChatsChatIdMessagesMessageIdRequest(c.Server, chatId, messageId, body)
+// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+func (c *Client) EditMessage(ctx context.Context, chatId ChatID, messageId MessageID, body EditMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditMessageRequest(c.Server, chatId, messageId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -707,11 +707,11 @@ func (c *Client) PatchApiV1ChatsChatIdMessagesMessageId(ctx context.Context, cha
 	return c.Client.Do(req)
 }
 
-// DeleteApiV1Sessions Terminates existing session.
+// DeleteSession Terminates existing session.
 //
-// Corresponds with DELETE /api/v1/sessions (the `DeleteApiV1Sessions` operationId).
-func (c *Client) DeleteApiV1Sessions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewDeleteApiV1SessionsRequest(c.Server)
+// Corresponds with DELETE /api/v1/sessions (the `DeleteSession` operationId).
+func (c *Client) DeleteSession(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteSessionRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -722,14 +722,14 @@ func (c *Client) DeleteApiV1Sessions(ctx context.Context, reqEditors ...RequestE
 	return c.Client.Do(req)
 }
 
-// PostApiV1Sessions Create a new session for a client
+// CreateSession Create a new session for a client
 //
 // Creates a new session for a client.
 // The created session can subsequently be used as: X-Session-ID.
 //
-// Corresponds with POST /api/v1/sessions (the `PostApiV1Sessions` operationId).
-func (c *Client) PostApiV1Sessions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostApiV1SessionsRequest(c.Server)
+// Corresponds with POST /api/v1/sessions (the `CreateSession` operationId).
+func (c *Client) CreateSession(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateSessionRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -740,19 +740,19 @@ func (c *Client) PostApiV1Sessions(ctx context.Context, reqEditors ...RequestEdi
 	return c.Client.Do(req)
 }
 
-// NewPostApiV1ChatsRequest calls the generic PostApiV1Chats builder with application/json body
-func NewPostApiV1ChatsRequest(server string, body PostApiV1ChatsJSONRequestBody) (*http.Request, error) {
+// NewCreateChatRequest calls the generic CreateChat builder with application/json body
+func NewCreateChatRequest(server string, body CreateChatJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewPostApiV1ChatsRequestWithBody(server, "application/json", bodyReader)
+	return NewCreateChatRequestWithBody(server, "application/json", bodyReader)
 }
 
-// NewPostApiV1ChatsRequestWithBody constructs an http.Request for the PostApiV1Chats method, with any body, and a specified content type
-func NewPostApiV1ChatsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+// NewCreateChatRequestWithBody constructs an http.Request for the CreateChat method, with any body, and a specified content type
+func NewCreateChatRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -780,8 +780,8 @@ func NewPostApiV1ChatsRequestWithBody(server string, contentType string, body io
 	return req, nil
 }
 
-// NewDeleteApiV1ChatsChatIdRequest constructs an http.Request for the DeleteApiV1ChatsChatId method
-func NewDeleteApiV1ChatsChatIdRequest(server string, chatId ChatID) (*http.Request, error) {
+// NewDeleteChatRequest constructs an http.Request for the DeleteChat method
+func NewDeleteChatRequest(server string, chatId ChatID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -814,8 +814,8 @@ func NewDeleteApiV1ChatsChatIdRequest(server string, chatId ChatID) (*http.Reque
 	return req, nil
 }
 
-// NewGetApiV1ChatsChatIdRequest constructs an http.Request for the GetApiV1ChatsChatId method
-func NewGetApiV1ChatsChatIdRequest(server string, chatId ChatID) (*http.Request, error) {
+// NewGetChatRequest constructs an http.Request for the GetChat method
+func NewGetChatRequest(server string, chatId ChatID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -848,19 +848,19 @@ func NewGetApiV1ChatsChatIdRequest(server string, chatId ChatID) (*http.Request,
 	return req, nil
 }
 
-// NewPatchApiV1ChatsChatIdRequest calls the generic PatchApiV1ChatsChatId builder with application/json body
-func NewPatchApiV1ChatsChatIdRequest(server string, chatId ChatID, body PatchApiV1ChatsChatIdJSONRequestBody) (*http.Request, error) {
+// NewUpdateChatRequest calls the generic UpdateChat builder with application/json body
+func NewUpdateChatRequest(server string, chatId ChatID, body UpdateChatJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewPatchApiV1ChatsChatIdRequestWithBody(server, chatId, "application/json", bodyReader)
+	return NewUpdateChatRequestWithBody(server, chatId, "application/json", bodyReader)
 }
 
-// NewPatchApiV1ChatsChatIdRequestWithBody constructs an http.Request for the PatchApiV1ChatsChatId method, with any body, and a specified content type
-func NewPatchApiV1ChatsChatIdRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
+// NewUpdateChatRequestWithBody constructs an http.Request for the UpdateChat method, with any body, and a specified content type
+func NewUpdateChatRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -895,19 +895,19 @@ func NewPatchApiV1ChatsChatIdRequestWithBody(server string, chatId ChatID, conte
 	return req, nil
 }
 
-// NewDeleteApiV1ChatsChatIdMembersRequest calls the generic DeleteApiV1ChatsChatIdMembers builder with application/json body
-func NewDeleteApiV1ChatsChatIdMembersRequest(server string, chatId ChatID, body DeleteApiV1ChatsChatIdMembersJSONRequestBody) (*http.Request, error) {
+// NewDeleteChatMemberRequest calls the generic DeleteChatMember builder with application/json body
+func NewDeleteChatMemberRequest(server string, chatId ChatID, body DeleteChatMemberJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewDeleteApiV1ChatsChatIdMembersRequestWithBody(server, chatId, "application/json", bodyReader)
+	return NewDeleteChatMemberRequestWithBody(server, chatId, "application/json", bodyReader)
 }
 
-// NewDeleteApiV1ChatsChatIdMembersRequestWithBody constructs an http.Request for the DeleteApiV1ChatsChatIdMembers method, with any body, and a specified content type
-func NewDeleteApiV1ChatsChatIdMembersRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
+// NewDeleteChatMemberRequestWithBody constructs an http.Request for the DeleteChatMember method, with any body, and a specified content type
+func NewDeleteChatMemberRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -942,19 +942,19 @@ func NewDeleteApiV1ChatsChatIdMembersRequestWithBody(server string, chatId ChatI
 	return req, nil
 }
 
-// NewPostApiV1ChatsChatIdMembersRequest calls the generic PostApiV1ChatsChatIdMembers builder with application/json body
-func NewPostApiV1ChatsChatIdMembersRequest(server string, chatId ChatID, body PostApiV1ChatsChatIdMembersJSONRequestBody) (*http.Request, error) {
+// NewAddChatMembersRequest calls the generic AddChatMembers builder with application/json body
+func NewAddChatMembersRequest(server string, chatId ChatID, body AddChatMembersJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewPostApiV1ChatsChatIdMembersRequestWithBody(server, chatId, "application/json", bodyReader)
+	return NewAddChatMembersRequestWithBody(server, chatId, "application/json", bodyReader)
 }
 
-// NewPostApiV1ChatsChatIdMembersRequestWithBody constructs an http.Request for the PostApiV1ChatsChatIdMembers method, with any body, and a specified content type
-func NewPostApiV1ChatsChatIdMembersRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
+// NewAddChatMembersRequestWithBody constructs an http.Request for the AddChatMembers method, with any body, and a specified content type
+func NewAddChatMembersRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -989,8 +989,8 @@ func NewPostApiV1ChatsChatIdMembersRequestWithBody(server string, chatId ChatID,
 	return req, nil
 }
 
-// NewGetApiV1ChatsChatIdMessagesRequest constructs an http.Request for the GetApiV1ChatsChatIdMessages method
-func NewGetApiV1ChatsChatIdMessagesRequest(server string, chatId ChatID, params *GetApiV1ChatsChatIdMessagesParams) (*http.Request, error) {
+// NewGetMessagesRequest constructs an http.Request for the GetMessages method
+func NewGetMessagesRequest(server string, chatId ChatID, params *GetMessagesParams) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1062,19 +1062,19 @@ func NewGetApiV1ChatsChatIdMessagesRequest(server string, chatId ChatID, params 
 	return req, nil
 }
 
-// NewPostApiV1ChatsChatIdMessagesRequest calls the generic PostApiV1ChatsChatIdMessages builder with application/json body
-func NewPostApiV1ChatsChatIdMessagesRequest(server string, chatId ChatID, body PostApiV1ChatsChatIdMessagesJSONRequestBody) (*http.Request, error) {
+// NewCreateMessageRequest calls the generic CreateMessage builder with application/json body
+func NewCreateMessageRequest(server string, chatId ChatID, body CreateMessageJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewPostApiV1ChatsChatIdMessagesRequestWithBody(server, chatId, "application/json", bodyReader)
+	return NewCreateMessageRequestWithBody(server, chatId, "application/json", bodyReader)
 }
 
-// NewPostApiV1ChatsChatIdMessagesRequestWithBody constructs an http.Request for the PostApiV1ChatsChatIdMessages method, with any body, and a specified content type
-func NewPostApiV1ChatsChatIdMessagesRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
+// NewCreateMessageRequestWithBody constructs an http.Request for the CreateMessage method, with any body, and a specified content type
+func NewCreateMessageRequestWithBody(server string, chatId ChatID, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1109,8 +1109,8 @@ func NewPostApiV1ChatsChatIdMessagesRequestWithBody(server string, chatId ChatID
 	return req, nil
 }
 
-// NewDeleteApiV1ChatsChatIdMessagesMessageIdRequest constructs an http.Request for the DeleteApiV1ChatsChatIdMessagesMessageId method
-func NewDeleteApiV1ChatsChatIdMessagesMessageIdRequest(server string, chatId ChatID, messageId MessageID) (*http.Request, error) {
+// NewDeleteMessageRequest constructs an http.Request for the DeleteMessage method
+func NewDeleteMessageRequest(server string, chatId ChatID, messageId MessageID) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1150,19 +1150,19 @@ func NewDeleteApiV1ChatsChatIdMessagesMessageIdRequest(server string, chatId Cha
 	return req, nil
 }
 
-// NewPatchApiV1ChatsChatIdMessagesMessageIdRequest calls the generic PatchApiV1ChatsChatIdMessagesMessageId builder with application/json body
-func NewPatchApiV1ChatsChatIdMessagesMessageIdRequest(server string, chatId ChatID, messageId MessageID, body PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody) (*http.Request, error) {
+// NewEditMessageRequest calls the generic EditMessage builder with application/json body
+func NewEditMessageRequest(server string, chatId ChatID, messageId MessageID, body EditMessageJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
 	bodyReader = bytes.NewReader(buf)
-	return NewPatchApiV1ChatsChatIdMessagesMessageIdRequestWithBody(server, chatId, messageId, "application/json", bodyReader)
+	return NewEditMessageRequestWithBody(server, chatId, messageId, "application/json", bodyReader)
 }
 
-// NewPatchApiV1ChatsChatIdMessagesMessageIdRequestWithBody constructs an http.Request for the PatchApiV1ChatsChatIdMessagesMessageId method, with any body, and a specified content type
-func NewPatchApiV1ChatsChatIdMessagesMessageIdRequestWithBody(server string, chatId ChatID, messageId MessageID, contentType string, body io.Reader) (*http.Request, error) {
+// NewEditMessageRequestWithBody constructs an http.Request for the EditMessage method, with any body, and a specified content type
+func NewEditMessageRequestWithBody(server string, chatId ChatID, messageId MessageID, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -1204,8 +1204,8 @@ func NewPatchApiV1ChatsChatIdMessagesMessageIdRequestWithBody(server string, cha
 	return req, nil
 }
 
-// NewDeleteApiV1SessionsRequest constructs an http.Request for the DeleteApiV1Sessions method
-func NewDeleteApiV1SessionsRequest(server string) (*http.Request, error) {
+// NewDeleteSessionRequest constructs an http.Request for the DeleteSession method
+func NewDeleteSessionRequest(server string) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -1231,8 +1231,8 @@ func NewDeleteApiV1SessionsRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewPostApiV1SessionsRequest constructs an http.Request for the PostApiV1Sessions method
-func NewPostApiV1SessionsRequest(server string) (*http.Request, error) {
+// NewCreateSessionRequest constructs an http.Request for the CreateSession method
+func NewCreateSessionRequest(server string) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -1302,174 +1302,174 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// PostApiV1ChatsWithBodyWithResponse Create chat
+	// CreateChatWithBodyWithResponse Create chat
 	//
 	// Creates a new chat for the session (chat owner).
 	// The owner must also be considered a chat member.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-	PostApiV1ChatsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsResponse, error)
+	// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+	CreateChatWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateChatResponse, error)
 
-	// PostApiV1ChatsWithResponse Create chat
+	// CreateChatWithResponse Create chat
 	//
 	// Creates a new chat for the session (chat owner).
 	// The owner must also be considered a chat member.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-	PostApiV1ChatsWithResponse(ctx context.Context, body PostApiV1ChatsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsResponse, error)
+	// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+	CreateChatWithResponse(ctx context.Context, body CreateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateChatResponse, error)
 
-	// DeleteApiV1ChatsChatIdWithResponse Delete an existing chat
+	// DeleteChatWithResponse Delete an existing chat
 	//
 	// Deletes an existing chat. Available for the chat owner.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteApiV1ChatsChatId` operationId).
-	DeleteApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdResponse, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteChat` operationId).
+	DeleteChatWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*DeleteChatResponse, error)
 
-	// GetApiV1ChatsChatIdWithResponse Gets chat
+	// GetChatWithResponse Gets chat
 	//
 	// Gets basic chat information, including chat settings and members' session IDs.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/chats/{chat_id} (the `GetApiV1ChatsChatId` operationId).
-	GetApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*GetApiV1ChatsChatIdResponse, error)
+	// Corresponds with GET /api/v1/chats/{chat_id} (the `GetChat` operationId).
+	GetChatWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*GetChatResponse, error)
 
-	// PatchApiV1ChatsChatIdWithBodyWithResponse Update chat settings
+	// UpdateChatWithBodyWithResponse Update chat settings
 	//
 	// Updates chat basic settings.
 	// Only the following fields can be updated: max_messages, expires_at, read_only.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-	PatchApiV1ChatsChatIdWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdResponse, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+	UpdateChatWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateChatResponse, error)
 
-	// PatchApiV1ChatsChatIdWithResponse Update chat settings
+	// UpdateChatWithResponse Update chat settings
 	//
 	// Updates chat basic settings.
 	// Only the following fields can be updated: max_messages, expires_at, read_only.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-	PatchApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, body PatchApiV1ChatsChatIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdResponse, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+	UpdateChatWithResponse(ctx context.Context, chatId ChatID, body UpdateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateChatResponse, error)
 
-	// DeleteApiV1ChatsChatIdMembersWithBodyWithResponse Delete chat member
+	// DeleteChatMemberWithBodyWithResponse Delete chat member
 	//
 	// Removes a member's session from the chat.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-	DeleteApiV1ChatsChatIdMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMembersResponse, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+	DeleteChatMemberWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteChatMemberResponse, error)
 
-	// DeleteApiV1ChatsChatIdMembersWithResponse Delete chat member
+	// DeleteChatMemberWithResponse Delete chat member
 	//
 	// Removes a member's session from the chat.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-	DeleteApiV1ChatsChatIdMembersWithResponse(ctx context.Context, chatId ChatID, body DeleteApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMembersResponse, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+	DeleteChatMemberWithResponse(ctx context.Context, chatId ChatID, body DeleteChatMemberJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteChatMemberResponse, error)
 
-	// PostApiV1ChatsChatIdMembersWithBodyWithResponse Adds an existing session to the chat
+	// AddChatMembersWithBodyWithResponse Adds an existing session to the chat
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-	PostApiV1ChatsChatIdMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMembersResponse, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+	AddChatMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddChatMembersResponse, error)
 
-	// PostApiV1ChatsChatIdMembersWithResponse Adds an existing session to the chat
+	// AddChatMembersWithResponse Adds an existing session to the chat
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-	PostApiV1ChatsChatIdMembersWithResponse(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMembersResponse, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+	AddChatMembersWithResponse(ctx context.Context, chatId ChatID, body AddChatMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChatMembersResponse, error)
 
-	// GetApiV1ChatsChatIdMessagesWithResponse Get list of messages
+	// GetMessagesWithResponse Get list of messages
 	//
 	// Returns all messages from a chat. Only chat members can retrieve messages.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetApiV1ChatsChatIdMessages` operationId).
-	GetApiV1ChatsChatIdMessagesWithResponse(ctx context.Context, chatId ChatID, params *GetApiV1ChatsChatIdMessagesParams, reqEditors ...RequestEditorFn) (*GetApiV1ChatsChatIdMessagesResponse, error)
+	// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetMessages` operationId).
+	GetMessagesWithResponse(ctx context.Context, chatId ChatID, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*GetMessagesResponse, error)
 
-	// PostApiV1ChatsChatIdMessagesWithBodyWithResponse Create a new message
+	// CreateMessageWithBodyWithResponse Create a new message
 	//
 	// Creates a new message in a chat.
 	// The message author is determined by the X-Session-ID header.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-	PostApiV1ChatsChatIdMessagesWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMessagesResponse, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+	CreateMessageWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateMessageResponse, error)
 
-	// PostApiV1ChatsChatIdMessagesWithResponse Create a new message
+	// CreateMessageWithResponse Create a new message
 	//
 	// Creates a new message in a chat.
 	// The message author is determined by the X-Session-ID header.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-	PostApiV1ChatsChatIdMessagesWithResponse(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMessagesJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMessagesResponse, error)
+	// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+	CreateMessageWithResponse(ctx context.Context, chatId ChatID, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMessageResponse, error)
 
-	// DeleteApiV1ChatsChatIdMessagesMessageIdWithResponse Delete a message
+	// DeleteMessageWithResponse Delete a message
 	//
 	// Deletes an existing message.
 	// Only the author and chat owner can delete a message.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteApiV1ChatsChatIdMessagesMessageId` operationId).
-	DeleteApiV1ChatsChatIdMessagesMessageIdWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMessagesMessageIdResponse, error)
+	// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteMessage` operationId).
+	DeleteMessageWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*DeleteMessageResponse, error)
 
-	// PatchApiV1ChatsChatIdMessagesMessageIdWithBodyWithResponse Edit a message
+	// EditMessageWithBodyWithResponse Edit a message
 	//
 	// Updates the text of an existing message.
 	// Only the author can edit the message.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-	PatchApiV1ChatsChatIdMessagesMessageIdWithBodyWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdMessagesMessageIdResponse, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+	EditMessageWithBodyWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditMessageResponse, error)
 
-	// PatchApiV1ChatsChatIdMessagesMessageIdWithResponse Edit a message
+	// EditMessageWithResponse Edit a message
 	//
 	// Updates the text of an existing message.
 	// Only the author can edit the message.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-	PatchApiV1ChatsChatIdMessagesMessageIdWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, body PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdMessagesMessageIdResponse, error)
+	// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+	EditMessageWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, body EditMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditMessageResponse, error)
 
-	// DeleteApiV1SessionsWithResponse Terminates existing session.
+	// DeleteSessionWithResponse Terminates existing session.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with DELETE /api/v1/sessions (the `DeleteApiV1Sessions` operationId).
-	DeleteApiV1SessionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*DeleteApiV1SessionsResponse, error)
+	// Corresponds with DELETE /api/v1/sessions (the `DeleteSession` operationId).
+	DeleteSessionWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*DeleteSessionResponse, error)
 
-	// PostApiV1SessionsWithResponse Create a new session for a client
+	// CreateSessionWithResponse Create a new session for a client
 	//
 	// Creates a new session for a client.
 	// The created session can subsequently be used as: X-Session-ID.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with POST /api/v1/sessions (the `PostApiV1Sessions` operationId).
-	PostApiV1SessionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostApiV1SessionsResponse, error)
+	// Corresponds with POST /api/v1/sessions (the `CreateSession` operationId).
+	CreateSessionWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*CreateSessionResponse, error)
 }
 
-type PostApiV1ChatsResponse struct {
+type CreateChatResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
@@ -1483,32 +1483,32 @@ type PostApiV1ChatsResponse struct {
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
-func (r PostApiV1ChatsResponse) GetJSON201() *Chat {
+func (r CreateChatResponse) GetJSON201() *Chat {
 	return r.JSON201
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r PostApiV1ChatsResponse) GetJSON401() *Error {
+func (r CreateChatResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r PostApiV1ChatsResponse) GetJSON403() *Error {
+func (r CreateChatResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PostApiV1ChatsResponse) GetJSON409() *Error {
+func (r CreateChatResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PostApiV1ChatsResponse) GetBody() []byte {
+func (r CreateChatResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PostApiV1ChatsResponse) Status() string {
+func (r CreateChatResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1516,7 +1516,7 @@ func (r PostApiV1ChatsResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PostApiV1ChatsResponse) StatusCode() int {
+func (r CreateChatResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1524,14 +1524,14 @@ func (r PostApiV1ChatsResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PostApiV1ChatsResponse) ContentType() string {
+func (r CreateChatResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type DeleteApiV1ChatsChatIdResponse struct {
+type DeleteChatResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON401 the response for an HTTP 401 `application/json` response
@@ -1543,27 +1543,27 @@ type DeleteApiV1ChatsChatIdResponse struct {
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r DeleteApiV1ChatsChatIdResponse) GetJSON401() *Error {
+func (r DeleteChatResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteApiV1ChatsChatIdResponse) GetJSON403() *Error {
+func (r DeleteChatResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r DeleteApiV1ChatsChatIdResponse) GetJSON404() *Error {
+func (r DeleteChatResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetBody returns the raw response body bytes
-func (r DeleteApiV1ChatsChatIdResponse) GetBody() []byte {
+func (r DeleteChatResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteApiV1ChatsChatIdResponse) Status() string {
+func (r DeleteChatResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1571,7 +1571,7 @@ func (r DeleteApiV1ChatsChatIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiV1ChatsChatIdResponse) StatusCode() int {
+func (r DeleteChatResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1579,14 +1579,14 @@ func (r DeleteApiV1ChatsChatIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r DeleteApiV1ChatsChatIdResponse) ContentType() string {
+func (r DeleteChatResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type GetApiV1ChatsChatIdResponse struct {
+type GetChatResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -1600,32 +1600,32 @@ type GetApiV1ChatsChatIdResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r GetApiV1ChatsChatIdResponse) GetJSON200() *Chat {
+func (r GetChatResponse) GetJSON200() *Chat {
 	return r.JSON200
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r GetApiV1ChatsChatIdResponse) GetJSON401() *Error {
+func (r GetChatResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetApiV1ChatsChatIdResponse) GetJSON403() *Error {
+func (r GetChatResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r GetApiV1ChatsChatIdResponse) GetJSON404() *Error {
+func (r GetChatResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetBody returns the raw response body bytes
-func (r GetApiV1ChatsChatIdResponse) GetBody() []byte {
+func (r GetChatResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r GetApiV1ChatsChatIdResponse) Status() string {
+func (r GetChatResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1633,7 +1633,7 @@ func (r GetApiV1ChatsChatIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r GetApiV1ChatsChatIdResponse) StatusCode() int {
+func (r GetChatResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1641,14 +1641,14 @@ func (r GetApiV1ChatsChatIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r GetApiV1ChatsChatIdResponse) ContentType() string {
+func (r GetChatResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type PatchApiV1ChatsChatIdResponse struct {
+type UpdateChatResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -1664,37 +1664,37 @@ type PatchApiV1ChatsChatIdResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r PatchApiV1ChatsChatIdResponse) GetJSON200() *Chat {
+func (r UpdateChatResponse) GetJSON200() *Chat {
 	return r.JSON200
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r PatchApiV1ChatsChatIdResponse) GetJSON401() *Error {
+func (r UpdateChatResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r PatchApiV1ChatsChatIdResponse) GetJSON403() *Error {
+func (r UpdateChatResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r PatchApiV1ChatsChatIdResponse) GetJSON404() *Error {
+func (r UpdateChatResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PatchApiV1ChatsChatIdResponse) GetJSON409() *Error {
+func (r UpdateChatResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PatchApiV1ChatsChatIdResponse) GetBody() []byte {
+func (r UpdateChatResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PatchApiV1ChatsChatIdResponse) Status() string {
+func (r UpdateChatResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1702,7 +1702,7 @@ func (r PatchApiV1ChatsChatIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PatchApiV1ChatsChatIdResponse) StatusCode() int {
+func (r UpdateChatResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1710,14 +1710,14 @@ func (r PatchApiV1ChatsChatIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PatchApiV1ChatsChatIdResponse) ContentType() string {
+func (r UpdateChatResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type DeleteApiV1ChatsChatIdMembersResponse struct {
+type DeleteChatMemberResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON401 the response for an HTTP 401 `application/json` response
@@ -1729,27 +1729,27 @@ type DeleteApiV1ChatsChatIdMembersResponse struct {
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r DeleteApiV1ChatsChatIdMembersResponse) GetJSON401() *Error {
+func (r DeleteChatMemberResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteApiV1ChatsChatIdMembersResponse) GetJSON403() *Error {
+func (r DeleteChatMemberResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r DeleteApiV1ChatsChatIdMembersResponse) GetJSON404() *Error {
+func (r DeleteChatMemberResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetBody returns the raw response body bytes
-func (r DeleteApiV1ChatsChatIdMembersResponse) GetBody() []byte {
+func (r DeleteChatMemberResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteApiV1ChatsChatIdMembersResponse) Status() string {
+func (r DeleteChatMemberResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1757,7 +1757,7 @@ func (r DeleteApiV1ChatsChatIdMembersResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiV1ChatsChatIdMembersResponse) StatusCode() int {
+func (r DeleteChatMemberResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1765,14 +1765,14 @@ func (r DeleteApiV1ChatsChatIdMembersResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r DeleteApiV1ChatsChatIdMembersResponse) ContentType() string {
+func (r DeleteChatMemberResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type PostApiV1ChatsChatIdMembersResponse struct {
+type AddChatMembersResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -1788,37 +1788,37 @@ type PostApiV1ChatsChatIdMembersResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r PostApiV1ChatsChatIdMembersResponse) GetJSON200() *AddChatMemberResponse {
+func (r AddChatMembersResponse) GetJSON200() *AddChatMemberResponse {
 	return r.JSON200
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r PostApiV1ChatsChatIdMembersResponse) GetJSON401() *Error {
+func (r AddChatMembersResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r PostApiV1ChatsChatIdMembersResponse) GetJSON403() *Error {
+func (r AddChatMembersResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r PostApiV1ChatsChatIdMembersResponse) GetJSON404() *Error {
+func (r AddChatMembersResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PostApiV1ChatsChatIdMembersResponse) GetJSON409() *Error {
+func (r AddChatMembersResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PostApiV1ChatsChatIdMembersResponse) GetBody() []byte {
+func (r AddChatMembersResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PostApiV1ChatsChatIdMembersResponse) Status() string {
+func (r AddChatMembersResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1826,7 +1826,7 @@ func (r PostApiV1ChatsChatIdMembersResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PostApiV1ChatsChatIdMembersResponse) StatusCode() int {
+func (r AddChatMembersResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1834,14 +1834,14 @@ func (r PostApiV1ChatsChatIdMembersResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PostApiV1ChatsChatIdMembersResponse) ContentType() string {
+func (r AddChatMembersResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type GetApiV1ChatsChatIdMessagesResponse struct {
+type GetMessagesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -1855,32 +1855,32 @@ type GetApiV1ChatsChatIdMessagesResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r GetApiV1ChatsChatIdMessagesResponse) GetJSON200() *[]Message {
+func (r GetMessagesResponse) GetJSON200() *[]Message {
 	return r.JSON200
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r GetApiV1ChatsChatIdMessagesResponse) GetJSON401() *Error {
+func (r GetMessagesResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r GetApiV1ChatsChatIdMessagesResponse) GetJSON403() *Error {
+func (r GetMessagesResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r GetApiV1ChatsChatIdMessagesResponse) GetJSON404() *Error {
+func (r GetMessagesResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetBody returns the raw response body bytes
-func (r GetApiV1ChatsChatIdMessagesResponse) GetBody() []byte {
+func (r GetMessagesResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r GetApiV1ChatsChatIdMessagesResponse) Status() string {
+func (r GetMessagesResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1888,7 +1888,7 @@ func (r GetApiV1ChatsChatIdMessagesResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r GetApiV1ChatsChatIdMessagesResponse) StatusCode() int {
+func (r GetMessagesResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1896,14 +1896,14 @@ func (r GetApiV1ChatsChatIdMessagesResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r GetApiV1ChatsChatIdMessagesResponse) ContentType() string {
+func (r GetMessagesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type PostApiV1ChatsChatIdMessagesResponse struct {
+type CreateMessageResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
@@ -1921,42 +1921,42 @@ type PostApiV1ChatsChatIdMessagesResponse struct {
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON201() *Message {
+func (r CreateMessageResponse) GetJSON201() *Message {
 	return r.JSON201
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON400() *Error {
+func (r CreateMessageResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON401() *Error {
+func (r CreateMessageResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON403() *Error {
+func (r CreateMessageResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON404() *Error {
+func (r CreateMessageResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PostApiV1ChatsChatIdMessagesResponse) GetJSON409() *Error {
+func (r CreateMessageResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PostApiV1ChatsChatIdMessagesResponse) GetBody() []byte {
+func (r CreateMessageResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PostApiV1ChatsChatIdMessagesResponse) Status() string {
+func (r CreateMessageResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -1964,7 +1964,7 @@ func (r PostApiV1ChatsChatIdMessagesResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PostApiV1ChatsChatIdMessagesResponse) StatusCode() int {
+func (r CreateMessageResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -1972,14 +1972,14 @@ func (r PostApiV1ChatsChatIdMessagesResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PostApiV1ChatsChatIdMessagesResponse) ContentType() string {
+func (r CreateMessageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type DeleteApiV1ChatsChatIdMessagesMessageIdResponse struct {
+type DeleteMessageResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON401 the response for an HTTP 401 `application/json` response
@@ -1991,27 +1991,27 @@ type DeleteApiV1ChatsChatIdMessagesMessageIdResponse struct {
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON401() *Error {
+func (r DeleteMessageResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON403() *Error {
+func (r DeleteMessageResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON404() *Error {
+func (r DeleteMessageResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetBody returns the raw response body bytes
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) GetBody() []byte {
+func (r DeleteMessageResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) Status() string {
+func (r DeleteMessageResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2019,7 +2019,7 @@ func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) StatusCode() int {
+func (r DeleteMessageResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2027,14 +2027,14 @@ func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r DeleteApiV1ChatsChatIdMessagesMessageIdResponse) ContentType() string {
+func (r DeleteMessageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type PatchApiV1ChatsChatIdMessagesMessageIdResponse struct {
+type EditMessageResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
@@ -2052,42 +2052,42 @@ type PatchApiV1ChatsChatIdMessagesMessageIdResponse struct {
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON200() *Message {
+func (r EditMessageResponse) GetJSON200() *Message {
 	return r.JSON200
 }
 
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON400() *Error {
+func (r EditMessageResponse) GetJSON400() *Error {
 	return r.JSON400
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON401() *Error {
+func (r EditMessageResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON403() *Error {
+func (r EditMessageResponse) GetJSON403() *Error {
 	return r.JSON403
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON404() *Error {
+func (r EditMessageResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetJSON409() *Error {
+func (r EditMessageResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) GetBody() []byte {
+func (r EditMessageResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) Status() string {
+func (r EditMessageResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2095,7 +2095,7 @@ func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) StatusCode() int {
+func (r EditMessageResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2103,14 +2103,14 @@ func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PatchApiV1ChatsChatIdMessagesMessageIdResponse) ContentType() string {
+func (r EditMessageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type DeleteApiV1SessionsResponse struct {
+type DeleteSessionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON401 the response for an HTTP 401 `application/json` response
@@ -2122,27 +2122,27 @@ type DeleteApiV1SessionsResponse struct {
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r DeleteApiV1SessionsResponse) GetJSON401() *Error {
+func (r DeleteSessionResponse) GetJSON401() *Error {
 	return r.JSON401
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r DeleteApiV1SessionsResponse) GetJSON404() *Error {
+func (r DeleteSessionResponse) GetJSON404() *Error {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r DeleteApiV1SessionsResponse) GetJSON409() *Error {
+func (r DeleteSessionResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r DeleteApiV1SessionsResponse) GetBody() []byte {
+func (r DeleteSessionResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r DeleteApiV1SessionsResponse) Status() string {
+func (r DeleteSessionResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2150,7 +2150,7 @@ func (r DeleteApiV1SessionsResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r DeleteApiV1SessionsResponse) StatusCode() int {
+func (r DeleteSessionResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2158,14 +2158,14 @@ func (r DeleteApiV1SessionsResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r DeleteApiV1SessionsResponse) ContentType() string {
+func (r DeleteSessionResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-type PostApiV1SessionsResponse struct {
+type CreateSessionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
@@ -2175,22 +2175,22 @@ type PostApiV1SessionsResponse struct {
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
-func (r PostApiV1SessionsResponse) GetJSON201() *Session {
+func (r CreateSessionResponse) GetJSON201() *Session {
 	return r.JSON201
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r PostApiV1SessionsResponse) GetJSON409() *Error {
+func (r CreateSessionResponse) GetJSON409() *Error {
 	return r.JSON409
 }
 
 // GetBody returns the raw response body bytes
-func (r PostApiV1SessionsResponse) GetBody() []byte {
+func (r CreateSessionResponse) GetBody() []byte {
 	return r.Body
 }
 
 // Status returns HTTPResponse.Status
-func (r PostApiV1SessionsResponse) Status() string {
+func (r CreateSessionResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -2198,7 +2198,7 @@ func (r PostApiV1SessionsResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r PostApiV1SessionsResponse) StatusCode() int {
+func (r CreateSessionResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -2206,296 +2206,296 @@ func (r PostApiV1SessionsResponse) StatusCode() int {
 }
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PostApiV1SessionsResponse) ContentType() string {
+func (r CreateSessionResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
 	return ""
 }
 
-// PostApiV1ChatsWithBodyWithResponse Create chat
+// CreateChatWithBodyWithResponse Create chat
 //
 // Creates a new chat for the session (chat owner).
 // The owner must also be considered a chat member.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsResponse, error) {
-	rsp, err := c.PostApiV1ChatsWithBody(ctx, contentType, body, reqEditors...)
+// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+func (c *ClientWithResponses) CreateChatWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateChatResponse, error) {
+	rsp, err := c.CreateChatWithBody(ctx, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsResponse(rsp)
+	return ParseCreateChatResponse(rsp)
 }
 
-// PostApiV1ChatsWithResponse Create chat
+// CreateChatWithResponse Create chat
 //
 // Creates a new chat for the session (chat owner).
 // The owner must also be considered a chat member.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats (the `PostApiV1Chats` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsWithResponse(ctx context.Context, body PostApiV1ChatsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsResponse, error) {
-	rsp, err := c.PostApiV1Chats(ctx, body, reqEditors...)
+// Corresponds with POST /api/v1/chats (the `CreateChat` operationId).
+func (c *ClientWithResponses) CreateChatWithResponse(ctx context.Context, body CreateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateChatResponse, error) {
+	rsp, err := c.CreateChat(ctx, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsResponse(rsp)
+	return ParseCreateChatResponse(rsp)
 }
 
-// DeleteApiV1ChatsChatIdWithResponse Delete an existing chat
+// DeleteChatWithResponse Delete an existing chat
 //
 // Deletes an existing chat. Available for the chat owner.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteApiV1ChatsChatId` operationId).
-func (c *ClientWithResponses) DeleteApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdResponse, error) {
-	rsp, err := c.DeleteApiV1ChatsChatId(ctx, chatId, reqEditors...)
+// Corresponds with DELETE /api/v1/chats/{chat_id} (the `DeleteChat` operationId).
+func (c *ClientWithResponses) DeleteChatWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*DeleteChatResponse, error) {
+	rsp, err := c.DeleteChat(ctx, chatId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteApiV1ChatsChatIdResponse(rsp)
+	return ParseDeleteChatResponse(rsp)
 }
 
-// GetApiV1ChatsChatIdWithResponse Gets chat
+// GetChatWithResponse Gets chat
 //
 // Gets basic chat information, including chat settings and members' session IDs.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/chats/{chat_id} (the `GetApiV1ChatsChatId` operationId).
-func (c *ClientWithResponses) GetApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*GetApiV1ChatsChatIdResponse, error) {
-	rsp, err := c.GetApiV1ChatsChatId(ctx, chatId, reqEditors...)
+// Corresponds with GET /api/v1/chats/{chat_id} (the `GetChat` operationId).
+func (c *ClientWithResponses) GetChatWithResponse(ctx context.Context, chatId ChatID, reqEditors ...RequestEditorFn) (*GetChatResponse, error) {
+	rsp, err := c.GetChat(ctx, chatId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetApiV1ChatsChatIdResponse(rsp)
+	return ParseGetChatResponse(rsp)
 }
 
-// PatchApiV1ChatsChatIdWithBodyWithResponse Update chat settings
+// UpdateChatWithBodyWithResponse Update chat settings
 //
 // Updates chat basic settings.
 // Only the following fields can be updated: max_messages, expires_at, read_only.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-func (c *ClientWithResponses) PatchApiV1ChatsChatIdWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdResponse, error) {
-	rsp, err := c.PatchApiV1ChatsChatIdWithBody(ctx, chatId, contentType, body, reqEditors...)
+// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+func (c *ClientWithResponses) UpdateChatWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateChatResponse, error) {
+	rsp, err := c.UpdateChatWithBody(ctx, chatId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePatchApiV1ChatsChatIdResponse(rsp)
+	return ParseUpdateChatResponse(rsp)
 }
 
-// PatchApiV1ChatsChatIdWithResponse Update chat settings
+// UpdateChatWithResponse Update chat settings
 //
 // Updates chat basic settings.
 // Only the following fields can be updated: max_messages, expires_at, read_only.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id} (the `PatchApiV1ChatsChatId` operationId).
-func (c *ClientWithResponses) PatchApiV1ChatsChatIdWithResponse(ctx context.Context, chatId ChatID, body PatchApiV1ChatsChatIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdResponse, error) {
-	rsp, err := c.PatchApiV1ChatsChatId(ctx, chatId, body, reqEditors...)
+// Corresponds with PATCH /api/v1/chats/{chat_id} (the `UpdateChat` operationId).
+func (c *ClientWithResponses) UpdateChatWithResponse(ctx context.Context, chatId ChatID, body UpdateChatJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateChatResponse, error) {
+	rsp, err := c.UpdateChat(ctx, chatId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePatchApiV1ChatsChatIdResponse(rsp)
+	return ParseUpdateChatResponse(rsp)
 }
 
-// DeleteApiV1ChatsChatIdMembersWithBodyWithResponse Delete chat member
+// DeleteChatMemberWithBodyWithResponse Delete chat member
 //
 // Removes a member's session from the chat.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-func (c *ClientWithResponses) DeleteApiV1ChatsChatIdMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMembersResponse, error) {
-	rsp, err := c.DeleteApiV1ChatsChatIdMembersWithBody(ctx, chatId, contentType, body, reqEditors...)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+func (c *ClientWithResponses) DeleteChatMemberWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DeleteChatMemberResponse, error) {
+	rsp, err := c.DeleteChatMemberWithBody(ctx, chatId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteApiV1ChatsChatIdMembersResponse(rsp)
+	return ParseDeleteChatMemberResponse(rsp)
 }
 
-// DeleteApiV1ChatsChatIdMembersWithResponse Delete chat member
+// DeleteChatMemberWithResponse Delete chat member
 //
 // Removes a member's session from the chat.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteApiV1ChatsChatIdMembers` operationId).
-func (c *ClientWithResponses) DeleteApiV1ChatsChatIdMembersWithResponse(ctx context.Context, chatId ChatID, body DeleteApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMembersResponse, error) {
-	rsp, err := c.DeleteApiV1ChatsChatIdMembers(ctx, chatId, body, reqEditors...)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/members (the `DeleteChatMember` operationId).
+func (c *ClientWithResponses) DeleteChatMemberWithResponse(ctx context.Context, chatId ChatID, body DeleteChatMemberJSONRequestBody, reqEditors ...RequestEditorFn) (*DeleteChatMemberResponse, error) {
+	rsp, err := c.DeleteChatMember(ctx, chatId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteApiV1ChatsChatIdMembersResponse(rsp)
+	return ParseDeleteChatMemberResponse(rsp)
 }
 
-// PostApiV1ChatsChatIdMembersWithBodyWithResponse Adds an existing session to the chat
+// AddChatMembersWithBodyWithResponse Adds an existing session to the chat
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsChatIdMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMembersResponse, error) {
-	rsp, err := c.PostApiV1ChatsChatIdMembersWithBody(ctx, chatId, contentType, body, reqEditors...)
+// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+func (c *ClientWithResponses) AddChatMembersWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddChatMembersResponse, error) {
+	rsp, err := c.AddChatMembersWithBody(ctx, chatId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsChatIdMembersResponse(rsp)
+	return ParseAddChatMembersResponse(rsp)
 }
 
-// PostApiV1ChatsChatIdMembersWithResponse Adds an existing session to the chat
+// AddChatMembersWithResponse Adds an existing session to the chat
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/members (the `PostApiV1ChatsChatIdMembers` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsChatIdMembersWithResponse(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMembersResponse, error) {
-	rsp, err := c.PostApiV1ChatsChatIdMembers(ctx, chatId, body, reqEditors...)
+// Corresponds with POST /api/v1/chats/{chat_id}/members (the `AddChatMembers` operationId).
+func (c *ClientWithResponses) AddChatMembersWithResponse(ctx context.Context, chatId ChatID, body AddChatMembersJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChatMembersResponse, error) {
+	rsp, err := c.AddChatMembers(ctx, chatId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsChatIdMembersResponse(rsp)
+	return ParseAddChatMembersResponse(rsp)
 }
 
-// GetApiV1ChatsChatIdMessagesWithResponse Get list of messages
+// GetMessagesWithResponse Get list of messages
 //
 // Returns all messages from a chat. Only chat members can retrieve messages.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetApiV1ChatsChatIdMessages` operationId).
-func (c *ClientWithResponses) GetApiV1ChatsChatIdMessagesWithResponse(ctx context.Context, chatId ChatID, params *GetApiV1ChatsChatIdMessagesParams, reqEditors ...RequestEditorFn) (*GetApiV1ChatsChatIdMessagesResponse, error) {
-	rsp, err := c.GetApiV1ChatsChatIdMessages(ctx, chatId, params, reqEditors...)
+// Corresponds with GET /api/v1/chats/{chat_id}/messages (the `GetMessages` operationId).
+func (c *ClientWithResponses) GetMessagesWithResponse(ctx context.Context, chatId ChatID, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*GetMessagesResponse, error) {
+	rsp, err := c.GetMessages(ctx, chatId, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetApiV1ChatsChatIdMessagesResponse(rsp)
+	return ParseGetMessagesResponse(rsp)
 }
 
-// PostApiV1ChatsChatIdMessagesWithBodyWithResponse Create a new message
+// CreateMessageWithBodyWithResponse Create a new message
 //
 // Creates a new message in a chat.
 // The message author is determined by the X-Session-ID header.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsChatIdMessagesWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMessagesResponse, error) {
-	rsp, err := c.PostApiV1ChatsChatIdMessagesWithBody(ctx, chatId, contentType, body, reqEditors...)
+// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+func (c *ClientWithResponses) CreateMessageWithBodyWithResponse(ctx context.Context, chatId ChatID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateMessageResponse, error) {
+	rsp, err := c.CreateMessageWithBody(ctx, chatId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsChatIdMessagesResponse(rsp)
+	return ParseCreateMessageResponse(rsp)
 }
 
-// PostApiV1ChatsChatIdMessagesWithResponse Create a new message
+// CreateMessageWithResponse Create a new message
 //
 // Creates a new message in a chat.
 // The message author is determined by the X-Session-ID header.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `PostApiV1ChatsChatIdMessages` operationId).
-func (c *ClientWithResponses) PostApiV1ChatsChatIdMessagesWithResponse(ctx context.Context, chatId ChatID, body PostApiV1ChatsChatIdMessagesJSONRequestBody, reqEditors ...RequestEditorFn) (*PostApiV1ChatsChatIdMessagesResponse, error) {
-	rsp, err := c.PostApiV1ChatsChatIdMessages(ctx, chatId, body, reqEditors...)
+// Corresponds with POST /api/v1/chats/{chat_id}/messages (the `CreateMessage` operationId).
+func (c *ClientWithResponses) CreateMessageWithResponse(ctx context.Context, chatId ChatID, body CreateMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMessageResponse, error) {
+	rsp, err := c.CreateMessage(ctx, chatId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1ChatsChatIdMessagesResponse(rsp)
+	return ParseCreateMessageResponse(rsp)
 }
 
-// DeleteApiV1ChatsChatIdMessagesMessageIdWithResponse Delete a message
+// DeleteMessageWithResponse Delete a message
 //
 // Deletes an existing message.
 // Only the author and chat owner can delete a message.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *ClientWithResponses) DeleteApiV1ChatsChatIdMessagesMessageIdWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*DeleteApiV1ChatsChatIdMessagesMessageIdResponse, error) {
-	rsp, err := c.DeleteApiV1ChatsChatIdMessagesMessageId(ctx, chatId, messageId, reqEditors...)
+// Corresponds with DELETE /api/v1/chats/{chat_id}/messages/{message_id} (the `DeleteMessage` operationId).
+func (c *ClientWithResponses) DeleteMessageWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, reqEditors ...RequestEditorFn) (*DeleteMessageResponse, error) {
+	rsp, err := c.DeleteMessage(ctx, chatId, messageId, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteApiV1ChatsChatIdMessagesMessageIdResponse(rsp)
+	return ParseDeleteMessageResponse(rsp)
 }
 
-// PatchApiV1ChatsChatIdMessagesMessageIdWithBodyWithResponse Edit a message
+// EditMessageWithBodyWithResponse Edit a message
 //
 // Updates the text of an existing message.
 // Only the author can edit the message.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *ClientWithResponses) PatchApiV1ChatsChatIdMessagesMessageIdWithBodyWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdMessagesMessageIdResponse, error) {
-	rsp, err := c.PatchApiV1ChatsChatIdMessagesMessageIdWithBody(ctx, chatId, messageId, contentType, body, reqEditors...)
+// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+func (c *ClientWithResponses) EditMessageWithBodyWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditMessageResponse, error) {
+	rsp, err := c.EditMessageWithBody(ctx, chatId, messageId, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePatchApiV1ChatsChatIdMessagesMessageIdResponse(rsp)
+	return ParseEditMessageResponse(rsp)
 }
 
-// PatchApiV1ChatsChatIdMessagesMessageIdWithResponse Edit a message
+// EditMessageWithResponse Edit a message
 //
 // Updates the text of an existing message.
 // Only the author can edit the message.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
-// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `PatchApiV1ChatsChatIdMessagesMessageId` operationId).
-func (c *ClientWithResponses) PatchApiV1ChatsChatIdMessagesMessageIdWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, body PatchApiV1ChatsChatIdMessagesMessageIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchApiV1ChatsChatIdMessagesMessageIdResponse, error) {
-	rsp, err := c.PatchApiV1ChatsChatIdMessagesMessageId(ctx, chatId, messageId, body, reqEditors...)
+// Corresponds with PATCH /api/v1/chats/{chat_id}/messages/{message_id} (the `EditMessage` operationId).
+func (c *ClientWithResponses) EditMessageWithResponse(ctx context.Context, chatId ChatID, messageId MessageID, body EditMessageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditMessageResponse, error) {
+	rsp, err := c.EditMessage(ctx, chatId, messageId, body, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePatchApiV1ChatsChatIdMessagesMessageIdResponse(rsp)
+	return ParseEditMessageResponse(rsp)
 }
 
-// DeleteApiV1SessionsWithResponse Terminates existing session.
+// DeleteSessionWithResponse Terminates existing session.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with DELETE /api/v1/sessions (the `DeleteApiV1Sessions` operationId).
-func (c *ClientWithResponses) DeleteApiV1SessionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*DeleteApiV1SessionsResponse, error) {
-	rsp, err := c.DeleteApiV1Sessions(ctx, reqEditors...)
+// Corresponds with DELETE /api/v1/sessions (the `DeleteSession` operationId).
+func (c *ClientWithResponses) DeleteSessionWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*DeleteSessionResponse, error) {
+	rsp, err := c.DeleteSession(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseDeleteApiV1SessionsResponse(rsp)
+	return ParseDeleteSessionResponse(rsp)
 }
 
-// PostApiV1SessionsWithResponse Create a new session for a client
+// CreateSessionWithResponse Create a new session for a client
 //
 // Creates a new session for a client.
 // The created session can subsequently be used as: X-Session-ID.
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with POST /api/v1/sessions (the `PostApiV1Sessions` operationId).
-func (c *ClientWithResponses) PostApiV1SessionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostApiV1SessionsResponse, error) {
-	rsp, err := c.PostApiV1Sessions(ctx, reqEditors...)
+// Corresponds with POST /api/v1/sessions (the `CreateSession` operationId).
+func (c *ClientWithResponses) CreateSessionWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*CreateSessionResponse, error) {
+	rsp, err := c.CreateSession(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParsePostApiV1SessionsResponse(rsp)
+	return ParseCreateSessionResponse(rsp)
 }
 
-// ParsePostApiV1ChatsResponse parses an HTTP response from a PostApiV1ChatsWithResponse call
-func ParsePostApiV1ChatsResponse(rsp *http.Response) (*PostApiV1ChatsResponse, error) {
+// ParseCreateChatResponse parses an HTTP response from a CreateChatWithResponse call
+func ParseCreateChatResponse(rsp *http.Response) (*CreateChatResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PostApiV1ChatsResponse{
+	response := &CreateChatResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2534,15 +2534,15 @@ func ParsePostApiV1ChatsResponse(rsp *http.Response) (*PostApiV1ChatsResponse, e
 	return response, nil
 }
 
-// ParseDeleteApiV1ChatsChatIdResponse parses an HTTP response from a DeleteApiV1ChatsChatIdWithResponse call
-func ParseDeleteApiV1ChatsChatIdResponse(rsp *http.Response) (*DeleteApiV1ChatsChatIdResponse, error) {
+// ParseDeleteChatResponse parses an HTTP response from a DeleteChatWithResponse call
+func ParseDeleteChatResponse(rsp *http.Response) (*DeleteChatResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteApiV1ChatsChatIdResponse{
+	response := &DeleteChatResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2577,15 +2577,15 @@ func ParseDeleteApiV1ChatsChatIdResponse(rsp *http.Response) (*DeleteApiV1ChatsC
 	return response, nil
 }
 
-// ParseGetApiV1ChatsChatIdResponse parses an HTTP response from a GetApiV1ChatsChatIdWithResponse call
-func ParseGetApiV1ChatsChatIdResponse(rsp *http.Response) (*GetApiV1ChatsChatIdResponse, error) {
+// ParseGetChatResponse parses an HTTP response from a GetChatWithResponse call
+func ParseGetChatResponse(rsp *http.Response) (*GetChatResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &GetApiV1ChatsChatIdResponse{
+	response := &GetChatResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2624,15 +2624,15 @@ func ParseGetApiV1ChatsChatIdResponse(rsp *http.Response) (*GetApiV1ChatsChatIdR
 	return response, nil
 }
 
-// ParsePatchApiV1ChatsChatIdResponse parses an HTTP response from a PatchApiV1ChatsChatIdWithResponse call
-func ParsePatchApiV1ChatsChatIdResponse(rsp *http.Response) (*PatchApiV1ChatsChatIdResponse, error) {
+// ParseUpdateChatResponse parses an HTTP response from a UpdateChatWithResponse call
+func ParseUpdateChatResponse(rsp *http.Response) (*UpdateChatResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PatchApiV1ChatsChatIdResponse{
+	response := &UpdateChatResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2678,15 +2678,15 @@ func ParsePatchApiV1ChatsChatIdResponse(rsp *http.Response) (*PatchApiV1ChatsCha
 	return response, nil
 }
 
-// ParseDeleteApiV1ChatsChatIdMembersResponse parses an HTTP response from a DeleteApiV1ChatsChatIdMembersWithResponse call
-func ParseDeleteApiV1ChatsChatIdMembersResponse(rsp *http.Response) (*DeleteApiV1ChatsChatIdMembersResponse, error) {
+// ParseDeleteChatMemberResponse parses an HTTP response from a DeleteChatMemberWithResponse call
+func ParseDeleteChatMemberResponse(rsp *http.Response) (*DeleteChatMemberResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteApiV1ChatsChatIdMembersResponse{
+	response := &DeleteChatMemberResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2721,15 +2721,15 @@ func ParseDeleteApiV1ChatsChatIdMembersResponse(rsp *http.Response) (*DeleteApiV
 	return response, nil
 }
 
-// ParsePostApiV1ChatsChatIdMembersResponse parses an HTTP response from a PostApiV1ChatsChatIdMembersWithResponse call
-func ParsePostApiV1ChatsChatIdMembersResponse(rsp *http.Response) (*PostApiV1ChatsChatIdMembersResponse, error) {
+// ParseAddChatMembersResponse parses an HTTP response from a AddChatMembersWithResponse call
+func ParseAddChatMembersResponse(rsp *http.Response) (*AddChatMembersResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PostApiV1ChatsChatIdMembersResponse{
+	response := &AddChatMembersResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2775,15 +2775,15 @@ func ParsePostApiV1ChatsChatIdMembersResponse(rsp *http.Response) (*PostApiV1Cha
 	return response, nil
 }
 
-// ParseGetApiV1ChatsChatIdMessagesResponse parses an HTTP response from a GetApiV1ChatsChatIdMessagesWithResponse call
-func ParseGetApiV1ChatsChatIdMessagesResponse(rsp *http.Response) (*GetApiV1ChatsChatIdMessagesResponse, error) {
+// ParseGetMessagesResponse parses an HTTP response from a GetMessagesWithResponse call
+func ParseGetMessagesResponse(rsp *http.Response) (*GetMessagesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &GetApiV1ChatsChatIdMessagesResponse{
+	response := &GetMessagesResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2822,15 +2822,15 @@ func ParseGetApiV1ChatsChatIdMessagesResponse(rsp *http.Response) (*GetApiV1Chat
 	return response, nil
 }
 
-// ParsePostApiV1ChatsChatIdMessagesResponse parses an HTTP response from a PostApiV1ChatsChatIdMessagesWithResponse call
-func ParsePostApiV1ChatsChatIdMessagesResponse(rsp *http.Response) (*PostApiV1ChatsChatIdMessagesResponse, error) {
+// ParseCreateMessageResponse parses an HTTP response from a CreateMessageWithResponse call
+func ParseCreateMessageResponse(rsp *http.Response) (*CreateMessageResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PostApiV1ChatsChatIdMessagesResponse{
+	response := &CreateMessageResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2883,15 +2883,15 @@ func ParsePostApiV1ChatsChatIdMessagesResponse(rsp *http.Response) (*PostApiV1Ch
 	return response, nil
 }
 
-// ParseDeleteApiV1ChatsChatIdMessagesMessageIdResponse parses an HTTP response from a DeleteApiV1ChatsChatIdMessagesMessageIdWithResponse call
-func ParseDeleteApiV1ChatsChatIdMessagesMessageIdResponse(rsp *http.Response) (*DeleteApiV1ChatsChatIdMessagesMessageIdResponse, error) {
+// ParseDeleteMessageResponse parses an HTTP response from a DeleteMessageWithResponse call
+func ParseDeleteMessageResponse(rsp *http.Response) (*DeleteMessageResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteApiV1ChatsChatIdMessagesMessageIdResponse{
+	response := &DeleteMessageResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2926,15 +2926,15 @@ func ParseDeleteApiV1ChatsChatIdMessagesMessageIdResponse(rsp *http.Response) (*
 	return response, nil
 }
 
-// ParsePatchApiV1ChatsChatIdMessagesMessageIdResponse parses an HTTP response from a PatchApiV1ChatsChatIdMessagesMessageIdWithResponse call
-func ParsePatchApiV1ChatsChatIdMessagesMessageIdResponse(rsp *http.Response) (*PatchApiV1ChatsChatIdMessagesMessageIdResponse, error) {
+// ParseEditMessageResponse parses an HTTP response from a EditMessageWithResponse call
+func ParseEditMessageResponse(rsp *http.Response) (*EditMessageResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PatchApiV1ChatsChatIdMessagesMessageIdResponse{
+	response := &EditMessageResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2987,15 +2987,15 @@ func ParsePatchApiV1ChatsChatIdMessagesMessageIdResponse(rsp *http.Response) (*P
 	return response, nil
 }
 
-// ParseDeleteApiV1SessionsResponse parses an HTTP response from a DeleteApiV1SessionsWithResponse call
-func ParseDeleteApiV1SessionsResponse(rsp *http.Response) (*DeleteApiV1SessionsResponse, error) {
+// ParseDeleteSessionResponse parses an HTTP response from a DeleteSessionWithResponse call
+func ParseDeleteSessionResponse(rsp *http.Response) (*DeleteSessionResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &DeleteApiV1SessionsResponse{
+	response := &DeleteSessionResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -3030,15 +3030,15 @@ func ParseDeleteApiV1SessionsResponse(rsp *http.Response) (*DeleteApiV1SessionsR
 	return response, nil
 }
 
-// ParsePostApiV1SessionsResponse parses an HTTP response from a PostApiV1SessionsWithResponse call
-func ParsePostApiV1SessionsResponse(rsp *http.Response) (*PostApiV1SessionsResponse, error) {
+// ParseCreateSessionResponse parses an HTTP response from a CreateSessionWithResponse call
+func ParseCreateSessionResponse(rsp *http.Response) (*CreateSessionResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &PostApiV1SessionsResponse{
+	response := &CreateSessionResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -3065,42 +3065,42 @@ func ParsePostApiV1SessionsResponse(rsp *http.Response) (*PostApiV1SessionsRespo
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// PostApiV1Chats Create chat
+	// CreateChat Create chat
 	// (POST /api/v1/chats)
-	PostApiV1Chats(w http.ResponseWriter, r *http.Request)
-	// DeleteApiV1ChatsChatId Delete an existing chat
+	CreateChat(w http.ResponseWriter, r *http.Request)
+	// DeleteChat Delete an existing chat
 	// (DELETE /api/v1/chats/{chat_id})
-	DeleteApiV1ChatsChatId(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// GetApiV1ChatsChatId Gets chat
+	DeleteChat(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// GetChat Gets chat
 	// (GET /api/v1/chats/{chat_id})
-	GetApiV1ChatsChatId(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// PatchApiV1ChatsChatId Update chat settings
+	GetChat(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// UpdateChat Update chat settings
 	// (PATCH /api/v1/chats/{chat_id})
-	PatchApiV1ChatsChatId(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// DeleteApiV1ChatsChatIdMembers Delete chat member
+	UpdateChat(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// DeleteChatMember Delete chat member
 	// (DELETE /api/v1/chats/{chat_id}/members)
-	DeleteApiV1ChatsChatIdMembers(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// PostApiV1ChatsChatIdMembers Adds an existing session to the chat
+	DeleteChatMember(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// AddChatMembers Adds an existing session to the chat
 	// (POST /api/v1/chats/{chat_id}/members)
-	PostApiV1ChatsChatIdMembers(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// GetApiV1ChatsChatIdMessages Get list of messages
+	AddChatMembers(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// GetMessages Get list of messages
 	// (GET /api/v1/chats/{chat_id}/messages)
-	GetApiV1ChatsChatIdMessages(w http.ResponseWriter, r *http.Request, chatId ChatID, params GetApiV1ChatsChatIdMessagesParams)
-	// PostApiV1ChatsChatIdMessages Create a new message
+	GetMessages(w http.ResponseWriter, r *http.Request, chatId ChatID, params GetMessagesParams)
+	// CreateMessage Create a new message
 	// (POST /api/v1/chats/{chat_id}/messages)
-	PostApiV1ChatsChatIdMessages(w http.ResponseWriter, r *http.Request, chatId ChatID)
-	// DeleteApiV1ChatsChatIdMessagesMessageId Delete a message
+	CreateMessage(w http.ResponseWriter, r *http.Request, chatId ChatID)
+	// DeleteMessage Delete a message
 	// (DELETE /api/v1/chats/{chat_id}/messages/{message_id})
-	DeleteApiV1ChatsChatIdMessagesMessageId(w http.ResponseWriter, r *http.Request, chatId ChatID, messageId MessageID)
-	// PatchApiV1ChatsChatIdMessagesMessageId Edit a message
+	DeleteMessage(w http.ResponseWriter, r *http.Request, chatId ChatID, messageId MessageID)
+	// EditMessage Edit a message
 	// (PATCH /api/v1/chats/{chat_id}/messages/{message_id})
-	PatchApiV1ChatsChatIdMessagesMessageId(w http.ResponseWriter, r *http.Request, chatId ChatID, messageId MessageID)
-	// DeleteApiV1Sessions Terminates existing session.
+	EditMessage(w http.ResponseWriter, r *http.Request, chatId ChatID, messageId MessageID)
+	// DeleteSession Terminates existing session.
 	// (DELETE /api/v1/sessions)
-	DeleteApiV1Sessions(w http.ResponseWriter, r *http.Request)
-	// PostApiV1Sessions Create a new session for a client
+	DeleteSession(w http.ResponseWriter, r *http.Request)
+	// CreateSession Create a new session for a client
 	// (POST /api/v1/sessions)
-	PostApiV1Sessions(w http.ResponseWriter, r *http.Request)
+	CreateSession(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -3112,11 +3112,11 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// PostApiV1Chats operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1Chats(w http.ResponseWriter, r *http.Request) {
+// CreateChat operation middleware
+func (siw *ServerInterfaceWrapper) CreateChat(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostApiV1Chats(w, r)
+		siw.Handler.CreateChat(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3126,8 +3126,8 @@ func (siw *ServerInterfaceWrapper) PostApiV1Chats(w http.ResponseWriter, r *http
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteApiV1ChatsChatId operation middleware
-func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatId(w http.ResponseWriter, r *http.Request) {
+// DeleteChat operation middleware
+func (siw *ServerInterfaceWrapper) DeleteChat(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3142,7 +3142,7 @@ func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatId(w http.ResponseWriter,
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteApiV1ChatsChatId(w, r, chatId)
+		siw.Handler.DeleteChat(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3152,8 +3152,8 @@ func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatId(w http.ResponseWriter,
 	handler.ServeHTTP(w, r)
 }
 
-// GetApiV1ChatsChatId operation middleware
-func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatId(w http.ResponseWriter, r *http.Request) {
+// GetChat operation middleware
+func (siw *ServerInterfaceWrapper) GetChat(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3168,7 +3168,7 @@ func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatId(w http.ResponseWriter, r 
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetApiV1ChatsChatId(w, r, chatId)
+		siw.Handler.GetChat(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3178,8 +3178,8 @@ func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatId(w http.ResponseWriter, r 
 	handler.ServeHTTP(w, r)
 }
 
-// PatchApiV1ChatsChatId operation middleware
-func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatId(w http.ResponseWriter, r *http.Request) {
+// UpdateChat operation middleware
+func (siw *ServerInterfaceWrapper) UpdateChat(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3194,7 +3194,7 @@ func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatId(w http.ResponseWriter, 
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PatchApiV1ChatsChatId(w, r, chatId)
+		siw.Handler.UpdateChat(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3204,8 +3204,8 @@ func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatId(w http.ResponseWriter, 
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteApiV1ChatsChatIdMembers operation middleware
-func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatIdMembers(w http.ResponseWriter, r *http.Request) {
+// DeleteChatMember operation middleware
+func (siw *ServerInterfaceWrapper) DeleteChatMember(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3220,7 +3220,7 @@ func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatIdMembers(w http.Response
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteApiV1ChatsChatIdMembers(w, r, chatId)
+		siw.Handler.DeleteChatMember(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3230,8 +3230,8 @@ func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatIdMembers(w http.Response
 	handler.ServeHTTP(w, r)
 }
 
-// PostApiV1ChatsChatIdMembers operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMembers(w http.ResponseWriter, r *http.Request) {
+// AddChatMembers operation middleware
+func (siw *ServerInterfaceWrapper) AddChatMembers(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3246,7 +3246,7 @@ func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMembers(w http.ResponseWr
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostApiV1ChatsChatIdMembers(w, r, chatId)
+		siw.Handler.AddChatMembers(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3256,8 +3256,8 @@ func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMembers(w http.ResponseWr
 	handler.ServeHTTP(w, r)
 }
 
-// GetApiV1ChatsChatIdMessages operation middleware
-func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatIdMessages(w http.ResponseWriter, r *http.Request) {
+// GetMessages operation middleware
+func (siw *ServerInterfaceWrapper) GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3272,7 +3272,7 @@ func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatIdMessages(w http.ResponseWr
 	}
 
 	// Parameter object where we will unmarshal all parameters from the context
-	var params GetApiV1ChatsChatIdMessagesParams
+	var params GetMessagesParams
 
 	// ------------- Optional query parameter "limit" -------------
 
@@ -3301,7 +3301,7 @@ func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatIdMessages(w http.ResponseWr
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetApiV1ChatsChatIdMessages(w, r, chatId, params)
+		siw.Handler.GetMessages(w, r, chatId, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3311,8 +3311,8 @@ func (siw *ServerInterfaceWrapper) GetApiV1ChatsChatIdMessages(w http.ResponseWr
 	handler.ServeHTTP(w, r)
 }
 
-// PostApiV1ChatsChatIdMessages operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMessages(w http.ResponseWriter, r *http.Request) {
+// CreateMessage operation middleware
+func (siw *ServerInterfaceWrapper) CreateMessage(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3327,7 +3327,7 @@ func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMessages(w http.ResponseW
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostApiV1ChatsChatIdMessages(w, r, chatId)
+		siw.Handler.CreateMessage(w, r, chatId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3337,43 +3337,8 @@ func (siw *ServerInterfaceWrapper) PostApiV1ChatsChatIdMessages(w http.ResponseW
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteApiV1ChatsChatIdMessagesMessageId operation middleware
-func (siw *ServerInterfaceWrapper) DeleteApiV1ChatsChatIdMessagesMessageId(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-	_ = err
-
-	// ------------- Path parameter "chat_id" -------------
-	var chatId ChatID
-
-	err = runtime.BindStyledParameterWithOptions("simple", "chat_id", r.PathValue("chat_id"), &chatId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid", ValueIsUnescaped: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "chat_id", Err: err})
-		return
-	}
-
-	// ------------- Path parameter "message_id" -------------
-	var messageId MessageID
-
-	err = runtime.BindStyledParameterWithOptions("simple", "message_id", r.PathValue("message_id"), &messageId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid", ValueIsUnescaped: true})
-	if err != nil {
-		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "message_id", Err: err})
-		return
-	}
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteApiV1ChatsChatIdMessagesMessageId(w, r, chatId, messageId)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PatchApiV1ChatsChatIdMessagesMessageId operation middleware
-func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatIdMessagesMessageId(w http.ResponseWriter, r *http.Request) {
+// DeleteMessage operation middleware
+func (siw *ServerInterfaceWrapper) DeleteMessage(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 	_ = err
@@ -3397,7 +3362,7 @@ func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatIdMessagesMessageId(w http
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PatchApiV1ChatsChatIdMessagesMessageId(w, r, chatId, messageId)
+		siw.Handler.DeleteMessage(w, r, chatId, messageId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3407,11 +3372,32 @@ func (siw *ServerInterfaceWrapper) PatchApiV1ChatsChatIdMessagesMessageId(w http
 	handler.ServeHTTP(w, r)
 }
 
-// DeleteApiV1Sessions operation middleware
-func (siw *ServerInterfaceWrapper) DeleteApiV1Sessions(w http.ResponseWriter, r *http.Request) {
+// EditMessage operation middleware
+func (siw *ServerInterfaceWrapper) EditMessage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "chat_id" -------------
+	var chatId ChatID
+
+	err = runtime.BindStyledParameterWithOptions("simple", "chat_id", r.PathValue("chat_id"), &chatId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "chat_id", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "message_id" -------------
+	var messageId MessageID
+
+	err = runtime.BindStyledParameterWithOptions("simple", "message_id", r.PathValue("message_id"), &messageId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "uuid", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "message_id", Err: err})
+		return
+	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteApiV1Sessions(w, r)
+		siw.Handler.EditMessage(w, r, chatId, messageId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3421,11 +3407,25 @@ func (siw *ServerInterfaceWrapper) DeleteApiV1Sessions(w http.ResponseWriter, r 
 	handler.ServeHTTP(w, r)
 }
 
-// PostApiV1Sessions operation middleware
-func (siw *ServerInterfaceWrapper) PostApiV1Sessions(w http.ResponseWriter, r *http.Request) {
+// DeleteSession operation middleware
+func (siw *ServerInterfaceWrapper) DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostApiV1Sessions(w, r)
+		siw.Handler.DeleteSession(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateSession operation middleware
+func (siw *ServerInterfaceWrapper) CreateSession(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateSession(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -3555,18 +3555,18 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/sessions", wrapper.DeleteApiV1Sessions)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/sessions", wrapper.PostApiV1Sessions)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats", wrapper.PostApiV1Chats)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.DeleteApiV1ChatsChatId)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.GetApiV1ChatsChatId)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.PatchApiV1ChatsChatId)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}/members", wrapper.DeleteApiV1ChatsChatIdMembers)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats/{chat_id}/members", wrapper.PostApiV1ChatsChatIdMembers)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages", wrapper.GetApiV1ChatsChatIdMessages)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages", wrapper.PostApiV1ChatsChatIdMessages)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages/{message_id}", wrapper.DeleteApiV1ChatsChatIdMessagesMessageId)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages/{message_id}", wrapper.PatchApiV1ChatsChatIdMessagesMessageId)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/sessions", wrapper.DeleteSession)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/sessions", wrapper.CreateSession)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats", wrapper.CreateChat)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.DeleteChat)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.GetChat)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/chats/{chat_id}", wrapper.UpdateChat)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}/members", wrapper.DeleteChatMember)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats/{chat_id}/members", wrapper.AddChatMembers)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages", wrapper.GetMessages)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages", wrapper.CreateMessage)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages/{message_id}", wrapper.DeleteMessage)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/chats/{chat_id}/messages/{message_id}", wrapper.EditMessage)
 
 	return m
 }
