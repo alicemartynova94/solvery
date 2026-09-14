@@ -16,6 +16,7 @@ security:
 paths:
   /api/v1/sessions:
     post:
+      operationId: CreateSession
       security: []
       tags: [Session]
       summary: Create a new session for a client
@@ -36,6 +37,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
+      operationId: DeleteSession
       tags: [ Session ]
       summary: Terminates existing session.
       responses:
@@ -61,6 +63,7 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/v1/chats:
     post:
+      operationId: CreateChat
       tags: [Chat]
       summary: Create chat
       description: |
@@ -100,6 +103,7 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/v1/chats/{chat_id}:
     get:
+      operationId: GetChat
       tags: [ Chat ]
       summary: Gets chat
       description: |
@@ -132,6 +136,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     patch:
+      operationId: UpdateChat
       tags: [ Chat ]
       summary: Update chat settings
       description: |
@@ -177,6 +182,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
+      operationId: DeleteChat
       tags: [ Chat ]
       summary: Delete an existing chat
       description: | 
@@ -206,6 +212,7 @@ paths:
               $ref: '#/components/schemas/Error'
   /api/v1/chats/{chat_id}/members:
     post:
+      operationId: AddChatMembers
       tags: [Chat]
       summary: Adds an existing session to the chat
       parameters:
@@ -248,6 +255,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
+      operationId: DeleteChatMember
       tags: [Chat]
       summary: Delete chat member
       description: | 
@@ -283,6 +291,7 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/v1/chats/{chat_id}/messages:
     post:
+      operationId: CreateMessage
       tags: [ Message ]
       summary: Create a new message
       description: |
@@ -334,6 +343,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     get:
+      operationId: GetMessages
       tags: [Message]
       summary: Get list of messages
       description: |
@@ -385,6 +395,7 @@ paths:
                 $ref: '#/components/schemas/Error'
   /api/v1/chats/{chat_id}/messages/{message_id}:
     delete:
+      operationId: DeleteMessage
       tags: [ Message ]
       summary: Delete a message
       description: |
@@ -415,6 +426,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     patch:
+      operationId: EditMessage
       tags: [ Message ]
       summary: Edit a message
       description: |
