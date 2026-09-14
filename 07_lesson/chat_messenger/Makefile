@@ -1,6 +1,10 @@
 .PHONY: openapi proto generate clean lint
 
 build:
+	go build -o bin/messenger ./cmd/messenger
+
+run:
+	go run ./cmd/messenger
 
 openapi:
 	oapi-codegen \
