@@ -1159,7 +1159,7 @@ const file_messenger_v1_messenger_proto_rawDesc = "" +
 	"\rCreateMessage\x12\x19.api.CreateMessageRequest\x1a\f.api.Message\x12@\n" +
 	"\vGetMessages\x12\x17.api.GetMessagesRequest\x1a\x18.api.GetMessagesResponse\x12F\n" +
 	"\rDeleteMessage\x12\x19.api.DeleteMessageRequest\x1a\x1a.api.DeleteMessageResponse\x124\n" +
-	"\vEditMessage\x12\x17.api.EditMessageRequest\x1a\f.api.MessageB=Z;solvery/07_lesson/chat_messenger/gen/messenger/v1;messengerb\x06proto3"
+	"\vEditMessage\x12\x17.api.EditMessageRequest\x1a\f.api.MessageB=Z;solvery/07_lesson/chat_messenger/pkg/messenger/v1;messengerb\x06proto3"
 
 var (
 	file_messenger_v1_messenger_proto_rawDescOnce sync.Once
