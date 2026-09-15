@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api;
 
-option go_package = "solvery/07_lesson/chat_messenger/gen/messenger/v1;messenger";
+option go_package = "solvery/07_lesson/chat_messenger/pkg/messenger/v1;messenger";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
