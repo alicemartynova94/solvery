@@ -2,7 +2,8 @@ package http
 
 import (
 	"net/http"
-	"solvery/07_lesson/chat_messenger/gen/openapi"
+	"solvery/07_lesson/chat_messenger/internal/metrics"
+	"solvery/07_lesson/chat_messenger/pkg/openapi"
 )
 
 type Handler struct{}
@@ -12,6 +13,8 @@ func NewHandler() *Handler {
 }
 
 func (h *Handler) CreateSession(w http.ResponseWriter, r *http.Request) {
+	metrics.RequestsTotal.WithLabelValues(r.Method, "/sessions").Inc()
+
 	http.Error(w, "not implemented", http.StatusNotImplemented)
 }
 
@@ -24,6 +27,7 @@ func (h *Handler) CreateChat(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetChat(w http.ResponseWriter, r *http.Request, chatID openapi.ChatID) {
+	metrics.RequestsTotal.WithLabelValues(r.Method, "/chat").Inc()
 	http.Error(w, "not implemented", http.StatusNotImplemented)
 }
 
