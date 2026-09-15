@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"solvery/07_lesson/chat_messenger/gen/messenger/v1"
+	"solvery/07_lesson/chat_messenger/pkg/messenger/v1"
 )
 
 type Handler struct {
