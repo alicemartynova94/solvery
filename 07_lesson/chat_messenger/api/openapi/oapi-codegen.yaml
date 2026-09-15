@@ -3,4 +3,4 @@ generate:
   models: true
   std-http-server: true
   client: true
-output: gen/openapi/messenger.gen.go
+output: pkg/openapi/messenger.pkg.go
