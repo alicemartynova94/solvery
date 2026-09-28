@@ -147,6 +147,8 @@ func NewHTTPServer(cfg *Config) *http.Server {
 
 	swaggerFS := http.FileServer(http.Dir(cfg.Swagger.Path))
 	mux.Handle("GET /swagger/", http.StripPrefix("/swagger/", swaggerFS))
+	openapiFS := http.FileServer(http.Dir("api/openapi"))
+	mux.Handle("GET /openapi/", http.StripPrefix("/openapi/", openapiFS))
 	mux.Handle("/metrics", promhttp.Handler())
 
 	return &http.Server{
