@@ -46,6 +46,9 @@ DELETE http://localhost:8080/api/v1/sessions
 X-Session-ID: <session-id>  
   
 ### Error Cases  
+**Invalid Session ID**  
+HTTP Status: 401 Unauthorized  
+  
 **Delete Non-existent Session**  
 HTTP Status: 404 Not Found  
   
