@@ -32,6 +32,7 @@ Swagger UI page is available.
   
 ### Create Session  
 Creates a new session for a client. The created session can subsequently be used as: X-Session-ID.  
+The max-sessions flag sets the maximum number of sessions that can be created. A value of 0 (the default) means there is no limit on the number of sessions.  
 POST http://localhost:8080/api/v1/sessions  
   
 ### Error Cases  
