@@ -1,8 +1,8 @@
 # QA Notes
 
 ## Task Breakdown  
-1. [ ] Спроектировать API 
-2. [ ] Подготовить базовую структуру проекта 
+1. [X] Спроектировать API 
+2. [X] Подготовить базовую структуру проекта 
 3. Реализовать Session API
 - [ ] Реализовать API для создания сессий
 - [ ] Реализовать API для удаления сессий 
@@ -32,69 +32,28 @@ Swagger UI page is available.
   
 ### Create Session  
 Creates a new session for a client. The created session can subsequently be used as: X-Session-ID.
-  
-**Request:**  
 POST http://localhost:8080/api/v1/sessions  
-Content-Type: application/json
-```
-{}
-```  
   
-**Response:**  
-```
-{
-    "id": "550e8400-e29b-41d4-a716-446655440000"
-}
-```  
-HTTP Status: 200 OK  
+### Error Cases  
+**Max Sessions Reached**  
+HTTP Status: 409 Conflict  
   
 ### Delete Session  
 Terminates existing session.  
   
 **Request:**  
-DELETE http://localhost:8080/api/v1/sessions
-X-Session-ID: <session-id>
-```
-{}
-```  
-  
-**Expected Response:**  
-```
-{}
-```  
-HTTP Status: 204 No Content  
+DELETE http://localhost:8080/api/v1/sessions  
+X-Session-ID: <session-id>  
   
 ### Error Cases  
-  
-**Max Sessions Reached**  
-Response:  
-```
-{
-    "error": "session limit reached"
-}
-```  
-HTTP Status: 409 Conflict  
-  
 **Delete Non-existent Session**  
-Response:  
-```
-{
-    "error": "session not found"
-}
-```  
 HTTP Status: 404 Not Found  
   
-**Delete Active Chat Session**
-Response:  
-```
-{
-    "error": "session owns active chats" 
-}
-```  
+**Delete Active Chat Session**  
 HTTP Status: 409 Conflict  
   
 ### gRPC API  
-GRPC http://localhost:8090/messenger.v1
+GRPC http://localhost:8090/messenger.v1  
   
 Available methods:  
 - CreateSession
