@@ -29,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Session'
+                $ref: '#/components/schemas/CreateSessionResponse'
         '409':
           description: Session limit reached
           content:
@@ -505,7 +505,7 @@ components:
         format: uuid
         example: "770e8400-e29b-41d4-a716-446655440000"
   schemas:
-    Session:
+    CreateSessionResponse:
       type: object
       required:
         - id

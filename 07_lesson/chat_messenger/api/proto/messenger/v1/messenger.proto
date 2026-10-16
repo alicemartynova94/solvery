@@ -8,9 +8,9 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
 service MessengerService{
-  rpc CreateSession(CreateSessionRequest) returns (Session);
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse);
 
-  rpc DeleteSession(google.protobuf.Empty) returns (DeleteSessionResponse);
+  rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse);
 
   rpc CreateChat(CreateChatRequest) returns (Chat);
 
@@ -33,10 +33,18 @@ service MessengerService{
   rpc EditMessage(EditMessageRequest) returns (Message);
 }
 
-message CreateSessionRequest{}
-
 message Session{
   string id = 1;
+}
+
+message CreateSessionRequest{}
+
+message CreateSessionResponse{
+  Session session = 1;
+}
+
+message DeleteSessionRequest {
+  Session session = 1;
 }
 
 message DeleteSessionResponse{}
@@ -58,6 +66,7 @@ message Chat{
   repeated string members = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
+  google.protobuf.Timestamp deleted_at = 9;
 }
 
 message GetChatRequest{
@@ -106,6 +115,7 @@ message Message {
   string text = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
+  google.protobuf.Timestamp deleted_at = 6;
 }
 
 message GetMessagesRequest{
