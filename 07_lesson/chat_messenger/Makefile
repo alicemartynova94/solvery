@@ -5,7 +5,7 @@ DB_PORT=5432
 DB_NAME=chat_messenger
 
 DB_URL=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable
-MIGRATIONS=./internal/database/migrations
+MIGRATIONS=./migrations
 
 .PHONY: build run openapi proto generate clean lint migrate-create migrate-up migrate-down
 
