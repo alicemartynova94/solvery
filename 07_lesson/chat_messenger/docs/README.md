@@ -43,7 +43,7 @@ Terminates existing session.
   
 **Request:**  
 DELETE http://localhost:8080/api/v1/sessions  
-X-Session-ID: <session-id>  
+X-Session-ID: session-uuid-id
   
 ### Error Cases  
 **Invalid Session ID**  
