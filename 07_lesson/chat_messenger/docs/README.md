@@ -31,7 +31,7 @@ Swagger UI page is available.
 ## Session API  
   
 ### Create Session  
-Creates a new session for a client. The created session can subsequently be used as: X-Session-ID.
+Creates a new session for a client. The created session can subsequently be used as: X-Session-ID.  
 POST http://localhost:8080/api/v1/sessions  
   
 ### Error Cases  
