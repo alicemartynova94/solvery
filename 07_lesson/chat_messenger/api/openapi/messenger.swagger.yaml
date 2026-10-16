@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/SessionLimitReachedError'
     delete:
       operationId: DeleteSession
       tags: [ Session ]
@@ -48,19 +48,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: Session owns active chats
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InvalidSessionIDError'
         '404':
           description: Session not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/SessionNotFoundError'
+        '409':
+          description: Session owns active chats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionHasActiveChatsError'
   /api/v1/chats:
     post:
       operationId: CreateChat
@@ -698,3 +698,43 @@ components:
         error:
           type: string
           example: error message
+    SessionLimitReachedError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum: [SESSION_LIMIT_REACHED]
+        message:
+          type: string
+          example: Maximum number of sessions reached
+    InvalidSessionIDError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum: [INVALID_SESSION_ID]
+        message:
+          type: string
+          example: Invalid session ID
+    SessionNotFoundError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum: [SESSION_NOT_FOUND]
+        message:
+          type: string
+          example: Session not found
+    SessionHasActiveChatsError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum: [SESSION_HAS_ACTIVE_CHATS]
+        message:
+          type: string
+          example: Session owns active chats and cannot be deleted
