@@ -15,8 +15,13 @@ grpc:
 database:
   host: db
   port: 5432
-  user:
+  user: 
   password:
   name:
   sslmode: disable
   connect_timeout: 5
+
+limits:
+  max_chat_size: 0
+  max_chats: 0
+  max_sessions: 0
