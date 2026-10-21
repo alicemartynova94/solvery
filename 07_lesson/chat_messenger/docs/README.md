@@ -78,50 +78,19 @@ All requests that require a session context must contain: X-Session-ID: <session
 **Expired Chat Rules**  
 - Becomes read only chat 
 - Member management is forbidden 
-- Settings update is forbidden 
-  
-### Create Chat  
-Creates a new chat for the session (chat owner). The owner must also be considered a chat member.  
-  
-**Max Messages Rules**  
+- Settings update is forbidden
+
+- **Max Messages Rules**  
 - Changing to a lower value (than the current) is forbidden 
 - Negative value is forbidden
 - Zero value indicated that there is no max messages value for a chat
   
+### Create Chat  
+Creates a new chat for the session (chat owner). The owner must also be considered a chat member.  
+  
 **Request:**  
 POST http://localhost:8080/api/v1/chats  
 X-Session-ID: <session-id> 
-Content-Type: application/json  
-```
-{
-    "chat_name": "example name",
-    "expires_at": "2026-08-10T12:00:00Z",
-    "read_only": false,
-    "max_messages": 100,
-    "members":[ 
-    "550e8400-e29b-41d4-a716-446655440001", 
-    "550e8400-e29b-41d4-a716-446655440002"
-    ]
-}
-```  
-  
-**Response:**  
-```
-{
-    "id": "660e8400-e29b-41d4-a716-446655440000"
-    "chat_name": "example name",
-    "expires_at": "2026-08-10T12:00:00Z",
-    "read_only": false,
-    "max_messages": 100,
-    "members":[ 
-    "550e8400-e29b-41d4-a716-446655440001", 
-    "550e8400-e29b-41d4-a716-446655440002"
-    ],
-    "created_at": "2026-08-10T10:00:00Z"
-    "updated_at": "2026-08-10T10:00:00Z"
-}
-```  
-HTTP Status: 200 OK  
   
 ### Get Chat  
 Gets basic chat info, including chat settings and members' session IDs.  
