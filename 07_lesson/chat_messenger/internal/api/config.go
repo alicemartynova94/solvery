@@ -1,6 +1,7 @@
 package api
 
 import (
+	"flag"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
@@ -34,6 +35,12 @@ type Config struct {
 		SSLMode        string `yaml:"sslmode"`
 		ConnectTimeout int    `yaml:"connect_timeout"`
 	} `yaml:"database"`
+
+	Limits struct {
+		MaxChatSize int `yaml:"max_chat_size"`
+		MaxChats    int `yaml:"max_chats"`
+		MaxSessions int `yaml:"max_sessions"`
+	} `yaml:"limits"`
 }
 
 func LoadConfig() (*Config, error) {
@@ -56,4 +63,29 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return &cfg, nil
+}
+
+func ParseLimitsFlags(cfg *Config) {
+	flag.IntVar(
+		&cfg.Limits.MaxChatSize,
+		"max-chat-size",
+		cfg.Limits.MaxChatSize,
+		"max size of a chat",
+	)
+
+	flag.IntVar(
+		&cfg.Limits.MaxChats,
+		"max-chats",
+		cfg.Limits.MaxChats,
+		"max number of chats",
+	)
+
+	flag.IntVar(
+		&cfg.Limits.MaxSessions,
+		"max-sessions",
+		cfg.Limits.MaxSessions,
+		"max number of sessions",
+	)
+
+	flag.Parse()
 }

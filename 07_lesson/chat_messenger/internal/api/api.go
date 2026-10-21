@@ -15,6 +15,9 @@ import (
 	grpcsrv "solvery/07_lesson/chat_messenger/internal/handler/grpc"
 	httpsrv "solvery/07_lesson/chat_messenger/internal/handler/http"
 	"solvery/07_lesson/chat_messenger/internal/logger"
+	"solvery/07_lesson/chat_messenger/internal/repository/memory"
+	"solvery/07_lesson/chat_messenger/internal/repository/synchronization"
+	"solvery/07_lesson/chat_messenger/internal/service"
 	"solvery/07_lesson/chat_messenger/pkg/messenger/v1"
 	"solvery/07_lesson/chat_messenger/pkg/openapi"
 	"strconv"
@@ -41,8 +44,17 @@ func Run(cfg *Config) {
 		return
 	}
 	defer db.Close()
-	httpServer := NewHTTPServer(cfg)
-	grpcServer := NewGRPCServer()
+
+	mu := synchronization.NewMutex()
+	sessionRepo := memory.NewSessionRepository(mu)
+	chatRepo := memory.NewChatRepository()
+	sessionSrv := service.NewSessionService(sessionRepo, cfg.Limits.MaxSessions)
+	chatSrv := service.NewChatService(mu, chatRepo, sessionRepo, cfg.Limits.MaxChats)
+	httpHandler := httpsrv.NewHandler(sessionSrv, chatSrv, log)
+	grpcHandler := grpcsrv.NewHandler(sessionSrv, log)
+
+	httpServer := NewHTTPServer(cfg, httpHandler)
+	grpcServer := NewGRPCServer(grpcHandler)
 
 	go func() {
 		err := httpServer.ListenAndServe()
@@ -75,9 +87,8 @@ func Run(cfg *Config) {
 	gracefulShutdown(log, httpServer, grpcServer)
 }
 
-func NewHTTPServer(cfg *Config) *http.Server {
+func NewHTTPServer(cfg *Config, apiServer *httpsrv.Handler) *http.Server {
 	mux := http.NewServeMux()
-	apiServer := httpsrv.NewHandler()
 	openapi.HandlerFromMux(apiServer, mux)
 
 	swaggerFS := http.FileServer(http.Dir(cfg.Swagger.Path))
@@ -92,9 +103,9 @@ func NewHTTPServer(cfg *Config) *http.Server {
 	}
 }
 
-func NewGRPCServer() *grpc.Server {
+func NewGRPCServer(handler *grpcsrv.Handler) *grpc.Server {
 	server := grpc.NewServer()
-	messenger.RegisterMessengerServiceServer(server, grpcsrv.NewHandler())
+	messenger.RegisterMessengerServiceServer(server, handler)
 
 	return server
 }
