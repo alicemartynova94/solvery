@@ -11,7 +11,6 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -38,18 +37,18 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MessengerServiceClient interface {
-	CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*Session, error)
-	DeleteSession(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*DeleteSessionResponse, error)
-	CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*Chat, error)
-	GetChat(ctx context.Context, in *GetChatRequest, opts ...grpc.CallOption) (*Chat, error)
-	UpdateChat(ctx context.Context, in *UpdateChatRequest, opts ...grpc.CallOption) (*Chat, error)
+	CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*CreateSessionResponse, error)
+	DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error)
+	CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*CreateChatResponse, error)
+	GetChat(ctx context.Context, in *GetChatRequest, opts ...grpc.CallOption) (*GetChatResponse, error)
+	UpdateChat(ctx context.Context, in *UpdateChatRequest, opts ...grpc.CallOption) (*UpdateChatResponse, error)
 	DeleteChat(ctx context.Context, in *DeleteChatRequest, opts ...grpc.CallOption) (*DeleteChatResponse, error)
 	AddChatMembers(ctx context.Context, in *AddChatMembersRequest, opts ...grpc.CallOption) (*AddChatMembersResponse, error)
 	DeleteChatMember(ctx context.Context, in *DeleteChatMemberRequest, opts ...grpc.CallOption) (*DeleteChatMemberResponse, error)
-	CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*Message, error)
+	CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*CreateMessageResponse, error)
 	GetMessages(ctx context.Context, in *GetMessagesRequest, opts ...grpc.CallOption) (*GetMessagesResponse, error)
 	DeleteMessage(ctx context.Context, in *DeleteMessageRequest, opts ...grpc.CallOption) (*DeleteMessageResponse, error)
-	EditMessage(ctx context.Context, in *EditMessageRequest, opts ...grpc.CallOption) (*Message, error)
+	EditMessage(ctx context.Context, in *EditMessageRequest, opts ...grpc.CallOption) (*EditMessageResponse, error)
 }
 
 type messengerServiceClient struct {
@@ -60,9 +59,9 @@ func NewMessengerServiceClient(cc grpc.ClientConnInterface) MessengerServiceClie
 	return &messengerServiceClient{cc}
 }
 
-func (c *messengerServiceClient) CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*Session, error) {
+func (c *messengerServiceClient) CreateSession(ctx context.Context, in *CreateSessionRequest, opts ...grpc.CallOption) (*CreateSessionResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Session)
+	out := new(CreateSessionResponse)
 	err := c.cc.Invoke(ctx, MessengerService_CreateSession_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -70,7 +69,7 @@ func (c *messengerServiceClient) CreateSession(ctx context.Context, in *CreateSe
 	return out, nil
 }
 
-func (c *messengerServiceClient) DeleteSession(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*DeleteSessionResponse, error) {
+func (c *messengerServiceClient) DeleteSession(ctx context.Context, in *DeleteSessionRequest, opts ...grpc.CallOption) (*DeleteSessionResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteSessionResponse)
 	err := c.cc.Invoke(ctx, MessengerService_DeleteSession_FullMethodName, in, out, cOpts...)
@@ -80,9 +79,9 @@ func (c *messengerServiceClient) DeleteSession(ctx context.Context, in *emptypb.
 	return out, nil
 }
 
-func (c *messengerServiceClient) CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*Chat, error) {
+func (c *messengerServiceClient) CreateChat(ctx context.Context, in *CreateChatRequest, opts ...grpc.CallOption) (*CreateChatResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Chat)
+	out := new(CreateChatResponse)
 	err := c.cc.Invoke(ctx, MessengerService_CreateChat_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -90,9 +89,9 @@ func (c *messengerServiceClient) CreateChat(ctx context.Context, in *CreateChatR
 	return out, nil
 }
 
-func (c *messengerServiceClient) GetChat(ctx context.Context, in *GetChatRequest, opts ...grpc.CallOption) (*Chat, error) {
+func (c *messengerServiceClient) GetChat(ctx context.Context, in *GetChatRequest, opts ...grpc.CallOption) (*GetChatResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Chat)
+	out := new(GetChatResponse)
 	err := c.cc.Invoke(ctx, MessengerService_GetChat_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -100,9 +99,9 @@ func (c *messengerServiceClient) GetChat(ctx context.Context, in *GetChatRequest
 	return out, nil
 }
 
-func (c *messengerServiceClient) UpdateChat(ctx context.Context, in *UpdateChatRequest, opts ...grpc.CallOption) (*Chat, error) {
+func (c *messengerServiceClient) UpdateChat(ctx context.Context, in *UpdateChatRequest, opts ...grpc.CallOption) (*UpdateChatResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Chat)
+	out := new(UpdateChatResponse)
 	err := c.cc.Invoke(ctx, MessengerService_UpdateChat_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -140,9 +139,9 @@ func (c *messengerServiceClient) DeleteChatMember(ctx context.Context, in *Delet
 	return out, nil
 }
 
-func (c *messengerServiceClient) CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*Message, error) {
+func (c *messengerServiceClient) CreateMessage(ctx context.Context, in *CreateMessageRequest, opts ...grpc.CallOption) (*CreateMessageResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Message)
+	out := new(CreateMessageResponse)
 	err := c.cc.Invoke(ctx, MessengerService_CreateMessage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -170,9 +169,9 @@ func (c *messengerServiceClient) DeleteMessage(ctx context.Context, in *DeleteMe
 	return out, nil
 }
 
-func (c *messengerServiceClient) EditMessage(ctx context.Context, in *EditMessageRequest, opts ...grpc.CallOption) (*Message, error) {
+func (c *messengerServiceClient) EditMessage(ctx context.Context, in *EditMessageRequest, opts ...grpc.CallOption) (*EditMessageResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Message)
+	out := new(EditMessageResponse)
 	err := c.cc.Invoke(ctx, MessengerService_EditMessage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -184,18 +183,18 @@ func (c *messengerServiceClient) EditMessage(ctx context.Context, in *EditMessag
 // All implementations must embed UnimplementedMessengerServiceServer
 // for forward compatibility.
 type MessengerServiceServer interface {
-	CreateSession(context.Context, *CreateSessionRequest) (*Session, error)
-	DeleteSession(context.Context, *emptypb.Empty) (*DeleteSessionResponse, error)
-	CreateChat(context.Context, *CreateChatRequest) (*Chat, error)
-	GetChat(context.Context, *GetChatRequest) (*Chat, error)
-	UpdateChat(context.Context, *UpdateChatRequest) (*Chat, error)
+	CreateSession(context.Context, *CreateSessionRequest) (*CreateSessionResponse, error)
+	DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error)
+	CreateChat(context.Context, *CreateChatRequest) (*CreateChatResponse, error)
+	GetChat(context.Context, *GetChatRequest) (*GetChatResponse, error)
+	UpdateChat(context.Context, *UpdateChatRequest) (*UpdateChatResponse, error)
 	DeleteChat(context.Context, *DeleteChatRequest) (*DeleteChatResponse, error)
 	AddChatMembers(context.Context, *AddChatMembersRequest) (*AddChatMembersResponse, error)
 	DeleteChatMember(context.Context, *DeleteChatMemberRequest) (*DeleteChatMemberResponse, error)
-	CreateMessage(context.Context, *CreateMessageRequest) (*Message, error)
+	CreateMessage(context.Context, *CreateMessageRequest) (*CreateMessageResponse, error)
 	GetMessages(context.Context, *GetMessagesRequest) (*GetMessagesResponse, error)
 	DeleteMessage(context.Context, *DeleteMessageRequest) (*DeleteMessageResponse, error)
-	EditMessage(context.Context, *EditMessageRequest) (*Message, error)
+	EditMessage(context.Context, *EditMessageRequest) (*EditMessageResponse, error)
 	mustEmbedUnimplementedMessengerServiceServer()
 }
 
@@ -206,19 +205,19 @@ type MessengerServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMessengerServiceServer struct{}
 
-func (UnimplementedMessengerServiceServer) CreateSession(context.Context, *CreateSessionRequest) (*Session, error) {
+func (UnimplementedMessengerServiceServer) CreateSession(context.Context, *CreateSessionRequest) (*CreateSessionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateSession not implemented")
 }
-func (UnimplementedMessengerServiceServer) DeleteSession(context.Context, *emptypb.Empty) (*DeleteSessionResponse, error) {
+func (UnimplementedMessengerServiceServer) DeleteSession(context.Context, *DeleteSessionRequest) (*DeleteSessionResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteSession not implemented")
 }
-func (UnimplementedMessengerServiceServer) CreateChat(context.Context, *CreateChatRequest) (*Chat, error) {
+func (UnimplementedMessengerServiceServer) CreateChat(context.Context, *CreateChatRequest) (*CreateChatResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateChat not implemented")
 }
-func (UnimplementedMessengerServiceServer) GetChat(context.Context, *GetChatRequest) (*Chat, error) {
+func (UnimplementedMessengerServiceServer) GetChat(context.Context, *GetChatRequest) (*GetChatResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetChat not implemented")
 }
-func (UnimplementedMessengerServiceServer) UpdateChat(context.Context, *UpdateChatRequest) (*Chat, error) {
+func (UnimplementedMessengerServiceServer) UpdateChat(context.Context, *UpdateChatRequest) (*UpdateChatResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateChat not implemented")
 }
 func (UnimplementedMessengerServiceServer) DeleteChat(context.Context, *DeleteChatRequest) (*DeleteChatResponse, error) {
@@ -230,7 +229,7 @@ func (UnimplementedMessengerServiceServer) AddChatMembers(context.Context, *AddC
 func (UnimplementedMessengerServiceServer) DeleteChatMember(context.Context, *DeleteChatMemberRequest) (*DeleteChatMemberResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteChatMember not implemented")
 }
-func (UnimplementedMessengerServiceServer) CreateMessage(context.Context, *CreateMessageRequest) (*Message, error) {
+func (UnimplementedMessengerServiceServer) CreateMessage(context.Context, *CreateMessageRequest) (*CreateMessageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateMessage not implemented")
 }
 func (UnimplementedMessengerServiceServer) GetMessages(context.Context, *GetMessagesRequest) (*GetMessagesResponse, error) {
@@ -239,7 +238,7 @@ func (UnimplementedMessengerServiceServer) GetMessages(context.Context, *GetMess
 func (UnimplementedMessengerServiceServer) DeleteMessage(context.Context, *DeleteMessageRequest) (*DeleteMessageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteMessage not implemented")
 }
-func (UnimplementedMessengerServiceServer) EditMessage(context.Context, *EditMessageRequest) (*Message, error) {
+func (UnimplementedMessengerServiceServer) EditMessage(context.Context, *EditMessageRequest) (*EditMessageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditMessage not implemented")
 }
 func (UnimplementedMessengerServiceServer) mustEmbedUnimplementedMessengerServiceServer() {}
@@ -282,7 +281,7 @@ func _MessengerService_CreateSession_Handler(srv interface{}, ctx context.Contex
 }
 
 func _MessengerService_DeleteSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(DeleteSessionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -294,7 +293,7 @@ func _MessengerService_DeleteSession_Handler(srv interface{}, ctx context.Contex
 		FullMethod: MessengerService_DeleteSession_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MessengerServiceServer).DeleteSession(ctx, req.(*emptypb.Empty))
+		return srv.(MessengerServiceServer).DeleteSession(ctx, req.(*DeleteSessionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

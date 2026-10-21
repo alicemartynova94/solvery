@@ -21,6 +21,111 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
+// Defines values for ChatLimitReachedErrorCode.
+const (
+	CHATLIMITREACHED ChatLimitReachedErrorCode = "CHAT_LIMIT_REACHED"
+)
+
+// Valid indicates whether the value is a known member of the ChatLimitReachedErrorCode enum.
+func (e ChatLimitReachedErrorCode) Valid() bool {
+	switch e {
+	case CHATLIMITREACHED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for InvalidRequestErrorCode.
+const (
+	INVALIDREQUEST InvalidRequestErrorCode = "INVALID_REQUEST"
+)
+
+// Valid indicates whether the value is a known member of the InvalidRequestErrorCode enum.
+func (e InvalidRequestErrorCode) Valid() bool {
+	switch e {
+	case INVALIDREQUEST:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for InvalidSessionIDErrorCode.
+const (
+	INVALIDSESSIONID InvalidSessionIDErrorCode = "INVALID_SESSION_ID"
+)
+
+// Valid indicates whether the value is a known member of the InvalidSessionIDErrorCode enum.
+func (e InvalidSessionIDErrorCode) Valid() bool {
+	switch e {
+	case INVALIDSESSIONID:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SessionDeletedErrorCode.
+const (
+	SESSIONDELETED SessionDeletedErrorCode = "SESSION_DELETED"
+)
+
+// Valid indicates whether the value is a known member of the SessionDeletedErrorCode enum.
+func (e SessionDeletedErrorCode) Valid() bool {
+	switch e {
+	case SESSIONDELETED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SessionHasActiveChatsErrorCode.
+const (
+	SESSIONHASACTIVECHATS SessionHasActiveChatsErrorCode = "SESSION_HAS_ACTIVE_CHATS"
+)
+
+// Valid indicates whether the value is a known member of the SessionHasActiveChatsErrorCode enum.
+func (e SessionHasActiveChatsErrorCode) Valid() bool {
+	switch e {
+	case SESSIONHASACTIVECHATS:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SessionLimitReachedErrorCode.
+const (
+	SESSIONLIMITREACHED SessionLimitReachedErrorCode = "SESSION_LIMIT_REACHED"
+)
+
+// Valid indicates whether the value is a known member of the SessionLimitReachedErrorCode enum.
+func (e SessionLimitReachedErrorCode) Valid() bool {
+	switch e {
+	case SESSIONLIMITREACHED:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SessionNotFoundErrorCode.
+const (
+	SESSIONNOTFOUND SessionNotFoundErrorCode = "SESSION_NOT_FOUND"
+)
+
+// Valid indicates whether the value is a known member of the SessionNotFoundErrorCode enum.
+func (e SessionNotFoundErrorCode) Valid() bool {
+	switch e {
+	case SESSIONNOTFOUND:
+		return true
+	default:
+		return false
+	}
+}
+
 // AddChatMemberRequest defines model for AddChatMemberRequest.
 type AddChatMemberRequest struct {
 	// Members Example: ["550e8400-e29b-41d4-a716-446655440000","550e8400-e29b-41d4-a716-446655440001"]
@@ -62,6 +167,17 @@ type Chat struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+// ChatLimitReachedError defines model for ChatLimitReachedError.
+type ChatLimitReachedError struct {
+	Code ChatLimitReachedErrorCode `json:"code"`
+
+	// Message Example: Maximum number of chats reached
+	Message string `json:"message"`
+}
+
+// ChatLimitReachedErrorCode defines model for ChatLimitReachedError.Code.
+type ChatLimitReachedErrorCode string
+
 // CreateChatRequest defines model for CreateChatRequest.
 type CreateChatRequest struct {
 	// ChatName The name of created chat
@@ -71,7 +187,7 @@ type CreateChatRequest struct {
 
 	// ExpiresAt Chat expiration time
 	//
-	// Example: 2026-07-14T15:30:00Z
+	// Example: 2027-07-14T15:30:00Z
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 
 	// MaxMessages Maximum number of messages in chat
@@ -80,12 +196,49 @@ type CreateChatRequest struct {
 	MaxMessages *int `json:"max_messages,omitempty"`
 
 	// Members Session IDs of chat members
+	//
+	// Example: ["550e8400-e29b-41d4-a716-446655440001","550e8400-e29b-41d4-a716-446655440002"]
 	Members *[]openapi_types.UUID `json:"members,omitempty"`
 
 	// ReadOnly Only owner can send messages
 	//
 	// Example: false
 	ReadOnly *bool `json:"read_only,omitempty"`
+}
+
+// CreateChatResp defines model for CreateChatResp.
+type CreateChatResp struct {
+	// ChatAuthor Example: 550e8400-e29b-41d4-a716-446655440001
+	ChatAuthor openapi_types.UUID `json:"chat_author"`
+
+	// ChatName The name of created chat
+	//
+	// Example: example name
+	ChatName string `json:"chat_name"`
+
+	// CreatedAt Example: 2026-08-10T10:00:00Z
+	CreatedAt time.Time `json:"created_at"`
+
+	// ExpiresAt Example: 2026-08-10T12:00:00Z
+	ExpiresAt *time.Time `json:"expires_at"`
+
+	// Id Example: 550e8400-e29b-41d4-a716-446655440001
+	Id openapi_types.UUID `json:"id"`
+
+	// MaxMessages Example: 100
+	MaxMessages int `json:"max_messages"`
+
+	// Members Example: ["550e8400-e29b-41d4-a716-446655440000","550e8400-e29b-41d4-a716-446655440001"]
+	Members []openapi_types.UUID `json:"members"`
+
+	// ReadOnly Example: false
+	ReadOnly bool `json:"read_only"`
+}
+
+// CreateSession defines model for CreateSession.
+type CreateSession struct {
+	// Id Example: 550e8400-e29b-41d4-a716-446655440000
+	Id openapi_types.UUID `json:"id"`
 }
 
 // DeleteChatMemberRequest defines model for DeleteChatMemberRequest.
@@ -99,6 +252,28 @@ type Error struct {
 	// Error Example: error message
 	Error string `json:"error"`
 }
+
+// InvalidRequestError defines model for InvalidRequestError.
+type InvalidRequestError struct {
+	Code InvalidRequestErrorCode `json:"code"`
+
+	// Message Example: Invalid request. Possible causes include invalid max_messages or expires_at.
+	Message string `json:"message"`
+}
+
+// InvalidRequestErrorCode defines model for InvalidRequestError.Code.
+type InvalidRequestErrorCode string
+
+// InvalidSessionIDError defines model for InvalidSessionIDError.
+type InvalidSessionIDError struct {
+	Code InvalidSessionIDErrorCode `json:"code"`
+
+	// Message Example: Invalid session ID
+	Message string `json:"message"`
+}
+
+// InvalidSessionIDErrorCode defines model for InvalidSessionIDError.Code.
+type InvalidSessionIDErrorCode string
 
 // Message defines model for Message.
 type Message struct {
@@ -118,11 +293,49 @@ type Message struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-// Session defines model for Session.
-type Session struct {
-	// Id Example: 550e8400-e29b-41d4-a716-446655440000
-	Id openapi_types.UUID `json:"id"`
+// SessionDeletedError defines model for SessionDeletedError.
+type SessionDeletedError struct {
+	Code SessionDeletedErrorCode `json:"code"`
+
+	// Message Example: Session has been deleted
+	Message string `json:"message"`
 }
+
+// SessionDeletedErrorCode defines model for SessionDeletedError.Code.
+type SessionDeletedErrorCode string
+
+// SessionHasActiveChatsError defines model for SessionHasActiveChatsError.
+type SessionHasActiveChatsError struct {
+	Code SessionHasActiveChatsErrorCode `json:"code"`
+
+	// Message Example: Session owns active chats and cannot be deleted
+	Message string `json:"message"`
+}
+
+// SessionHasActiveChatsErrorCode defines model for SessionHasActiveChatsError.Code.
+type SessionHasActiveChatsErrorCode string
+
+// SessionLimitReachedError defines model for SessionLimitReachedError.
+type SessionLimitReachedError struct {
+	Code SessionLimitReachedErrorCode `json:"code"`
+
+	// Message Example: Maximum number of sessions reached
+	Message string `json:"message"`
+}
+
+// SessionLimitReachedErrorCode defines model for SessionLimitReachedError.Code.
+type SessionLimitReachedErrorCode string
+
+// SessionNotFoundError defines model for SessionNotFoundError.
+type SessionNotFoundError struct {
+	Code SessionNotFoundErrorCode `json:"code"`
+
+	// Message Example: Session not found
+	Message string `json:"message"`
+}
+
+// SessionNotFoundErrorCode defines model for SessionNotFoundError.Code.
+type SessionNotFoundErrorCode string
 
 // TextRequest defines model for TextRequest.
 type TextRequest struct {
@@ -1473,33 +1686,47 @@ type CreateChatResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
-	JSON201 *Chat
+	JSON201 *CreateChatResp
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *InvalidRequestError
 	// JSON401 the response for an HTTP 401 `application/json` response
-	JSON401 *Error
-	// JSON403 the response for an HTTP 403 `application/json` response
-	JSON403 *Error
+	JSON401 *InvalidSessionIDError
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *SessionNotFoundError
 	// JSON409 the response for an HTTP 409 `application/json` response
-	JSON409 *Error
+	JSON409 *ChatLimitReachedError
+	// JSON410 the response for an HTTP 410 `application/json` response
+	JSON410 *SessionDeletedError
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
-func (r CreateChatResponse) GetJSON201() *Chat {
+func (r CreateChatResponse) GetJSON201() *CreateChatResp {
 	return r.JSON201
 }
 
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreateChatResponse) GetJSON400() *InvalidRequestError {
+	return r.JSON400
+}
+
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r CreateChatResponse) GetJSON401() *Error {
+func (r CreateChatResponse) GetJSON401() *InvalidSessionIDError {
 	return r.JSON401
 }
 
-// GetJSON403 returns the response for an HTTP 403 `application/json` response
-func (r CreateChatResponse) GetJSON403() *Error {
-	return r.JSON403
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateChatResponse) GetJSON404() *SessionNotFoundError {
+	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r CreateChatResponse) GetJSON409() *Error {
+func (r CreateChatResponse) GetJSON409() *ChatLimitReachedError {
 	return r.JSON409
+}
+
+// GetJSON410 returns the response for an HTTP 410 `application/json` response
+func (r CreateChatResponse) GetJSON410() *SessionDeletedError {
+	return r.JSON410
 }
 
 // GetBody returns the raw response body bytes
@@ -2114,26 +2341,33 @@ type DeleteSessionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON401 the response for an HTTP 401 `application/json` response
-	JSON401 *Error
+	JSON401 *InvalidSessionIDError
 	// JSON404 the response for an HTTP 404 `application/json` response
-	JSON404 *Error
+	JSON404 *SessionNotFoundError
 	// JSON409 the response for an HTTP 409 `application/json` response
-	JSON409 *Error
+	JSON409 *SessionHasActiveChatsError
+	// JSON410 the response for an HTTP 410 `application/json` response
+	JSON410 *SessionDeletedError
 }
 
 // GetJSON401 returns the response for an HTTP 401 `application/json` response
-func (r DeleteSessionResponse) GetJSON401() *Error {
+func (r DeleteSessionResponse) GetJSON401() *InvalidSessionIDError {
 	return r.JSON401
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
-func (r DeleteSessionResponse) GetJSON404() *Error {
+func (r DeleteSessionResponse) GetJSON404() *SessionNotFoundError {
 	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r DeleteSessionResponse) GetJSON409() *Error {
+func (r DeleteSessionResponse) GetJSON409() *SessionHasActiveChatsError {
 	return r.JSON409
+}
+
+// GetJSON410 returns the response for an HTTP 410 `application/json` response
+func (r DeleteSessionResponse) GetJSON410() *SessionDeletedError {
+	return r.JSON410
 }
 
 // GetBody returns the raw response body bytes
@@ -2169,18 +2403,18 @@ type CreateSessionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
-	JSON201 *Session
+	JSON201 *CreateSession
 	// JSON409 the response for an HTTP 409 `application/json` response
-	JSON409 *Error
+	JSON409 *SessionLimitReachedError
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
-func (r CreateSessionResponse) GetJSON201() *Session {
+func (r CreateSessionResponse) GetJSON201() *CreateSession {
 	return r.JSON201
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
-func (r CreateSessionResponse) GetJSON409() *Error {
+func (r CreateSessionResponse) GetJSON409() *SessionLimitReachedError {
 	return r.JSON409
 }
 
@@ -2502,32 +2736,46 @@ func ParseCreateChatResponse(rsp *http.Response) (*CreateChatResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest Chat
+		var dest CreateChatResp
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest InvalidRequestError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest InvalidSessionIDError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
-		var dest Error
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest SessionNotFoundError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
-		response.JSON403 = &dest
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest ChatLimitReachedError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
+		var dest SessionDeletedError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON410 = &dest
 
 	}
 
@@ -3005,25 +3253,32 @@ func ParseDeleteSessionResponse(rsp *http.Response) (*DeleteSessionResponse, err
 		break // No content-type
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
-		var dest Error
+		var dest InvalidSessionIDError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON401 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
-		var dest Error
+		var dest SessionNotFoundError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest SessionHasActiveChatsError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 410:
+		var dest SessionDeletedError
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON410 = &dest
 
 	}
 
@@ -3045,14 +3300,14 @@ func ParseCreateSessionResponse(rsp *http.Response) (*CreateSessionResponse, err
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest Session
+		var dest CreateSession
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
 		response.JSON201 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
-		var dest Error
+		var dest SessionLimitReachedError
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
