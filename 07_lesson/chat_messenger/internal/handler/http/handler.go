@@ -9,7 +9,6 @@ import (
 	"net/http"
 	dmnerr "solvery/07_lesson/chat_messenger/internal/errors"
 	"solvery/07_lesson/chat_messenger/internal/handler/dto"
-	"solvery/07_lesson/chat_messenger/internal/metrics"
 	"solvery/07_lesson/chat_messenger/internal/service"
 	"solvery/07_lesson/chat_messenger/pkg/openapi"
 )
@@ -46,7 +45,7 @@ func (h *Handler) CreateSession(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	sessionIDString := r.Header.Get("X-Session-ID")
-	sessionID, err := parseSessionID(sessionIDString)
+	sessionID, err := parseID(sessionIDString)
 	if err != nil {
 		h.writeError(w, err)
 		return
@@ -62,7 +61,7 @@ func (h *Handler) DeleteSession(w http.ResponseWriter, r *http.Request) {
 
 func (h *Handler) CreateChat(w http.ResponseWriter, r *http.Request) {
 	sessionIDString := r.Header.Get("X-Session-ID")
-	sessionID, err := parseSessionID(sessionIDString)
+	sessionID, err := parseID(sessionIDString)
 	if err != nil {
 		h.writeError(w, err)
 		return
@@ -70,21 +69,6 @@ func (h *Handler) CreateChat(w http.ResponseWriter, r *http.Request) {
 
 	var reqDTO dto.CreateChatRequest
 	if err := json.NewDecoder(r.Body).Decode(&reqDTO); err != nil {
-		//http.Error(w, "invalid request body", http.StatusBadRequest)
-		//return
-		var typeErr *json.UnmarshalTypeError
-
-		if errors.As(err, &typeErr) {
-			h.logger.Error(
-				"JSON type mismatch",
-				zap.String("field", typeErr.Field),
-				zap.String("value", typeErr.Value),
-				zap.String("expected_type", typeErr.Type.String()),
-			)
-		} else {
-			h.logger.Error("invalid request body", zap.Error(err))
-		}
-
 		http.Error(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
@@ -116,7 +100,6 @@ func (h *Handler) CreateChat(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) GetChat(w http.ResponseWriter, r *http.Request, chatID openapi.ChatID) {
-	metrics.RequestsTotal.WithLabelValues(r.Method, "/chat").Inc()
 	http.Error(w, "not implemented", http.StatusNotImplemented)
 }
 
@@ -176,7 +159,7 @@ func (h *Handler) writeError(w http.ResponseWriter, err error) {
 	}
 }
 
-func parseSessionID(sessionID string) (uuid.UUID, error) {
+func parseID(sessionID string) (uuid.UUID, error) {
 	if sessionID == "" {
 		return uuid.Nil, dmnerr.ErrInvalidUUIDFormat
 	}

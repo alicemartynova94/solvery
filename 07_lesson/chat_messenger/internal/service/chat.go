@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"github.com/google/uuid"
 	dmnerr "solvery/07_lesson/chat_messenger/internal/errors"
 	"solvery/07_lesson/chat_messenger/internal/handler/dto"
 	"solvery/07_lesson/chat_messenger/internal/mapper"
+	"solvery/07_lesson/chat_messenger/internal/models"
 	"solvery/07_lesson/chat_messenger/internal/repository"
 	"solvery/07_lesson/chat_messenger/internal/repository/synchronization"
 	"time"
@@ -12,6 +14,7 @@ import (
 
 type ChatSrv interface {
 	CreateChat(ctx context.Context, reqDTO *dto.CreateChatRequest) (*dto.CreateChatResponse, error)
+	GetChat(ctx context.Context, id uuid.UUID) (*models.Chat, error)
 }
 
 type ChatService struct {
@@ -51,4 +54,8 @@ func (s *ChatService) CreateChat(ctx context.Context, reqDTO *dto.CreateChatRequ
 	}
 
 	return mapper.ChatToCreateChatRespDTO(newChat), nil
+}
+
+func (s *ChatService) GetChat(ctx context.Context, id uuid.UUID) (*models.Chat, error) {
+	return s.chatRepo.GetChat(ctx, id)
 }

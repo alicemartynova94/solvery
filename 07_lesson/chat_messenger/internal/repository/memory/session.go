@@ -3,7 +3,7 @@ package memory
 import (
 	"context"
 	"github.com/google/uuid"
-	"solvery/07_lesson/chat_messenger/internal/errors"
+	dmnerr "solvery/07_lesson/chat_messenger/internal/errors"
 	"solvery/07_lesson/chat_messenger/internal/models"
 	"solvery/07_lesson/chat_messenger/internal/repository/synchronization"
 	"time"
@@ -37,7 +37,7 @@ func (r *SessionRepository) CreateSession(ctx context.Context, maxSessions int) 
 	}
 
 	if maxSessions != 0 && activeSessions >= maxSessions {
-		return nil, errors.ErrSessionsLimitExceeded
+		return nil, dmnerr.ErrSessionsLimitExceeded
 	}
 
 	newSession := models.Session{
@@ -73,11 +73,11 @@ func (r *SessionRepository) DeleteSession(ctx context.Context, id uuid.UUID) err
 func (r *SessionRepository) CheckSessionActive(id uuid.UUID) error {
 	session, ok := r.sessions[id]
 	if !ok {
-		return errors.ErrSessionNotFound
+		return dmnerr.ErrSessionNotFound
 	}
 
 	if session.DeletedAt != nil {
-		return errors.ErrSessionDeleted
+		return dmnerr.ErrSessionDeleted
 	}
 
 	return nil

@@ -14,4 +14,5 @@ type SessionRepository interface {
 
 type ChatRepository interface {
 	CreateChat(ctx context.Context, chat *models.Chat, maxChats int) (*models.Chat, error)
+	GetChat(ctx context.Context, id uuid.UUID) (*models.Chat, error)
 }

@@ -15,4 +15,6 @@ var (
 	ErrChatNameEmpty           = errors.New("chat_name must not be empty")
 	ErrChatNameExceedLimit     = errors.New("chat_name must be at most 100 characters")
 	ErrChatNegativeMaxMessages = errors.New("max_messages must be non-negative")
+	ErrChatNotFound            = errors.New("chat not found")
+	ErrChatDeleted             = errors.New("chat was already deleted")
 )

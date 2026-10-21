@@ -37,3 +37,29 @@ func (r *ChatInMemoryRepository) CreateChat(ctx context.Context, chat *models.Ch
 
 	return chat, nil
 }
+
+func (r *ChatInMemoryRepository) GetChat(ctx context.Context, id uuid.UUID) (*models.Chat, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	chat, err := r.checkChatActive(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return chat, nil
+}
+
+func (r *ChatInMemoryRepository) checkChatActive(id uuid.UUID) (*models.Chat, error) {
+	chat, ok := r.chats[id]
+	if !ok {
+		return nil, dmnerr.ErrChatNotFound
+	}
+
+	if chat.DeletedAt != nil {
+		return nil, dmnerr.ErrChatDeleted
+	}
+
+	return &chat, nil
+}
