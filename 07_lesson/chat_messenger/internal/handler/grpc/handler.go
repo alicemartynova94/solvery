@@ -77,11 +77,11 @@ func (*Handler) CreateChat(ctx context.Context, req *messenger.CreateChatRequest
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (*Handler) GetChat(ctx context.Context, req *messenger.GetChatRequest) (*messenger.Chat, error) {
+func (*Handler) GetChat(ctx context.Context, req *messenger.GetChatRequest) (*messenger.GetChatResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (*Handler) UpdateChat(ctx context.Context, req *messenger.UpdateChatRequest) (*messenger.Chat, error) {
+func (*Handler) UpdateChat(ctx context.Context, req *messenger.UpdateChatRequest) (*messenger.UpdateChatResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
@@ -97,7 +97,7 @@ func (*Handler) DeleteChatMember(ctx context.Context, req *messenger.DeleteChatM
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (*Handler) CreateMessage(ctx context.Context, req *messenger.CreateMessageRequest) (*messenger.Message, error) {
+func (*Handler) CreateMessage(ctx context.Context, req *messenger.CreateMessageRequest) (*messenger.CreateMessageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
@@ -109,6 +109,6 @@ func (*Handler) DeleteMessage(ctx context.Context, req *messenger.DeleteMessageR
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
 
-func (*Handler) EditMessage(ctx context.Context, req *messenger.EditMessageRequest) (*messenger.Message, error) {
+func (*Handler) EditMessage(ctx context.Context, req *messenger.EditMessageRequest) (*messenger.EditMessageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "not implemented")
 }
