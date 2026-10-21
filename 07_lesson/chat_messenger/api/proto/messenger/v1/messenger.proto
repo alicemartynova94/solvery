@@ -12,11 +12,11 @@ service MessengerService{
 
   rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse);
 
-  rpc CreateChat(CreateChatRequest) returns (Chat);
+  rpc CreateChat(CreateChatRequest) returns (CreateChatResponse);
 
-  rpc GetChat(GetChatRequest) returns (Chat);
+  rpc GetChat(GetChatRequest) returns (GetChatResponse);
 
-  rpc UpdateChat(UpdateChatRequest) returns (Chat);
+  rpc UpdateChat(UpdateChatRequest) returns (UpdateChatResponse);
 
   rpc DeleteChat(DeleteChatRequest) returns (DeleteChatResponse);
 
@@ -24,13 +24,13 @@ service MessengerService{
 
   rpc DeleteChatMember(DeleteChatMemberRequest) returns (DeleteChatMemberResponse);
 
-  rpc CreateMessage(CreateMessageRequest) returns (Message);
+  rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse);
 
   rpc GetMessages(GetMessagesRequest) returns (GetMessagesResponse);
 
   rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse);
 
-  rpc EditMessage(EditMessageRequest) returns (Message);
+  rpc EditMessage(EditMessageRequest) returns (EditMessageResponse);
 }
 
 message Session{
@@ -43,19 +43,11 @@ message CreateSessionResponse{
   Session session = 1;
 }
 
-message DeleteSessionRequest {
+message DeleteSessionRequest{
   Session session = 1;
 }
 
 message DeleteSessionResponse{}
-
-message CreateChatRequest{
-  string chat_name = 1;
-  optional google.protobuf.Timestamp expires_at = 2;
-  bool read_only = 3;
-  int32 max_messages = 4;
-  repeated string members = 5;
-}
 
 message Chat{
   string id = 1;
@@ -69,8 +61,31 @@ message Chat{
   google.protobuf.Timestamp deleted_at = 9;
 }
 
+message CreateChatRequest{
+  string chat_name = 1;
+  optional google.protobuf.Timestamp expires_at = 2;
+  bool read_only = 3;
+  int32 max_messages = 4;
+  repeated Session members = 5;
+}
+
+message CreateChatResponse{
+  string id = 1;
+  Session chat_author = 2;
+  string chat_name = 3;
+  google.protobuf.Timestamp expires_at = 4;
+  bool read_only = 5;
+  int32 max_messages = 6;
+  repeated Session chat_members = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
 message GetChatRequest{
   string chat_id = 1;
+}
+
+message GetChatResponse{
+  Chat chat = 1;
 }
 
 message UpdateChatRequest{
@@ -79,6 +94,10 @@ message UpdateChatRequest{
   optional bool read_only = 3;
   optional int32 max_messages = 4;
   bool clear_expires_at = 5;
+}
+
+message UpdateChatResponse{
+  Chat chat = 1;
 }
 
 message DeleteChatRequest{
@@ -109,13 +128,17 @@ message CreateMessageRequest{
   string text = 2;
 }
 
-message Message {
+message Message{
   string id = 1;
   string author_id = 2;
   string text = 3;
   google.protobuf.Timestamp created_at = 4;
   google.protobuf.Timestamp updated_at = 5;
   google.protobuf.Timestamp deleted_at = 6;
+}
+
+message CreateMessageResponse{
+  Message message = 1;
 }
 
 message GetMessagesRequest{
@@ -137,4 +160,8 @@ message EditMessageRequest{
   string chat_id = 1;
   string message_id = 2;
   string text = 3;
+}
+
+message EditMessageResponse{
+  Message message = 1;
 }
